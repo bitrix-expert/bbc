@@ -13,12 +13,13 @@ if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 
 \CBitrixComponent::includeComponentClass(basename(dirname(__DIR__)).':basis');
 
+
 /**
  * Work in progress…
  */
 class ElementsList extends Basis
 {
-    protected static $needModules = array('iblock1');
+    protected static $needModules = array('iblock');
 
     protected function getResult()
     {

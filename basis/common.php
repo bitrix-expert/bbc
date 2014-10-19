@@ -331,9 +331,11 @@ trait Common
 
     private function executeFinal()
     {
-        if (is_file(__DIR__.'/'.static::$logException))
+        $logFile = Application::getDocumentRoot().$this->__path.'/'.static::$logException;
+
+        if (is_file($logFile))
         {
-            unlink(__DIR__.'/'.static::$logException);
+            unlink($logFile);
         }
     }
 
