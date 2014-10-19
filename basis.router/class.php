@@ -9,7 +9,7 @@
  */
 namespace Components\Basis;
 
-include_once dirname(__DIR__).'/basis/trait.php';
+include_once dirname(__DIR__).'/basis/common.php';
 
 
 /**
@@ -17,7 +17,7 @@ include_once dirname(__DIR__).'/basis/trait.php';
  */
 abstract class BasisRouter extends \CBitrixComponent
 {
-    use BasisTrait;
+    use Common;
 
     /**
      * @var array Paths of templates default
@@ -112,20 +112,22 @@ abstract class BasisRouter extends \CBitrixComponent
         try {
             $this->includeModules();
             $this->checkParams();
+
             $this->startAjax();
             $this->executeProlog();
 
             $this->setSefDefaultParams();
             $this->setPage();
             $this->getResult();
-
             $this->returnDatas($this->page);
+
             $this->executeEpilog();
             $this->stopAjax();
+            $this->executeFinal();
         }
         catch (\Exception $e)
         {
-            $this->catchError($e);
+            $this->catchException($e);
         }
     }
 }

@@ -9,7 +9,7 @@
  */
 namespace Components\Basis;
 
-include_once __DIR__.'/trait.php';
+include_once __DIR__.'/common.php';
 
 
 /**
@@ -17,7 +17,7 @@ include_once __DIR__.'/trait.php';
  */
 abstract class Basis extends \CBitrixComponent
 {
-    use BasisTrait;
+    use Common;
 
     final public function executeComponent()
     {
@@ -30,17 +30,27 @@ abstract class Basis extends \CBitrixComponent
             if ($this->startCache())
             {
                 $this->getResult();
-                $this->returnDatas();
+
+                if ($this->cacheTemplate)
+                {
+                    $this->returnDatas();
+                }
+
                 $this->writeCache();
+            }
+
+            if (!$this->cacheTemplate)
+            {
+                $this->returnDatas();
             }
 
             $this->executeEpilog();
             $this->stopAjax();
+            $this->executeFinal();
         }
         catch (\Exception $e)
         {
-            $this->abortCache();
-            $this->catchError($e);
+            $this->catchException($e);
         }
     }
 }

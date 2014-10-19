@@ -11,26 +11,39 @@ namespace Components\Basis;
 
 use Bitrix\Main;
 use Bitrix\Main\Application;
+use Bitrix\Main\Localization\Loc;
 
 if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 
+Loc::loadMessages(__DIR__.'/class.php');
 
-trait BasisTrait
+
+trait Common
 {
+    /**
+     * @var string File name of log with last exception
+     */
+    public static $logException = 'exception.log';
+
     /**
      * @var object Main\Data\Cache
      */
     protected $cache;
 
     /**
-     * @var string Cache ID
+     * @var array Additional cache ID
      */
-    protected $cacheId;
+    protected $cacheIdAdditional;
 
     /**
      * @var string Cache dir
      */
     protected $cacheDir;
+
+    /**
+     * @var bool Caching template of the component (default not cache)
+     */
+    protected $cacheTemplate = true;
 
     /**
      * @var string Component ID for AJAX request (default value result of CAjax::GetComponentID())
@@ -48,27 +61,50 @@ trait BasisTrait
     protected $ajaxRequestParam = 'compid';
 
     /**
-     * @var bool|array Pagination
+     * @var bool Reload page headers after AJAX request
+     */
+    protected $ajaxReloadHead = false;
+
+    /**
+     * @var array Paginator parameters
      */
     protected $navParams;
 
     /**
-     * @var array The codes of modules that will be connected when performing component
+     * @var string Name of the navigation template
      */
-    protected $needModules;
+    protected $navTemplate;
 
     /**
-     * Include modules (use $this->needModules)
+     * @var string Template page name
+     */
+    protected $page;
+
+    /**
+     * @var array The codes of modules that will be connected when performing component
+     */
+    protected static $needModules = array();
+
+    /**
+     * Include modules
      *
+     * @param array $needModules [optional] Array with codes of the modules (default uses static::$needModules)
      * @throws \Bitrix\Main\LoaderException
      */
-    protected function includeModules()
+    public static function includeModules($needModules = array())
     {
-        foreach ($this->needModules as $module)
+        if (!$needModules)
+        {
+            $needModules = static::$needModules;
+        }
+
+        foreach ($needModules as $module)
         {
             if (!Main\Loader::includeModule($module))
             {
-                throw new Main\LoaderException('Not installed module "'.$module.'"');
+                throw new Main\LoaderException(
+                    Loc::getMessage('BASIS_COMPONENT_EXCEPTION_LOADER', array('#MODULE_CODE#' => $module))
+                );
             }
         }
     }
@@ -95,7 +131,14 @@ trait BasisTrait
         {
             global $APPLICATION;
 
-            $APPLICATION->RestartBuffer();
+            if ($this->ajaxReloadHead)
+            {
+                $APPLICATION->ShowAjaxHead();
+            }
+            else
+            {
+                $APPLICATION->RestartBuffer();
+            }
         }
     }
 
@@ -116,11 +159,14 @@ trait BasisTrait
     {
         if ($this->arParams['CACHE_TYPE'] && $this->arParams['CACHE_TYPE'] !== 'N' && $this->arParams['CACHE_TIME'] > 0)
         {
-            $this->cache = Main\Data\Cache::createInstance();
-            $this->cacheId = $this->getCacheId();
-            $this->cacheDir = Application::getInstance()->getManagedCache()->getCompCachePath($this->getRelativePath());
+            array_push(
+                $this->cacheIdAdditional,
+                $this->page,
+                $this->navTemplate,
+                \CDBResult::GetNavParams($this->navParams)
+            );
 
-            if ($this->startResultCache($this->arParams['CACHE_TIME'], $this->cacheId, $this->cacheDir))
+            if ($this->startResultCache($this->arParams['CACHE_TIME'], $this->cacheIdAdditional, $this->cacheDir))
             {
                 return true;
             }
@@ -138,12 +184,7 @@ trait BasisTrait
      */
     protected function writeCache()
     {
-        if ($this->cache)
-        {
-            Application::getInstance()->getTaggedCache()->endTagCache();
-
-            $this->endResultCache();
-        }
+        $this->endResultCache();
     }
 
     /**
@@ -151,10 +192,7 @@ trait BasisTrait
      */
     protected function abortCache()
     {
-        if ($this->cache)
-        {
-            $this->abortResultCache();
-        }
+        $this->abortResultCache();
     }
 
     /**
@@ -175,7 +213,7 @@ trait BasisTrait
     }
 
     /**
-     * Stop execute of script if AJAX request
+     * Stop execute script if AJAX request
      */
     protected function stopAjax()
     {
@@ -199,24 +237,104 @@ trait BasisTrait
     }
 
     /**
+     * Set status 404 and reset cache
+     */
+    protected function return404()
+    {
+        $this->abortCache();
+
+        @define('ERROR_404', 'Y');
+        \CHTTP::SetStatus('404 Not Found');
+    }
+
+    /**
      * Called when an error occurs
      *
      * @param object $e Exception
      */
-    protected function catchError($e)
+    protected function catchException($e)
+    {
+        global $USER;
+
+        $adminEmail = Main\Config\Option::get('main', 'email_from');
+        $logFile = Application::getDocumentRoot().$this->__path.'/'.static::$logException;
+
+        $this->abortCache();
+
+        if ($USER->IsAdmin())
+        {
+            $this->showExceptionAdmin($e);
+        }
+        else
+        {
+            $this->showExceptionUser($e);
+        }
+
+        if (!is_file($logFile) && $adminEmail)
+        {
+            $date = date('Y-m-d H:m:s');
+
+            bxmail(
+                $adminEmail,
+                Loc::getMessage(
+                    'BASIS_COMPONENT_EXCEPTION_EMAIL_SUBJECT', array('#SITE_URL#' => SITE_SERVER_NAME)
+                ),
+                Loc::getMessage(
+                    'BASIS_COMPONENT_EXCEPTION_EMAIL_TEXT',
+                    array(
+                        '#URL#' => 'http://'.SITE_SERVER_NAME.Main\Context::getCurrent()->getRequest()->getRequestedPage(),
+                        '#DATE#' => $date,
+                        '#EXCEPTION_MESSAGE#' => $e->getMessage(),
+                        '#EXCEPTION#' => $e
+                    )
+                ),
+                'Content-Type: text/html; charset=utf-8'
+            );
+
+            $log = fopen($logFile, 'w');
+            fwrite($log, '['.$date.'] Catch exception: '.PHP_EOL.$e);
+            fclose($log);
+        }
+    }
+
+    /**
+     * Display of the error for user
+     *
+     * @param object $e Exception
+     */
+    protected function showExceptionUser($e)
+    {
+        ShowError(Loc::getMessage('BASIS_COMPONENT_CATCH_EXCEPTION'));
+    }
+
+    /**
+     * Display of the error for admin
+     *
+     * @param object $e Exception
+     */
+    protected function showExceptionAdmin($e)
     {
         ShowError($e->getMessage());
+
+        echo nl2br($e);
     }
 
     /**
      * Show results. Default: include template of the component
      *
-     * @param string $page Template page
-     * @param string $customPath Custom template path
+     * @uses $this->page
      */
-    protected function returnDatas($page = '', $customPath = '')
+    protected function returnDatas()
     {
-        $this->includeComponentTemplate($page, $customPath);
+        $this->includeComponentTemplate($this->page);
+    }
+
+    private function executeFinal()
+    {
+        if (is_file(__DIR__.'/'.static::$logException))
+        {
+            unlink(__DIR__.'/'.static::$logException);
+        }
     }
 
     /**
