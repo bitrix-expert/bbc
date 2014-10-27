@@ -67,6 +67,14 @@ trait Pages
         }
     }
 
+    /**
+     * Setting meta tags for current page
+     * <ul> Uses:
+     * <li> title
+     * <li> description
+     * <li> keywords
+     * </ul>
+     */
     protected function setSeoTags()
     {
         global $APPLICATION;
@@ -87,6 +95,15 @@ trait Pages
         }
     }
 
+    /**
+     * Setting open graph tags for current page
+     * <ul> Uses:
+     * <li> og:title
+     * <li> og:type
+     * <li> og:url
+     * <li> og:image
+     * </ul>
+     */
     protected function setOgTags()
     {
         global $APPLICATION;

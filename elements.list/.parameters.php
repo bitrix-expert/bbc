@@ -50,7 +50,11 @@ try
     }
 
     $arComponentParameters = array(
-        'GROUPS' => array(),
+        'GROUPS' => array(
+            'NAV' => array(
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_GROUP_NAV')
+            )
+        ),
         'PARAMETERS' => array(
             'IBLOCK_TYPE' => array(
                 'PARENT' => 'BASE',
@@ -67,25 +71,31 @@ try
                 'VALUES' => $iblocks
             ),
             'NAV_SHOW' => array(
-                'PARENT' => 'BASE',
+                'PARENT' => 'NAV',
                 'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_NAV_SHOW'),
                 'TYPE' => 'CHECKBOX',
                 'DEFAULT' => 'N'
             ),
             'NAV_SHOW_ALWAYS' => array(
-                'PARENT' => 'BASE',
+                'PARENT' => 'NAV',
                 'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_NAV_SHOW_ALWAYS'),
                 'TYPE' => 'CHECKBOX',
                 'DEFAULT' => 'N'
             ),
             'NAV_TITLE' => array(
-                'PARENT' => 'BASE',
+                'PARENT' => 'NAV',
                 'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_NAV_TITLE'),
                 'TYPE' => 'STRING',
                 'DEFAULT' => ''
             ),
+            'NAV_SAVE_SESSION' => array(
+                'PARENT' => 'NAV',
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_NAV_SAVE_SESSION'),
+                'TYPE' => 'CHECKBOX',
+                'DEFAULT' => 'N'
+            ),
             'ELEMENTS_COUNT' => array(
-                'PARENT' => 'BASE',
+                'PARENT' => 'NAV',
                 'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_ELEMENTS_COUNT'),
                 'TYPE' => 'STRING',
                 'DEFAULT' => ''

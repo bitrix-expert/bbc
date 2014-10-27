@@ -20,10 +20,21 @@ abstract class Basis extends \CBitrixComponent
 {
     use Common;
 
+    /**
+     * Auto executing methods of prolog / epilog in the traits
+     */
     const TRAITS_AUTO_EXECUTE = true;
 
+    /**
+     * @var array Used traits
+     */
     private $usedTraits;
 
+    /**
+     * Executing methods of prolog / epilog included traits
+     *
+     * @param string $type prolog / epilog
+     */
     final private function executeTraits($type)
     {
         if (!empty($this->usedTraits))
@@ -42,6 +53,9 @@ abstract class Basis extends \CBitrixComponent
         }
     }
 
+    /**
+     * Set to $this->usedTraits included traits
+     */
     private function getUsedTraits()
     {
         if (static::TRAITS_AUTO_EXECUTE)
