@@ -9,11 +9,11 @@
  */
 namespace Components\Basis;
 
-include_once dirname(__DIR__).'/basis/common.php';
+\CBitrixComponent::includeComponentClass(basename(dirname(__DIR__)).':basis');
 
 
 /**
- * Basis complex component
+ * Abstraction basis router component
  */
 abstract class BasisRouter extends \CBitrixComponent
 {
@@ -112,7 +112,6 @@ abstract class BasisRouter extends \CBitrixComponent
         try {
             $this->includeModules();
             $this->checkParams();
-
             $this->startAjax();
             $this->executeProlog();
 

@@ -15,10 +15,12 @@ if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 
 
 /**
- * Work in progress…
+ * Component for show elements list
  */
 class ElementsList extends Basis
 {
+    use Pages;
+
     protected static $needModules = array('iblock');
 
     protected function getResult()
@@ -31,9 +33,7 @@ class ElementsList extends Basis
                 'ACTIVE' => 'Y'
             ),
             false,
-            array(
-                'nTopCount' => $this->arParams['ELEMENTS_COUNT']
-            ),
+            $this->navParams,
             array(
                 'ID',
                 'IBLOCK_ID',
@@ -45,5 +45,7 @@ class ElementsList extends Basis
         {
             $this->arResult['ELEMENTS'][] = $arElement;
         }
+
+        $this->setNav($rsElements);
     }
 }

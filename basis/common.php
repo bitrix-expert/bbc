@@ -18,6 +18,9 @@ if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 Loc::loadMessages(__DIR__.'/class.php');
 
 
+/**
+ * Common main trait for all basis components
+ */
 trait Common
 {
     /**
@@ -38,7 +41,7 @@ trait Common
     /**
      * @var string Cache dir
      */
-    protected $cacheDir;
+    protected $cacheDir = false;
 
     /**
      * @var bool Caching template of the component (default not cache)
@@ -69,11 +72,6 @@ trait Common
      * @var array Paginator parameters
      */
     protected $navParams;
-
-    /**
-     * @var string Name of the navigation template
-     */
-    protected $navTemplate;
 
     /**
      * @var string Template page name
@@ -159,10 +157,9 @@ trait Common
     {
         if ($this->arParams['CACHE_TYPE'] && $this->arParams['CACHE_TYPE'] !== 'N' && $this->arParams['CACHE_TIME'] > 0)
         {
-            array_push(
+            $this->cacheIdAdditional = array(
                 $this->cacheIdAdditional,
                 $this->page,
-                $this->navTemplate,
                 \CDBResult::GetNavParams($this->navParams)
             );
 

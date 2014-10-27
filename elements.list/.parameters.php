@@ -66,11 +66,23 @@ try
                 'TYPE' => 'LIST',
                 'VALUES' => $iblocks
             ),
-            'SHOW_NAV' => array(
+            'NAV_SHOW' => array(
                 'PARENT' => 'BASE',
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_SHOW_NAV'),
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_NAV_SHOW'),
                 'TYPE' => 'CHECKBOX',
                 'DEFAULT' => 'N'
+            ),
+            'NAV_SHOW_ALWAYS' => array(
+                'PARENT' => 'BASE',
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_NAV_SHOW_ALWAYS'),
+                'TYPE' => 'CHECKBOX',
+                'DEFAULT' => 'N'
+            ),
+            'NAV_TITLE' => array(
+                'PARENT' => 'BASE',
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_NAV_TITLE'),
+                'TYPE' => 'STRING',
+                'DEFAULT' => ''
             ),
             'ELEMENTS_COUNT' => array(
                 'PARENT' => 'BASE',
