@@ -14,6 +14,11 @@ if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 
 trait Pages
 {
+    /**
+     * @var array Paginator parameters
+     */
+    protected $navParams;
+
     protected function executePrologPages()
     {
         $this->setNavParams();
@@ -21,27 +26,31 @@ trait Pages
 
     protected function setNavParams()
     {
-        if ($this->arParams['NAV_SHOW'] === 'Y' && $this->arParams['ELEMENTS_COUNT'] > 0)
+        if ($this->arParams['PAGER_SAVE_SESSION'] !== 'Y')
+        {
+            \CPageOption::SetOptionString('main', 'nav_page_in_session', 'N');
+        }
+
+        if (($this->arParams['DISPLAY_BOTTOM_PAGER'] || $this->arParams['DISPLAY_TOP_PAGER']))
         {
             $this->navParams = array(
                 'nPageSize' => $this->arParams['ELEMENTS_COUNT'],
-                'bShowAll' => false
+                'bDescPageNumbering' => $this->arParams['PAGER_DESC_NUMBERING'],
+                'bShowAll' => $this->arParams['PAGER_SHOW_ALL']
             );
+
+            $this->addCacheAdditionalId(\CDBResult::GetNavParams($this->navParams));
         }
         elseif ($this->arParams['ELEMENTS_COUNT'] > 0)
         {
             $this->navParams = array(
-                'nTopCount' => $this->arParams['ELEMENTS_COUNT']
+                'nTopCount' => $this->arParams['ELEMENTS_COUNT'],
+                'bDescPageNumbering' => $this->arParams['PAGER_DESC_NUMBERING']
             );
         }
         else
         {
             $this->navParams = false;
-        }
-
-        if ($this->arParams['NAV_SAVE_SESSION'] !== 'Y')
-        {
-            \CPageOption::SetOptionString('main', 'nav_page_in_session', 'N');
         }
     }
 
@@ -52,15 +61,15 @@ trait Pages
      */
     protected function setNav($result)
     {
-        if ($this->arParams['NAV_SHOW'] === 'Y')
+        if ($this->arParams['DISPLAY_BOTTOM_PAGER'] || $this->arParams['DISPLAY_TOP_PAGER'])
         {
             $navComponentObject = false;
 
             $this->arResult['NAV_STRING'] = $result->GetPageNavStringEx(
                 $navComponentObject,
-                $this->arParams['NAV_TITLE'],
-                $this->arParams['NAV_TEMPLATE'],
-                $this->arParams['NAV_SHOW_ALWAYS']
+                $this->arParams['PAGER_TITLE'],
+                $this->arParams['PAGER_TEMPLATE'],
+                $this->arParams['PAGER_SHOW_ALWAYS']
             );
             $this->arResult['NAV_CACHED_DATA'] = $navComponentObject->GetTemplateCachedData();
             $this->arResult['NAV_RESULT'] = $result;
@@ -111,6 +120,11 @@ trait Pages
         if ($this->arResult['OG_TAGS']['TITLE'])
         {
             $APPLICATION->AddHeadString('<meta property="og:title" content="'.$this->arResult['OG_TAGS']['TITLE'].'" />', true);
+        }
+
+        if ($this->arResult['OG_TAGS']['DESCRIPTION'])
+        {
+            $APPLICATION->AddHeadString('<meta property="og:description" content="'.$this->arResult['OG_TAGS']['DESCRIPTION'].'" />', true);
         }
 
         if ($this->arResult['OG_TAGS']['TYPE'])

@@ -50,11 +50,7 @@ try
     }
 
     $arComponentParameters = array(
-        'GROUPS' => array(
-            'NAV' => array(
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_GROUP_NAV')
-            )
-        ),
+        'GROUPS' => array(),
         'PARAMETERS' => array(
             'IBLOCK_TYPE' => array(
                 'PARENT' => 'BASE',
@@ -70,41 +66,31 @@ try
                 'TYPE' => 'LIST',
                 'VALUES' => $iblocks
             ),
-            'NAV_SHOW' => array(
-                'PARENT' => 'NAV',
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_NAV_SHOW'),
-                'TYPE' => 'CHECKBOX',
-                'DEFAULT' => 'N'
-            ),
-            'NAV_SHOW_ALWAYS' => array(
-                'PARENT' => 'NAV',
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_NAV_SHOW_ALWAYS'),
-                'TYPE' => 'CHECKBOX',
-                'DEFAULT' => 'N'
-            ),
-            'NAV_TITLE' => array(
-                'PARENT' => 'NAV',
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_NAV_TITLE'),
-                'TYPE' => 'STRING',
-                'DEFAULT' => ''
-            ),
-            'NAV_SAVE_SESSION' => array(
-                'PARENT' => 'NAV',
+            'PAGER_SAVE_SESSION' => array(
+                'PARENT' => 'PAGER_SETTINGS',
                 'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_NAV_SAVE_SESSION'),
                 'TYPE' => 'CHECKBOX',
                 'DEFAULT' => 'N'
             ),
             'ELEMENTS_COUNT' => array(
-                'PARENT' => 'NAV',
+                'PARENT' => 'PAGER_SETTINGS',
                 'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_ELEMENTS_COUNT'),
                 'TYPE' => 'STRING',
-                'DEFAULT' => ''
+                'DEFAULT' => '10'
+            ),
+            'CACHE_GROUPS' => array(
+                'PARENT' => 'CACHE_SETTINGS',
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_CACHE_GROUPS'),
+                'TYPE' => 'CHECKBOX',
+                'DEFAULT' => 'N'
             ),
             'CACHE_TIME' => array(
                 'DEFAULT' => 360000
             )
         )
     );
+
+    \CIBlockParameters::AddPagerSettings($arComponentParameters, Loc::getMessage('ELEMENTS_LIST_PARAMETERS_NAV_TITLE'), true, true);
 }
 catch (\Exception $e)
 {

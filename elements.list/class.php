@@ -25,7 +25,6 @@ class ElementsList extends Basis
 
     protected function getResult()
     {
-
         $rsElements = \CIBlockElement::GetList(
             array(),
             array(

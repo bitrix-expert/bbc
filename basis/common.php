@@ -29,14 +29,9 @@ trait Common
     public static $logException = 'exception.log';
 
     /**
-     * @var object Main\Data\Cache
-     */
-    protected $cache;
-
-    /**
      * @var array Additional cache ID
      */
-    protected $cacheIdAdditional;
+    private $cacheAdditionalId;
 
     /**
      * @var string Cache dir
@@ -67,11 +62,6 @@ trait Common
      * @var bool Reload page headers after AJAX request
      */
     protected $ajaxReloadHead = false;
-
-    /**
-     * @var array Paginator parameters
-     */
-    protected $navParams;
 
     /**
      * @var string Template page name
@@ -155,15 +145,18 @@ trait Common
      */
     protected function startCache()
     {
+        global $USER;
+
         if ($this->arParams['CACHE_TYPE'] && $this->arParams['CACHE_TYPE'] !== 'N' && $this->arParams['CACHE_TIME'] > 0)
         {
-            $this->cacheIdAdditional = array(
-                $this->cacheIdAdditional,
-                $this->page,
-                \CDBResult::GetNavParams($this->navParams)
-            );
+            $this->cacheAdditionalId[] = $this->page;
 
-            if ($this->startResultCache($this->arParams['CACHE_TIME'], $this->cacheIdAdditional, $this->cacheDir))
+            if ($this->arParams['CACHE_GROUPS'] === 'Y')
+            {
+                $this->cacheAdditionalId[] = $USER->GetGroups();
+            }
+
+            if ($this->startResultCache($this->arParams['CACHE_TIME'], $this->cacheAdditionalId, $this->cacheDir))
             {
                 return true;
             }
@@ -367,5 +360,15 @@ trait Common
         {
             Application::getInstance()->getTaggedCache()->registerTag($tag);
         }
+    }
+
+    /**
+     * Add additional ID to cache
+     *
+     * @param mixed $id
+     */
+    protected function addCacheAdditionalId($id)
+    {
+        $this->cacheAdditionalId[] = $id;
     }
 }
