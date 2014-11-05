@@ -9,6 +9,9 @@
  */
 namespace Components\Basis;
 
+use \Bitrix\Iblock\InheritedProperty;
+
+
 if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 
 
@@ -31,7 +34,7 @@ trait Pages
             \CPageOption::SetOptionString('main', 'nav_page_in_session', 'N');
         }
 
-        if (($this->arParams['DISPLAY_BOTTOM_PAGER'] || $this->arParams['DISPLAY_TOP_PAGER']))
+        if ($this->arParams['DISPLAY_BOTTOM_PAGER'] === 'Y' || $this->arParams['DISPLAY_TOP_PAGER'] === 'Y')
         {
             $this->navParams = array(
                 'nPageSize' => $this->arParams['ELEMENTS_COUNT'],
@@ -44,8 +47,7 @@ trait Pages
         elseif ($this->arParams['ELEMENTS_COUNT'] > 0)
         {
             $this->navParams = array(
-                'nTopCount' => $this->arParams['ELEMENTS_COUNT'],
-                'bDescPageNumbering' => $this->arParams['PAGER_DESC_NUMBERING']
+                'nTopCount' => $this->arParams['ELEMENTS_COUNT']
             );
         }
         else
@@ -61,7 +63,7 @@ trait Pages
      */
     protected function setNav($result)
     {
-        if ($this->arParams['DISPLAY_BOTTOM_PAGER'] || $this->arParams['DISPLAY_TOP_PAGER'])
+        if ($this->arParams['DISPLAY_BOTTOM_PAGER'] === 'Y' || $this->arParams['DISPLAY_TOP_PAGER'] === 'Y')
         {
             $navComponentObject = false;
 
@@ -73,6 +75,55 @@ trait Pages
             );
             $this->arResult['NAV_CACHED_DATA'] = $navComponentObject->GetTemplateCachedData();
             $this->arResult['NAV_RESULT'] = $result;
+        }
+    }
+
+    protected function executeGetResultPages()
+    {
+        if ($this->arParams['SET_SEO_TAGS'] !== 'Y')
+        {
+            return;
+        }
+
+        if ($this->arParams['SECTION_ID'])
+        {
+            $rsSeoValues = new InheritedProperty\SectionValues($this->arParams['IBLOCK_ID'], $this->arParams['SECTION_ID']);
+            $arSeoValues = $rsSeoValues->getValues();
+
+            if (!$this->arResult['SEO_TAGS']['TITLE'])
+            {
+                $this->arResult['SEO_TAGS']['TITLE'] = $arSeoValues['SECTION_META_TITLE'];
+            }
+
+            if (!$this->arResult['SEO_TAGS']['DESCRIPTION'])
+            {
+                $this->arResult['SEO_TAGS']['DESCRIPTION'] = $arSeoValues['SECTION_META_DESCRIPTION'];
+            }
+
+            if (!$this->arResult['SEO_TAGS']['KEYWORDS'])
+            {
+                $this->arResult['SEO_TAGS']['KEYWORDS'] = $arSeoValues['SECTION_META_KEYWORDS'];
+            }
+        }
+        elseif ($this->arParams['ELEMENT_ID'])
+        {
+            $rsSeoValues = new InheritedProperty\ElementValues($this->arParams['IBLOCK_ID'], $this->arParams['ELEMENT_ID']);
+            $arSeoValues = $rsSeoValues->getValues();
+
+            if (!$this->arResult['SEO_TAGS']['TITLE'])
+            {
+                $this->arResult['SEO_TAGS']['TITLE'] = $arSeoValues['ELEMENT_META_TITLE'];
+            }
+
+            if (!$this->arResult['SEO_TAGS']['DESCRIPTION'])
+            {
+                $this->arResult['SEO_TAGS']['DESCRIPTION'] = $arSeoValues['ELEMENT_META_DESCRIPTION'];
+            }
+
+            if (!$this->arResult['SEO_TAGS']['KEYWORDS'])
+            {
+                $this->arResult['SEO_TAGS']['KEYWORDS'] = $arSeoValues['ELEMENT_META_KEYWORDS'];
+            }
         }
     }
 

@@ -9,6 +9,7 @@
  */
 namespace Components\Basis;
 
+
 if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 
 \CBitrixComponent::includeComponentClass(basename(dirname(__DIR__)).':basis');
@@ -30,6 +31,7 @@ class ElementsList extends Basis
             array(
                 'IBLOCK_TYPE' => $this->arParams['IBLOCK_TYPE'],
                 'IBLOCK_ID' => $this->arParams['IBLOCK_ID'],
+                'SECTION_ID' => $this->arParams['SECTION_ID'],
                 'ACTIVE' => 'Y'
             ),
             false,

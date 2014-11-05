@@ -31,24 +31,39 @@ abstract class Basis extends \CBitrixComponent
     private $usedTraits;
 
     /**
-     * Executing methods of prolog / epilog included traits
+     * Executing methods prolog, getResult and epilog included traits
      *
-     * @param string $type prolog / epilog
+     * @param string $type prolog, getResult or epilog
      */
     final private function executeTraits($type)
     {
-        if (!empty($this->usedTraits))
+        if (empty($this->usedTraits))
         {
-            $type = ($type === 'prolog') ? 'Prolog' : 'Epilog';
+            return;
+        }
 
-            foreach ($this->usedTraits as $trait => $name)
+        switch ($type)
+        {
+            case 'prolog':
+                $type = 'Prolog';
+            break;
+
+            case 'getResult':
+                $type = 'GetResult';
+            break;
+
+            default:
+                $type = 'Epilog';
+            break;
+        }
+
+        foreach ($this->usedTraits as $trait => $name)
+        {
+            $method = 'execute'.$type.$name;
+
+            if (method_exists($trait, $method))
             {
-                $method = 'execute'.$type.$name;
-
-                if (method_exists($trait, $method))
-                {
-                    $this->$method();
-                }
+                $this->$method();
             }
         }
     }
@@ -94,6 +109,7 @@ abstract class Basis extends \CBitrixComponent
             if ($this->startCache())
             {
                 $this->getResult();
+                $this->executeTraits('getResult');
 
                 if ($this->cacheTemplate)
                 {
