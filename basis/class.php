@@ -21,9 +21,9 @@ abstract class Basis extends \CBitrixComponent
     use Common;
 
     /**
-     * Auto executing methods of prolog / epilog in the traits
+     * @var bool Auto executing methods of prolog / epilog in the traits
      */
-    const TRAITS_AUTO_EXECUTE = true;
+    protected $traitsAutoExecute = true;
 
     /**
      * @var array Used traits
@@ -35,7 +35,7 @@ abstract class Basis extends \CBitrixComponent
      *
      * @param string $type prolog, getResult or epilog
      */
-    final private function executeTraits($type)
+    private function executeTraits($type)
     {
         if (empty($this->usedTraits))
         {
@@ -73,7 +73,7 @@ abstract class Basis extends \CBitrixComponent
      */
     private function getUsedTraits()
     {
-        if (static::TRAITS_AUTO_EXECUTE)
+        if ($this->traitsAutoExecute)
         {
             $reflection = new \ReflectionClass(get_called_class());
 
@@ -96,38 +96,47 @@ abstract class Basis extends \CBitrixComponent
         }
     }
 
-    final public function executeComponent()
+    /**
+     * Main logic in basis component
+     */
+    final protected function executeBasis()
     {
-        try {
-            $this->getUsedTraits();
-            $this->includeModules();
-            $this->checkParams();
-            $this->startAjax();
-            $this->executeTraits('prolog');
-            $this->executeProlog();
+        $this->getUsedTraits();
+        $this->includeModules();
+        $this->checkAutomaticParams();
+        $this->checkParams();
+        $this->startAjax();
+        $this->executeTraits('prolog');
+        $this->executeProlog();
 
-            if ($this->startCache())
-            {
-                $this->getResult();
-                $this->executeTraits('getResult');
+        if ($this->startCache())
+        {
+            $this->getResult();
+            $this->executeTraits('getResult');
 
-                if ($this->cacheTemplate)
-                {
-                    $this->returnDatas();
-                }
-
-                $this->writeCache();
-            }
-
-            if (!$this->cacheTemplate)
+            if ($this->cacheTemplate)
             {
                 $this->returnDatas();
             }
 
-            $this->executeTraits('epilog');
-            $this->executeEpilog();
-            $this->stopAjax();
-            $this->executeFinal();
+            $this->writeCache();
+        }
+
+        if (!$this->cacheTemplate)
+        {
+            $this->returnDatas();
+        }
+
+        $this->executeTraits('epilog');
+        $this->executeEpilog();
+        $this->stopAjax();
+        $this->executeFinal();
+    }
+
+    public function executeComponent()
+    {
+        try {
+            $this->executeBasis();
         }
         catch (\Exception $e)
         {

@@ -84,14 +84,9 @@ try
             )
         );
 
-        while ($arr = $rsProperties->Fetch())
+        while ($arProperty = $rsProperties->Fetch())
         {
-            $arProperty[$arr['CODE']] = '['.$arr['CODE'].'] '.$arr['NAME'];
-
-            if (in_array($arr['PROPERTY_TYPE'], array('L', 'N', 'S')))
-            {
-                $elementProperties[$arr['CODE']] = '['.$arr['CODE'].'] '.$arr['NAME'];
-            }
+            $elementProperties[$arProperty['CODE']] = '['.$arProperty['CODE'].'] '.$arProperty['NAME'];
         }
     }
 
@@ -182,6 +177,12 @@ try
                 'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_SET_SEO_TAGS'),
                 'TYPE' => 'CHECKBOX',
                 'DEFAULT' => 'Y'
+            ),
+            'SET_404' => array(
+                'PARENT' => 'OTHERS',
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_SET_404'),
+                'TYPE' => 'CHECKBOX',
+                'DEFAULT' => 'N'
             ),
             'DATE_FORMAT' => \CIBlockParameters::GetDateFormat(
                 Loc::getMessage('ELEMENTS_LIST_PARAMETERS_DATE_FORMAT'),

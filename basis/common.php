@@ -24,9 +24,14 @@ Loc::loadMessages(__DIR__.'/class.php');
 trait Common
 {
     /**
+     * @var array The codes of modules that will be connected when performing component
+     */
+    protected static $needModules = array();
+
+    /**
      * @var string File name of log with last exception
      */
-    public static $logException = 'exception.log';
+    protected $logException = 'exception.log';
 
     /**
      * @var array Additional cache ID
@@ -64,14 +69,20 @@ trait Common
     protected $ajaxReloadHead = false;
 
     /**
+     * @var bool If true, will be set to header "Content-Type: application/json"
+     */
+    protected $ajaxJson = false;
+
+    /**
      * @var string Template page name
      */
     protected $page;
 
     /**
-     * @var array The codes of modules that will be connected when performing component
+     * @var array List keys from $this-arParams for checking
+     * @example $checkParams = array('IBLOCK_TYPE' => array('type' => 'string'), 'ELEMENT_ID' => array('type' => 'int', 'error' => '404'));
      */
-    protected static $needModules = array();
+    protected $checkParams = array();
 
     /**
      * Include modules
@@ -90,9 +101,70 @@ trait Common
         {
             if (!Main\Loader::includeModule($module))
             {
-                throw new Main\LoaderException(
-                    Loc::getMessage('BASIS_COMPONENT_EXCEPTION_LOADER', array('#MODULE_CODE#' => $module))
-                );
+                throw new Main\LoaderException('Failed include module "'.$module.'"');
+            }
+        }
+    }
+
+    /**
+     * @throws \Bitrix\Main\ArgumentNullException
+     */
+    private function checkAutomaticParams()
+    {
+        foreach ($this->checkParams as $key => $params)
+        {
+            $exception = false;
+
+            switch ($params['type'])
+            {
+                case 'int':
+
+                    if (!is_numeric($this->arParams[$key]))
+                    {
+                        $exception = new Main\ArgumentTypeException($key, 'integer');
+                    }
+                    else
+                    {
+                        $this->arParams[$key] = intval($this->arParams[$key]);
+                    }
+
+                break;
+
+                case 'string':
+
+                    $this->arParams[$key] = htmlspecialchars(trim($this->arParams[$key]));
+
+                    if (strlen($this->arParams[$key]) <= 0)
+                    {
+                        $exception = new Main\ArgumentNullException($key);
+                    }
+
+                break;
+
+                case 'array':
+
+                    if (!is_array($this->arParams[$key]))
+                    {
+                        $exception = new Main\ArgumentTypeException($key, 'array');
+                    }
+
+                break;
+
+                default:
+                    $exception = new Main\NotSupportedException('Not supported type of parameter for automatical checking');
+                break;
+            }
+
+            if ($exception)
+            {
+                if ($this->checkParams[$key]['error'] === '404')
+                {
+                    $this->return404();
+                }
+                else
+                {
+                    throw $exception;
+                }
             }
         }
     }
@@ -108,7 +180,7 @@ trait Common
     /**
      * Restart buffer if AJAX request
      */
-    protected function startAjax()
+    private function startAjax()
     {
         if (!$this->ajaxComponentId)
         {
@@ -126,6 +198,11 @@ trait Common
             else
             {
                 $APPLICATION->RestartBuffer();
+            }
+
+            if ($this->ajaxJson)
+            {
+                header('Content-Type: application/json');
             }
         }
     }
@@ -205,7 +282,7 @@ trait Common
     /**
      * Stop execute script if AJAX request
      */
-    protected function stopAjax()
+    private function stopAjax()
     {
         if ($this->isAjax())
         {
@@ -247,7 +324,7 @@ trait Common
         global $USER;
 
         $adminEmail = Main\Config\Option::get('main', 'email_from');
-        $logFile = Application::getDocumentRoot().$this->__path.'/'.static::$logException;
+        $logFile = Application::getDocumentRoot().$this->__path.'/'.$this->logException;
 
         $this->abortCache();
 
@@ -321,7 +398,7 @@ trait Common
 
     private function executeFinal()
     {
-        $logFile = Application::getDocumentRoot().$this->__path.'/'.static::$logException;
+        $logFile = Application::getDocumentRoot().$this->__path.'/'.$this->logException;
 
         if (is_file($logFile))
         {

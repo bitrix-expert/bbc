@@ -24,6 +24,11 @@ class ElementsList extends Basis
 
     protected static $needModules = array('iblock');
 
+    protected $checkParams = array(
+        'IBLOCK_TYPE' => array('type' => 'string'),
+        'IBLOCK_ID' => array('type' => 'int')
+    );
+
     protected function getResult()
     {
         $rsElements = \CIBlockElement::GetList(
@@ -46,6 +51,11 @@ class ElementsList extends Basis
         while ($arElement = $rsElements->Fetch())
         {
             $this->arResult['ELEMENTS'][] = $arElement;
+        }
+
+        if ($this->arParams['SET_404'] === 'Y' && empty($this->arResult['ELEMENTS']))
+        {
+            $this->return404();
         }
 
         $this->setNav($rsElements);

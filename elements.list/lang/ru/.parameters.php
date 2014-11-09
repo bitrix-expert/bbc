@@ -20,6 +20,7 @@ $MESS['ELEMENTS_LIST_PARAMETERS_NAV_CATEGORIES'] = 'Страницы';
 $MESS['ELEMENTS_LIST_PARAMETERS_NAV_SAVE_SESSION'] = 'Записывать номер страницы в сессию';
 
 $MESS['ELEMENTS_LIST_PARAMETERS_CACHE_GROUPS'] = 'Учитывать группы пользователя';
+$MESS['ELEMENTS_LIST_PARAMETERS_SET_404'] = 'Устанавливать 404 статус при отсутствии элементов';
 $MESS['ELEMENTS_LIST_PARAMETERS_DATE_FORMAT'] = 'Формат даты';
 
 $MESS['ELEMENTS_LIST_PARAMETERS_SET_SEO_TAGS'] = 'Устанавливать СЕО-теги в разделе';
