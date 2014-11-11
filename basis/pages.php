@@ -25,6 +25,7 @@ trait Pages
     protected function executePrologPages()
     {
         $this->setNavParams();
+        $this->setGlobalFilters();
     }
 
     protected function setNavParams()
@@ -192,6 +193,55 @@ trait Pages
         {
             $APPLICATION->AddHeadString('<meta property="og:image" content="'.$this->arResult['OG_TAGS']['IMAGE'].'" />', true);
         }
+    }
+
+    /**
+     * Getting global filter and write his to component parameters
+     */
+    public function setGlobalFilters()
+    {
+        if (strlen($this->arParams['EX_FILTER_NAME']) > 0
+            && preg_match("/^[A-Za-z_][A-Za-z01-9_]*$/", $this->arParams['EX_FILTER_NAME'])
+            && is_array($GLOBALS[$this->arParams['EX_FILTER_NAME']])
+        )
+        {
+            $this->arParams['EX_FILTER'] = $GLOBALS[$this->arParams['EX_FILTER_NAME']];
+        }
+        else
+        {
+            $this->arParams['EX_FILTER'] = array();
+        }
+    }
+
+    /**
+     * Returns array with selected fields and properties for uses in \CIBlock...::GetList()
+     *
+     * @param string $propsPrefix Prefix for properties. Default PROPERTY_
+     * @return array
+     */
+    protected function getSelectedFields($propsPrefix = 'PROPERTY_')
+    {
+        $fields = array();
+
+        foreach ($this->arParams['SELECT_FIELDS'] as $field)
+        {
+            if (trim($field))
+            {
+                $fields[] = $field;
+            }
+        }
+
+        unset($field);
+
+        foreach ($this->arParams['SELECT_PROPS'] as $propCode)
+        {
+            if (trim($propCode))
+            {
+                $fields[] = $propsPrefix.$propCode;
+            }
+        }
+
+        return $fields;
     }
 
     protected function executeEpilogPages()

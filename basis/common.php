@@ -304,22 +304,24 @@ trait Common
     }
 
     /**
-     * Set status 404 and reset cache
+     * Set status 404 and throw exception
+     *
+     * @throws \Exception
      */
     protected function return404()
     {
-        $this->abortCache();
-
         @define('ERROR_404', 'Y');
         \CHTTP::SetStatus('404 Not Found');
+
+        throw new \Exception('Page not found');
     }
 
     /**
      * Called when an error occurs
      *
-     * @param object $e Exception
+     * @param \Exception $e
      */
-    protected function catchException($e)
+    protected function catchException(\Exception $e)
     {
         global $USER;
 
@@ -367,9 +369,9 @@ trait Common
     /**
      * Display of the error for user
      *
-     * @param object $e Exception
+     * @param \Exception $e
      */
-    protected function showExceptionUser($e)
+    protected function showExceptionUser(\Exception $e)
     {
         ShowError(Loc::getMessage('BASIS_COMPONENT_CATCH_EXCEPTION'));
     }
@@ -377,9 +379,9 @@ trait Common
     /**
      * Display of the error for admin
      *
-     * @param object $e Exception
+     * @param \Exception $e
      */
-    protected function showExceptionAdmin($e)
+    protected function showExceptionAdmin(\Exception $e)
     {
         ShowError($e->getMessage());
 

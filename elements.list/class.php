@@ -33,18 +33,24 @@ class ElementsList extends Basis
     {
         $rsElements = \CIBlockElement::GetList(
             array(),
-            array(
-                'IBLOCK_TYPE' => $this->arParams['IBLOCK_TYPE'],
-                'IBLOCK_ID' => $this->arParams['IBLOCK_ID'],
-                'SECTION_ID' => $this->arParams['SECTION_ID'],
-                'ACTIVE' => 'Y'
+            array_merge(
+                array(
+                    'IBLOCK_TYPE' => $this->arParams['IBLOCK_TYPE'],
+                    'IBLOCK_ID' => $this->arParams['IBLOCK_ID'],
+                    'SECTION_ID' => $this->arParams['SECTION_ID'],
+                    'ACTIVE' => 'Y'
+                ),
+                $this->arParams['EX_FILTER']
             ),
             false,
             $this->navParams,
-            array(
-                'ID',
-                'IBLOCK_ID',
-                'NAME'
+            array_merge(
+                array(
+                    'ID',
+                    'IBLOCK_ID',
+                    'NAME'
+                ),
+                $this->getSelectedFields()
             )
         );
 
@@ -53,7 +59,7 @@ class ElementsList extends Basis
             $this->arResult['ELEMENTS'][] = $arElement;
         }
 
-        if ($this->arParams['SET_404'] === 'Y' && empty($this->arResult['ELEMENTS']))
+        if ($this->arParams['SET_404'] === 'Y' && empty($this->arResult['ELEMENTS']) && empty($this->arParams['EX_FILTER']))
         {
             $this->return404();
         }
