@@ -196,9 +196,37 @@ trait Pages
     }
 
     /**
+     * Prepare parameters of sort of the component
+     */
+    protected function setSortFields()
+    {
+        $this->arParams['SORT_BY_1'] = trim($this->arParams['SORT_BY_1']);
+
+        if (strlen($this->arParams['SORT_BY_1']) <= 0)
+        {
+            $this->arParams['SORT_BY_1'] = 'ACTIVE_FROM';
+        }
+
+        if (!preg_match('/^(asc|desc|nulls)(,asc|,desc|,nulls){0,1}$/i', $this->arParams['SORT_ORDER_1']))
+        {
+            $this->arParams['SORT_ORDER_1'] = 'DESC';
+        }
+
+        if (strlen($this->arParams['SORT_BY_2']) <= 0)
+        {
+            $this->arParams['SORT_BY_2'] = 'SORT';
+        }
+
+        if (!preg_match('/^(asc|desc|nulls)(,asc|,desc|,nulls){0,1}$/i', $this->arParams['SORT_ORDER_2']))
+        {
+            $this->arParams['SORT_ORDER_2'] = 'ASC';
+        }
+    }
+
+    /**
      * Getting global filter and write his to component parameters
      */
-    public function setGlobalFilters()
+    protected function setGlobalFilters()
     {
         if (strlen($this->arParams['EX_FILTER_NAME']) > 0
             && preg_match("/^[A-Za-z_][A-Za-z01-9_]*$/", $this->arParams['EX_FILTER_NAME'])

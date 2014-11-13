@@ -32,7 +32,10 @@ class ElementsList extends Basis
     protected function getResult()
     {
         $rsElements = \CIBlockElement::GetList(
-            array(),
+            array(
+                $this->arParams['SORT_BY_1'] => $this->arParams['SORT_ORDER_1'],
+                $this->arParams['SORT_BY_2'] => $this->arParams['SORT_ORDER_2']
+            ),
             array_merge(
                 array(
                     'IBLOCK_TYPE' => $this->arParams['IBLOCK_TYPE'],
@@ -54,7 +57,7 @@ class ElementsList extends Basis
             )
         );
 
-        while ($arElement = $rsElements->Fetch())
+        while ($arElement = $rsElements->GetNext())
         {
             $this->arResult['ELEMENTS'][] = $arElement;
         }

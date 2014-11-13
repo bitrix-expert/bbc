@@ -129,8 +129,8 @@ abstract class Basis extends \CBitrixComponent
 
         $this->executeTraits('epilog');
         $this->executeEpilog();
-        $this->stopAjax();
         $this->executeFinal();
+        $this->stopAjax();
     }
 
     public function executeComponent()

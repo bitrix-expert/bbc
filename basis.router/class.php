@@ -121,8 +121,8 @@ abstract class BasisRouter extends \CBitrixComponent
             $this->returnDatas($this->page);
 
             $this->executeEpilog();
-            $this->stopAjax();
             $this->executeFinal();
+            $this->stopAjax();
         }
         catch (\Exception $e)
         {
