@@ -10,43 +10,133 @@
 namespace Components\Basis;
 
 include_once __DIR__.'/common.php';
+include_once __DIR__.'/pages.php';
 
 
 /**
- * Basis component
+ * Abstraction basis component
  */
 abstract class Basis extends \CBitrixComponent
 {
     use Common;
 
-    final public function executeComponent()
+    /**
+     * @var bool Auto executing methods of prolog / epilog in the traits
+     */
+    protected $traitsAutoExecute = true;
+
+    /**
+     * @var array Used traits
+     */
+    private $usedTraits;
+
+    /**
+     * Executing methods prolog, getResult and epilog included traits
+     *
+     * @param string $type prolog, getResult or epilog
+     */
+    private function executeTraits($type)
     {
-        try {
-            $this->includeModules();
-            $this->checkParams();
-            $this->startAjax();
-            $this->executeProlog();
+        if (empty($this->usedTraits))
+        {
+            return;
+        }
 
-            if ($this->startCache())
+        switch ($type)
+        {
+            case 'prolog':
+                $type = 'Prolog';
+            break;
+
+            case 'getResult':
+                $type = 'GetResult';
+            break;
+
+            default:
+                $type = 'Epilog';
+            break;
+        }
+
+        foreach ($this->usedTraits as $trait => $name)
+        {
+            $method = 'execute'.$type.$name;
+
+            if (method_exists($trait, $method))
             {
-                $this->getResult();
+                $this->$method();
+            }
+        }
+    }
 
-                if ($this->cacheTemplate)
+    /**
+     * Set to $this->usedTraits included traits
+     */
+    private function getUsedTraits()
+    {
+        if ($this->traitsAutoExecute)
+        {
+            $reflection = new \ReflectionClass(get_called_class());
+
+            $parentClass = $reflection;
+
+            while (1)
+            {
+                foreach ($parentClass->getTraitNames() as $trait)
                 {
-                    $this->returnDatas();
+                    $this->usedTraits[$trait] = bx_basename($trait);
                 }
 
-                $this->writeCache();
-            }
+                if ($parentClass->name === __CLASS__)
+                {
+                    break;
+                }
 
-            if (!$this->cacheTemplate)
+                $parentClass = $parentClass->getParentClass();
+            }
+        }
+    }
+
+    /**
+     * Main logic in basis component
+     */
+    final protected function executeBasis()
+    {
+        $this->getUsedTraits();
+        $this->includeModules();
+        $this->checkAutomaticParams();
+        $this->checkParams();
+        $this->startAjax();
+        $this->executeTraits('prolog');
+        $this->executeProlog();
+
+        if ($this->startCache())
+        {
+            $this->getResult();
+            $this->executeTraits('getResult');
+
+            if ($this->cacheTemplate)
             {
                 $this->returnDatas();
             }
 
-            $this->executeEpilog();
-            $this->stopAjax();
-            $this->executeFinal();
+            $this->writeCache();
+        }
+
+        if (!$this->cacheTemplate)
+        {
+            $this->returnDatas();
+        }
+
+        $this->executeTraits('epilog');
+        $this->executeEpilog();
+        $this->executeFinal();
+        $this->stopAjax();
+    }
+
+    public function executeComponent()
+    {
+        try {
+            $this->executeBasis();
         }
         catch (\Exception $e)
         {

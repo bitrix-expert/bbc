@@ -5,3 +5,5 @@
     <h1><?=$element['NAME']?></h1>
 
 <?}?>
+
+<?=$arResult['NAV_STRING']?>

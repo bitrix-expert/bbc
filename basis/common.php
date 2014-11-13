@@ -18,27 +18,30 @@ if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 Loc::loadMessages(__DIR__.'/class.php');
 
 
+/**
+ * Common main trait for all basis components
+ */
 trait Common
 {
     /**
-     * @var string File name of log with last exception
+     * @var array The codes of modules that will be connected when performing component
      */
-    public static $logException = 'exception.log';
+    protected static $needModules = array();
 
     /**
-     * @var object Main\Data\Cache
+     * @var string File name of log with last exception
      */
-    protected $cache;
+    protected $logException = 'exception.log';
 
     /**
      * @var array Additional cache ID
      */
-    protected $cacheIdAdditional;
+    private $cacheAdditionalId;
 
     /**
      * @var string Cache dir
      */
-    protected $cacheDir;
+    protected $cacheDir = false;
 
     /**
      * @var bool Caching template of the component (default not cache)
@@ -66,14 +69,9 @@ trait Common
     protected $ajaxReloadHead = false;
 
     /**
-     * @var array Paginator parameters
+     * @var bool If true, will be set to header "Content-Type: application/json"
      */
-    protected $navParams;
-
-    /**
-     * @var string Name of the navigation template
-     */
-    protected $navTemplate;
+    protected $ajaxJson = false;
 
     /**
      * @var string Template page name
@@ -81,9 +79,10 @@ trait Common
     protected $page;
 
     /**
-     * @var array The codes of modules that will be connected when performing component
+     * @var array List keys from $this-arParams for checking
+     * @example $checkParams = array('IBLOCK_TYPE' => array('type' => 'string'), 'ELEMENT_ID' => array('type' => 'int', 'error' => '404'));
      */
-    protected static $needModules = array();
+    protected $checkParams = array();
 
     /**
      * Include modules
@@ -102,9 +101,70 @@ trait Common
         {
             if (!Main\Loader::includeModule($module))
             {
-                throw new Main\LoaderException(
-                    Loc::getMessage('BASIS_COMPONENT_EXCEPTION_LOADER', array('#MODULE_CODE#' => $module))
-                );
+                throw new Main\LoaderException('Failed include module "'.$module.'"');
+            }
+        }
+    }
+
+    /**
+     * @throws \Bitrix\Main\ArgumentNullException
+     */
+    private function checkAutomaticParams()
+    {
+        foreach ($this->checkParams as $key => $params)
+        {
+            $exception = false;
+
+            switch ($params['type'])
+            {
+                case 'int':
+
+                    if (!is_numeric($this->arParams[$key]))
+                    {
+                        $exception = new Main\ArgumentTypeException($key, 'integer');
+                    }
+                    else
+                    {
+                        $this->arParams[$key] = intval($this->arParams[$key]);
+                    }
+
+                break;
+
+                case 'string':
+
+                    $this->arParams[$key] = htmlspecialchars(trim($this->arParams[$key]));
+
+                    if (strlen($this->arParams[$key]) <= 0)
+                    {
+                        $exception = new Main\ArgumentNullException($key);
+                    }
+
+                break;
+
+                case 'array':
+
+                    if (!is_array($this->arParams[$key]))
+                    {
+                        $exception = new Main\ArgumentTypeException($key, 'array');
+                    }
+
+                break;
+
+                default:
+                    $exception = new Main\NotSupportedException('Not supported type of parameter for automatical checking');
+                break;
+            }
+
+            if ($exception)
+            {
+                if ($this->checkParams[$key]['error'] === '404')
+                {
+                    $this->return404();
+                }
+                else
+                {
+                    throw $exception;
+                }
             }
         }
     }
@@ -120,7 +180,7 @@ trait Common
     /**
      * Restart buffer if AJAX request
      */
-    protected function startAjax()
+    private function startAjax()
     {
         if (!$this->ajaxComponentId)
         {
@@ -138,6 +198,11 @@ trait Common
             else
             {
                 $APPLICATION->RestartBuffer();
+            }
+
+            if ($this->ajaxJson)
+            {
+                header('Content-Type: application/json');
             }
         }
     }
@@ -157,16 +222,18 @@ trait Common
      */
     protected function startCache()
     {
+        global $USER;
+
         if ($this->arParams['CACHE_TYPE'] && $this->arParams['CACHE_TYPE'] !== 'N' && $this->arParams['CACHE_TIME'] > 0)
         {
-            array_push(
-                $this->cacheIdAdditional,
-                $this->page,
-                $this->navTemplate,
-                \CDBResult::GetNavParams($this->navParams)
-            );
+            $this->cacheAdditionalId[] = $this->page;
 
-            if ($this->startResultCache($this->arParams['CACHE_TIME'], $this->cacheIdAdditional, $this->cacheDir))
+            if ($this->arParams['CACHE_GROUPS'] === 'Y')
+            {
+                $this->cacheAdditionalId[] = $USER->GetGroups();
+            }
+
+            if ($this->startResultCache($this->arParams['CACHE_TIME'], $this->cacheAdditionalId, $this->cacheDir))
             {
                 return true;
             }
@@ -215,7 +282,7 @@ trait Common
     /**
      * Stop execute script if AJAX request
      */
-    protected function stopAjax()
+    private function stopAjax()
     {
         if ($this->isAjax())
         {
@@ -237,27 +304,29 @@ trait Common
     }
 
     /**
-     * Set status 404 and reset cache
+     * Set status 404 and throw exception
+     *
+     * @throws \Exception
      */
     protected function return404()
     {
-        $this->abortCache();
-
         @define('ERROR_404', 'Y');
         \CHTTP::SetStatus('404 Not Found');
+
+        throw new \Exception('Page not found');
     }
 
     /**
      * Called when an error occurs
      *
-     * @param object $e Exception
+     * @param \Exception $e
      */
-    protected function catchException($e)
+    protected function catchException(\Exception $e)
     {
         global $USER;
 
         $adminEmail = Main\Config\Option::get('main', 'email_from');
-        $logFile = Application::getDocumentRoot().$this->__path.'/'.static::$logException;
+        $logFile = Application::getDocumentRoot().$this->__path.'/'.$this->logException;
 
         $this->abortCache();
 
@@ -300,9 +369,9 @@ trait Common
     /**
      * Display of the error for user
      *
-     * @param object $e Exception
+     * @param \Exception $e
      */
-    protected function showExceptionUser($e)
+    protected function showExceptionUser(\Exception $e)
     {
         ShowError(Loc::getMessage('BASIS_COMPONENT_CATCH_EXCEPTION'));
     }
@@ -310,9 +379,9 @@ trait Common
     /**
      * Display of the error for admin
      *
-     * @param object $e Exception
+     * @param \Exception $e
      */
-    protected function showExceptionAdmin($e)
+    protected function showExceptionAdmin(\Exception $e)
     {
         ShowError($e->getMessage());
 
@@ -331,7 +400,7 @@ trait Common
 
     private function executeFinal()
     {
-        $logFile = Application::getDocumentRoot().$this->__path.'/'.static::$logException;
+        $logFile = Application::getDocumentRoot().$this->__path.'/'.$this->logException;
 
         if (is_file($logFile))
         {
@@ -370,5 +439,15 @@ trait Common
         {
             Application::getInstance()->getTaggedCache()->registerTag($tag);
         }
+    }
+
+    /**
+     * Add additional ID to cache
+     *
+     * @param mixed $id
+     */
+    protected function addCacheAdditionalId($id)
+    {
+        $this->cacheAdditionalId[] = $id;
     }
 }
