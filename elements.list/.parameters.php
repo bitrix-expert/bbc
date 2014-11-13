@@ -151,8 +151,8 @@ try
                 'TYPE' => 'LIST',
                 'VALUES' => $sortOrders
             ),
-            'FIELDS' => $paramElementsFields,
-            'PROPERTIES' => array(
+            'SELECT_FIELDS' => $paramElementsFields,
+            'SELECT_PROPS' => array(
                 'PARENT' => 'BASE',
                 'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_PROPERTIES'),
                 'TYPE' => 'LIST',
