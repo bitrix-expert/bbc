@@ -24,7 +24,7 @@ try
     Common::includeModules(array('iblock'));
 
     $iblockTypes = \CIBlockParameters::GetIBlockTypes(array(0 => ''));
-    $iblocks = array();
+    $iblocks = array(0 => '');
     $sections = array(0 => '');
     $elementProperties = array();
 
@@ -86,7 +86,7 @@ try
 
         while ($arProperty = $rsProperties->Fetch())
         {
-            $elementProperties[$arProperty['CODE']] = '['.$arProperty['CODE'].'] '.$arProperty['NAME'];
+            $elementProperties['PROPERTY_'.$arProperty['CODE']] = '['.$arProperty['CODE'].'] '.$arProperty['NAME'];
         }
     }
 
@@ -119,7 +119,8 @@ try
                 'PARENT' => 'BASE',
                 'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_IBLOCK_ID'),
                 'TYPE' => 'LIST',
-                'VALUES' => $iblocks
+                'VALUES' => $iblocks,
+                'REFRESH' => 'Y'
             ),
             'SECTION_ID' => array(
                 'PARENT' => 'BASE',
@@ -181,6 +182,12 @@ try
             'SET_404' => array(
                 'PARENT' => 'OTHERS',
                 'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_SET_404'),
+                'TYPE' => 'CHECKBOX',
+                'DEFAULT' => 'N'
+            ),
+            'CHECK_PERMISSIONS' => array(
+                'PARENT' => 'OTHERS',
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_CHECK_PERMISSIONS'),
                 'TYPE' => 'CHECKBOX',
                 'DEFAULT' => 'N'
             ),

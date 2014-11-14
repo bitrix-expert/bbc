@@ -16,9 +16,9 @@ if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 
 
 /**
- * Component for show elements list
+ * Show page with element of the info-block
  */
-class ElementsList extends Basis
+class ElementsDetail extends Basis
 {
     use Elements;
 
@@ -26,29 +26,27 @@ class ElementsList extends Basis
 
     protected $checkParams = array(
         'IBLOCK_TYPE' => array('type' => 'string'),
-        'IBLOCK_ID' => array('type' => 'int')
+        'IBLOCK_ID' => array('type' => 'int'),
+        'ELEMENT_ID' => array('type' => 'int', 'error' => '404')
     );
 
     protected function getResult()
     {
-        $rsElements = \CIBlockElement::GetList(
-            $this->getParamsSort(),
+        $rsElement = \CIBlockElement::GetList(
+            array(),
             $this->getParamsFilter(),
             false,
-            $this->getParamsNavStart(),
+            false,
             $this->getParamsSelected()
         );
 
-        while ($element = $rsElements->GetNext())
+        if ($element = $rsElement->GetNext())
         {
-            $this->arResult['ELEMENTS'][] = $element;
+            $this->arResult = array_merge($this->arResult, $element);
         }
-
-        if ($this->arParams['SET_404'] === 'Y' && empty($this->arResult['ELEMENTS']) && empty($this->arParams['EX_FILTER']))
+        elseif ($this->arParams['SET_404'] === 'Y')
         {
             $this->return404();
         }
-
-        $this->setNav($rsElements);
     }
 }

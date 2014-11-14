@@ -79,7 +79,7 @@ trait Common
     protected $page;
 
     /**
-     * @var array List keys from $this-arParams for checking
+     * @var array List keys from $this->arParams for checking
      * @example $checkParams = array('IBLOCK_TYPE' => array('type' => 'string'), 'ELEMENT_ID' => array('type' => 'int', 'error' => '404'));
      */
     protected $checkParams = array();

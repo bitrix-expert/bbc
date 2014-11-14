@@ -10,7 +10,7 @@
 namespace Components\Basis;
 
 include_once __DIR__.'/common.php';
-include_once __DIR__.'/pages.php';
+include_once __DIR__.'/elements.php';
 
 
 /**

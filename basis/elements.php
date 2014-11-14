@@ -15,20 +15,22 @@ use \Bitrix\Iblock\InheritedProperty;
 if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 
 
-trait Pages
+trait Elements
 {
     /**
-     * @var array Paginator parameters
+     * @var array|bool Paginator parameters for \CIBlockElement::GetList()
      */
-    protected $navParams;
+    private $navStartParams;
 
-    protected function executePrologPages()
+    private $globalFilterValues = array();
+
+    protected function executePrologElements()
     {
-        $this->setNavParams();
+        $this->setNavStartParams();
         $this->setGlobalFilters();
     }
 
-    protected function setNavParams()
+    protected function setNavStartParams()
     {
         if ($this->arParams['PAGER_SAVE_SESSION'] !== 'Y')
         {
@@ -37,23 +39,23 @@ trait Pages
 
         if ($this->arParams['DISPLAY_BOTTOM_PAGER'] === 'Y' || $this->arParams['DISPLAY_TOP_PAGER'] === 'Y')
         {
-            $this->navParams = array(
+            $this->navStartParams = array(
                 'nPageSize' => $this->arParams['ELEMENTS_COUNT'],
                 'bDescPageNumbering' => $this->arParams['PAGER_DESC_NUMBERING'],
                 'bShowAll' => $this->arParams['PAGER_SHOW_ALL']
             );
 
-            $this->addCacheAdditionalId(\CDBResult::GetNavParams($this->navParams));
+            $this->addCacheAdditionalId(\CDBResult::GetNavParams($this->navStartParams));
         }
         elseif ($this->arParams['ELEMENTS_COUNT'] > 0)
         {
-            $this->navParams = array(
+            $this->navStartParams = array(
                 'nTopCount' => $this->arParams['ELEMENTS_COUNT']
             );
         }
         else
         {
-            $this->navParams = false;
+            $this->navStartParams = false;
         }
     }
 
@@ -79,9 +81,9 @@ trait Pages
         }
     }
 
-    protected function executeGetResultPages()
+    protected function executeGetResultElements()
     {
-        if ($this->arParams['SET_SEO_TAGS'] !== 'Y')
+        if ($this->arParams['SET_SEO_TAGS'] !== 'Y' || !$this->arParams['IBLOCK_ID'])
         {
             return;
         }
@@ -196,9 +198,12 @@ trait Pages
     }
 
     /**
-     * Prepare parameters of sort of the component
+     * Returns prepare parameters of sort of the component
+     *
+     * @param array $additionalFields Additional fields for sorting
+     * @return array
      */
-    protected function setSortFields()
+    protected function getParamsSort($additionalFields = array())
     {
         $this->arParams['SORT_BY_1'] = trim($this->arParams['SORT_BY_1']);
 
@@ -221,35 +226,112 @@ trait Pages
         {
             $this->arParams['SORT_ORDER_2'] = 'ASC';
         }
+
+        $fields = array(
+            $this->arParams['SORT_BY_1'] => $this->arParams['SORT_ORDER_1'],
+            $this->arParams['SORT_BY_2'] => $this->arParams['SORT_ORDER_2']
+        );
+
+        if (is_array($additionalFields) && !empty($additionalFields))
+        {
+            $fields = array_merge($fields, $additionalFields);
+        }
+
+        return $fields;
     }
 
     /**
      * Getting global filter and write his to component parameters
      */
-    protected function setGlobalFilters()
+    private function setGlobalFilters()
     {
         if (strlen($this->arParams['EX_FILTER_NAME']) > 0
             && preg_match("/^[A-Za-z_][A-Za-z01-9_]*$/", $this->arParams['EX_FILTER_NAME'])
             && is_array($GLOBALS[$this->arParams['EX_FILTER_NAME']])
         )
         {
-            $this->arParams['EX_FILTER'] = $GLOBALS[$this->arParams['EX_FILTER_NAME']];
+            $this->globalFilterValues = $GLOBALS[$this->arParams['EX_FILTER_NAME']];
+
+            $this->addCacheAdditionalId($GLOBALS[$this->arParams['EX_FILTER_NAME']]);
         }
-        else
+    }
+
+    /**
+     * Returns array filters fields for uses in \CIBlock...::GetList().
+     *
+     * Returns array with values global filter and (if is set in $this->arParams)
+     * <ul>
+     * <li> IBLOCK_TYPE
+     * <li> IBLOCK_ID
+     * <li> SECTION_ID
+     * </ul>
+     *
+     * @param array $additionalFields
+     * @return array
+     */
+    protected function getParamsFilter($additionalFields = array())
+    {
+        if ($this->arParams['IBLOCK_TYPE'] && !$additionalFields['IBLOCK_TYPE'])
         {
-            $this->arParams['EX_FILTER'] = array();
+            $additionalFields['IBLOCK_TYPE'] = $this->arParams['IBLOCK_TYPE'];
         }
+
+        if ($this->arParams['IBLOCK_ID'] > 0 && !$additionalFields['IBLOCK_ID'])
+        {
+            $additionalFields['IBLOCK_ID'] = $this->arParams['IBLOCK_ID'];
+        }
+
+        if ($this->arParams['SECTION_ID'] > 0 && !$additionalFields['SECTION_ID'])
+        {
+            $additionalFields['SECTION_ID'] = $this->arParams['SECTION_ID'];
+        }
+
+        if ($this->arParams['ELEMENT_ID'] > 0 && !$additionalFields['ID'])
+        {
+            $additionalFields['ID'] = $this->arParams['ELEMENT_ID'];
+        }
+
+        if ($this->arParams['CHECK_PERMISSIONS'] && !$additionalFields['CHECK_PERMISSIONS'])
+        {
+            $additionalFields['CHECK_PERMISSIONS'] = $this->arParams['CHECK_PERMISSIONS'];
+        }
+
+        if ($additionalFields['ACTIVE'] != false)
+        {
+            $additionalFields['ACTIVE'] = 'Y';
+        }
+
+        if (is_array($additionalFields) && !empty($additionalFields))
+        {
+            $this->globalFilterValues = array_merge($this->globalFilterValues, $additionalFields);
+        }
+
+        return $this->globalFilterValues;
+    }
+
+    protected function getParamsNavStart($additionalFields = array())
+    {
+        if (is_array($additionalFields) && !empty($additionalFields))
+        {
+            $this->navStartParams = array_merge($this->navStartParams, $additionalFields);
+        }
+
+        return $this->navStartParams;
     }
 
     /**
      * Returns array with selected fields and properties for uses in \CIBlock...::GetList()
      *
-     * @param string $propsPrefix Prefix for properties. Default PROPERTY_
+     * @param array $additionalFields Additional fields
      * @return array
      */
-    protected function getSelectedFields($propsPrefix = 'PROPERTY_')
+    protected function getParamsSelected($additionalFields = array())
     {
-        $fields = array();
+        $fields = array(
+            'ID',
+            'IBLOCK_ID',
+            'NAME'
+        );
 
         foreach ($this->arParams['SELECT_FIELDS'] as $field)
         {
@@ -265,14 +347,19 @@ trait Pages
         {
             if (trim($propCode))
             {
-                $fields[] = $propsPrefix.$propCode;
+                $fields[] = $propCode;
             }
+        }
+
+        if (is_array($additionalFields) && !empty($additionalFields))
+        {
+            $fields = array_merge($fields, $additionalFields);
         }
 
         return $fields;
     }
 
-    protected function executeEpilogPages()
+    protected function executeEpilogElements()
     {
         $this->setSeoTags();
         $this->setOgTags();
