@@ -13,6 +13,7 @@ use Bitrix\Main;
 use Bitrix\Main\Application;
 use Bitrix\Main\Localization\Loc;
 
+
 if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 
 Loc::loadMessages(__DIR__.'/class.php');
@@ -26,7 +27,7 @@ trait Common
     /**
      * @var array The codes of modules that will be connected when performing component
      */
-    protected static $needModules = array();
+    protected $needModules = array();
 
     /**
      * @var string File name of log with last exception
@@ -87,17 +88,17 @@ trait Common
     /**
      * Include modules
      *
-     * @param array $needModules [optional] Array with codes of the modules (default uses static::$needModules)
+     * @uses $this->needModules
      * @throws \Bitrix\Main\LoaderException
      */
-    public static function includeModules($needModules = array())
+    protected function includeModules()
     {
-        if (!$needModules)
+        if (empty($this->needModules))
         {
-            $needModules = static::$needModules;
+            return false;
         }
 
-        foreach ($needModules as $module)
+        foreach ($this->needModules as $module)
         {
             if (!Main\Loader::includeModule($module))
             {

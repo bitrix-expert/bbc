@@ -50,7 +50,7 @@ abstract class BasisRouter extends \CBitrixComponent
     protected function setSefDefaultParams()
     {
         $this->defaultUrlTemplates404 = array(
-            'list' => 'index.php',
+            'list' => '/',
             'detail' => '#ELEMENT_ID#/'
         );
 

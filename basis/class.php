@@ -9,6 +9,7 @@
  */
 namespace Components\Basis;
 
+include_once __DIR__.'/componenthelpers.php';
 include_once __DIR__.'/common.php';
 include_once __DIR__.'/elements.php';
 

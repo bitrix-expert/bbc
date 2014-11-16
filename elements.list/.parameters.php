@@ -9,10 +9,11 @@
  */
 namespace Components\Basis;
 
-if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
-
 use Bitrix\Iblock;
 use Bitrix\Main\Localization\Loc;
+
+
+if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 
 Loc::loadMessages(__FILE__);
 
@@ -21,7 +22,7 @@ Loc::loadMessages(__FILE__);
 
 try
 {
-    Common::includeModules(array('iblock'));
+    ComponentHelpers::includeModules(array('iblock'));
 
     $iblockTypes = \CIBlockParameters::GetIBlockTypes(array(0 => ''));
     $iblocks = array(0 => '');
