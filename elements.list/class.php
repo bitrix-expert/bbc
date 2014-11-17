@@ -22,7 +22,7 @@ class ElementsList extends Basis
 {
     use Elements;
 
-    protected static $needModules = array('iblock');
+    protected $needModules = array('iblock');
 
     protected $checkParams = array(
         'IBLOCK_TYPE' => array('type' => 'string'),
