@@ -3,7 +3,8 @@
 <?$APPLICATION->IncludeComponent('basis:elements.list', '.default', array(
         'IBLOCK_TYPE' => $arParams['IBLOCK_TYPE'],
         'IBLOCK_ID' => $arParams['IBLOCK_ID'],
-        'SECTION_ID' => $arParams['SECTION_ID'],
+        'SECTION_ID' => $arResult['VARIABLES']['SECTION_ID'],
+        'SECTION_CODE' => $arResult['VARIABLES']['SECTION_CODE'],
         'SORT_BY_1' => $arParams['SORT_BY_1'],
         'SORT_ORDER_1' => $arParams['SORT_ORDER_1'],
         'SORT_BY_2' => $arParams['SORT_BY_2'],

@@ -3,7 +3,8 @@
 <?$APPLICATION->IncludeComponent('basis:elements.detail', '.default', array(
         'IBLOCK_TYPE' => $arParams['IBLOCK_TYPE'],
         'IBLOCK_ID' => $arParams['IBLOCK_ID'],
-        'ELEMENT_ID' => $arParams['ELEMENT_ID'],
+        'ELEMENT_ID' => $arResult['VARIABLES']['ELEMENT_ID'],
+        'ELEMENT_CODE' => $arResult['VARIABLES']['ELEMENT_CODE'],
         'SELECT_FIELDS' => $arParams['DETAIL_SELECT_FIELDS'],
         'SELECT_PROPS' => $arParams['DETAIL_SELECT_PROPS'],
         'CACHE_GROUPS' => $arParams['CACHE_GROUPS'],
