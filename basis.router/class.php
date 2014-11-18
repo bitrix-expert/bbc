@@ -9,6 +9,9 @@
  */
 namespace Components\Basis;
 
+use Bitrix\Main;
+
+
 \CBitrixComponent::includeComponentClass(basename(dirname(__DIR__)).':basis');
 
 
@@ -50,7 +53,7 @@ abstract class BasisRouter extends \CBitrixComponent
     protected function setSefDefaultParams()
     {
         $this->defaultUrlTemplates404 = array(
-            'list' => '/',
+            'list' => '',
             'detail' => '#ELEMENT_ID#/'
         );
 
@@ -86,6 +89,26 @@ abstract class BasisRouter extends \CBitrixComponent
 
             if (!$this->page)
             {
+                if ($this->arParams['SET_404'] === 'Y')
+                {
+                    $folder404 = str_replace('\\', '/', $this->arParams['SEF_FOLDER']);
+
+                    if ($folder404 != '/')
+                    {
+                        $folder404 = '/'.trim($folder404, "/ \t\n\r\0\x0B")."/";
+                    }
+
+                    if (substr($folder404, -1) == '/')
+                    {
+                        $folder404 .= 'index.php';
+                    }
+
+                    if ($folder404 != Main\Context::getCurrent()->getRequest()->getRequestedPage())
+                    {
+                        $this->return404();
+                    }
+                }
+
                 $this->page = $this->defaultSefPage;
             }
 

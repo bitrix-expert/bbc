@@ -17,14 +17,21 @@ if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 
 class ElementsRouter extends BasisRouter
 {
+    protected $defaultSefPage = 'index';
+
     protected function setSefDefaultParams()
     {
         $this->defaultUrlTemplates404 = array(
-            'index' => 'index.php',
+            'index' => '',
             'section' => '#SECTION_CODE#/',
             'detail' => '#SECTION_CODE#/#ELEMENT_CODE#/'
         );
 
-        $this->componentVariables = array('SECTION_CODE', 'ELEMENT_CODE');
+        $this->componentVariables = array(
+            'SECTION_ID',
+            'SECTION_CODE',
+            'ELEMENT_ID',
+            'ELEMENT_CODE'
+        );
     }
 }
