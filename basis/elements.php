@@ -257,6 +257,19 @@ trait Elements
     }
 
     /**
+     * Add new fields to global filter
+     *
+     * @param array $fields
+     */
+    public function addGlobalFilters(array $fields)
+    {
+        if (is_array($fields) && !empty($fields))
+        {
+            $this->globalFilterValues = array_merge_recursive($this->globalFilterValues, $fields);
+        }
+    }
+
+    /**
      * Returns array filters fields for uses in \CIBlock...::GetList().
      *
      * Returns array with values global filter and (if is set in $this->arParams)

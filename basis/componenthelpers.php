@@ -52,6 +52,7 @@ class ComponentHelpers
      *                                      Options:
      *                                      <ul>
      *                                      <li> RENAME — rename parameter
+     *                                      <li> NAME — add new name (title) for parameter
      *                                      <li> MOVE — move parameter to another parameter group
      *                                      <li> DELETE — true or false
      *                                      </ul>
@@ -81,6 +82,11 @@ class ComponentHelpers
                 if ($prepareParams[$code]['MOVE'])
                 {
                     $params['PARENT'] = $prepareParams[$code]['MOVE'];
+                }
+
+                if ($prepareParams[$code]['NAME'])
+                {
+                    $params['NAME'] = $prepareParams[$code]['NAME'];
                 }
 
                 if ($prepareParams[$code]['RENAME'])
