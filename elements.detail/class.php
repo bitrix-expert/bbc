@@ -51,9 +51,12 @@ class ElementsDetail extends Basis
             $this->getParamsSelected()
         );
 
-        if ($element = $rsElement->GetNext())
+        if ($element = $rsElement->GetNextElement())
         {
-            $this->arResult = array_merge($this->arResult, $element);
+            $arElement = $element->GetFields();
+            $arElement['PROPERTIES'] = $element->GetProperties();
+
+            $this->arResult = array_merge($this->arResult, $arElement);
         }
         elseif ($this->arParams['SET_404'] === 'Y')
         {

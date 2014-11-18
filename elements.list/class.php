@@ -36,12 +36,18 @@ class ElementsList extends Basis
             $this->getParamsFilters(),
             false,
             $this->getParamsNavStart(),
-            $this->getParamsSelected()
+            $this->getParamsSelected(array(
+                'DETAIL_PAGE_URL',
+                'LIST_PAGE_URL'
+            ))
         );
 
-        while ($element = $rsElements->GetNext())
+        while ($element = $rsElements->GetNextElement())
         {
-            $this->arResult['ELEMENTS'][] = $element;
+            $arElement = $element->GetFields();
+            $arElement['PROPERTIES'] = $element->GetProperties();
+
+            $this->arResult['ELEMENTS'][] = $arElement;
         }
 
         if ($this->arParams['SET_404'] === 'Y' && empty($this->arResult['ELEMENTS']) && empty($this->arParams['EX_FILTER']))
