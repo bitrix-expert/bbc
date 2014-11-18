@@ -64,11 +64,13 @@ trait Elements
      *
      * @param object $result \CIBlockResult
      */
-    protected function setNav($result)
+    protected function generateNav($result)
     {
         if ($this->arParams['DISPLAY_BOTTOM_PAGER'] === 'Y' || $this->arParams['DISPLAY_TOP_PAGER'] === 'Y')
         {
-            $navComponentObject = false;
+            /**
+             * @global object $navComponentObject
+             */
 
             $this->arResult['NAV_STRING'] = $result->GetPageNavStringEx(
                 $navComponentObject,
@@ -282,7 +284,7 @@ trait Elements
      * @param array $additionalFields
      * @return array
      */
-    protected function getParamsFilter($additionalFields = array())
+    protected function getParamsFilters($additionalFields = array())
     {
         if ($this->arParams['IBLOCK_TYPE'] && !$additionalFields['IBLOCK_TYPE'])
         {
@@ -294,12 +296,20 @@ trait Elements
             $additionalFields['IBLOCK_ID'] = $this->arParams['IBLOCK_ID'];
         }
 
-        if ($this->arParams['SECTION_ID'] > 0 && !$additionalFields['SECTION_ID'])
+        if ($this->arParams['SECTION_CODE'] && !$additionalFields['SECTION_CODE'])
+        {
+            $additionalFields['SECTION_CODE'] = $this->arParams['SECTION_CODE'];
+        }
+        elseif ($this->arParams['SECTION_ID'] > 0 && !$additionalFields['SECTION_ID'])
         {
             $additionalFields['SECTION_ID'] = $this->arParams['SECTION_ID'];
         }
 
-        if ($this->arParams['ELEMENT_ID'] > 0 && !$additionalFields['ID'])
+        if ($this->arParams['ELEMENT_CODE'] && !$additionalFields['CODE'])
+        {
+            $additionalFields['CODE'] = $this->arParams['ELEMENT_CODE'];
+        }
+        elseif ($this->arParams['ELEMENT_ID'] > 0 && !$additionalFields['ID'])
         {
             $additionalFields['ID'] = $this->arParams['ELEMENT_ID'];
         }

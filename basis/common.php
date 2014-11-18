@@ -120,7 +120,7 @@ trait Common
             {
                 case 'int':
 
-                    if (!is_numeric($this->arParams[$key]))
+                    if (!is_numeric($this->arParams[$key]) && $params['error'] !== false)
                     {
                         $exception = new Main\ArgumentTypeException($key, 'integer');
                     }
@@ -135,7 +135,7 @@ trait Common
 
                     $this->arParams[$key] = htmlspecialchars(trim($this->arParams[$key]));
 
-                    if (strlen($this->arParams[$key]) <= 0)
+                    if (strlen($this->arParams[$key]) <= 0 && $params['error'] !== false)
                     {
                         $exception = new Main\ArgumentNullException($key);
                     }

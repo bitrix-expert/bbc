@@ -129,6 +129,11 @@ try
                 'TYPE' => 'LIST',
                 'VALUES' => $sections
             ),
+            'SECTION_CODE' => array(
+                'PARENT' => 'BASE',
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_SECTION_CODE'),
+                'TYPE' => 'STRING'
+            ),
             'SORT_BY_1' => array(
                 'PARENT' => 'BASE',
                 'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_SORT_BY_1'),

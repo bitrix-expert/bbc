@@ -64,6 +64,9 @@ try
             'SECTION_ID' => array(
                 'DELETE' => true
             ),
+            'SECTION_CODE' => array(
+                'DELETE' => true
+            ),
             'SELECT_FIELDS' => array(
                 'RENAME' => 'LIST_SELECT_FIELDS',
                 'MOVE' => 'LIST'
@@ -96,6 +99,9 @@ try
         $currentZone.':elements.detail',
         array(
             'ELEMENT_ID' => array(
+                'DELETE' => true
+            ),
+            'ELEMENT_CODE' => array(
                 'DELETE' => true
             ),
             'SELECT_FIELDS' => array(

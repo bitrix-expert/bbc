@@ -6,6 +6,8 @@ $MESS['ELEMENTS_DETAIL_PARAMETERS_GROUP_OTHERS'] = 'Прочее';
 $MESS['ELEMENTS_DETAIL_PARAMETERS_IBLOCK_TYPE'] = 'Тип инфоблока';
 $MESS['ELEMENTS_DETAIL_PARAMETERS_IBLOCK_ID'] = 'Инфоблок';
 $MESS['ELEMENTS_DETAIL_PARAMETERS_ELEMENT_ID'] = 'Идентификатор элемента';
+$MESS['ELEMENTS_DETAIL_PARAMETERS_ELEMENT_CODE'] = 'Символьный код элемента';
+$MESS['ELEMENT_CODE_TIP'] = 'Вместо фильтрации по идентификатору';
 
 $MESS['ELEMENTS_DETAIL_PARAMETERS_FIELDS'] = 'Возвращаемые поля';
 $MESS['ELEMENTS_DETAIL_PARAMETERS_PROPERTIES'] = 'Возвращаемые свойства';

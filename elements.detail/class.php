@@ -27,16 +27,27 @@ class ElementsDetail extends Basis
     protected $checkParams = array(
         'IBLOCK_TYPE' => array('type' => 'string'),
         'IBLOCK_ID' => array('type' => 'int'),
-        'ELEMENT_ID' => array('type' => 'int', 'error' => '404')
+        'ELEMENT_ID' => array('type' => 'int', 'error' => false),
+        'ELEMENT_CODE' => array('type' => 'string', 'error' => false)
     );
+
+    protected function executeProlog()
+    {
+        if (!$this->arParams['ELEMENT_ID'] && !$this->arParams['ELEMENT_CODE'])
+        {
+            $this->return404();
+        }
+    }
 
     protected function getResult()
     {
         $rsElement = \CIBlockElement::GetList(
             array(),
-            $this->getParamsFilter(),
+            $this->getParamsFilters(),
             false,
-            false,
+            array(
+                'nTopCount' => 1
+            ),
             $this->getParamsSelected()
         );
 

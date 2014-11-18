@@ -33,7 +33,7 @@ class ElementsList extends Basis
     {
         $rsElements = \CIBlockElement::GetList(
             $this->getParamsSort(),
-            $this->getParamsFilter(),
+            $this->getParamsFilters(),
             false,
             $this->getParamsNavStart(),
             $this->getParamsSelected()
@@ -49,6 +49,6 @@ class ElementsList extends Basis
             $this->return404();
         }
 
-        $this->setNav($rsElements);
+        $this->generateNav($rsElements);
     }
 }

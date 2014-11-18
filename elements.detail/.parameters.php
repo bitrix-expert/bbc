@@ -101,6 +101,11 @@ try
                 'NAME' => Loc::getMessage('ELEMENTS_DETAIL_PARAMETERS_ELEMENT_ID'),
                 'TYPE' => 'string'
             ),
+            'ELEMENT_CODE' => array(
+                'PARENT' => 'BASE',
+                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_PARAMETERS_ELEMENT_CODE'),
+                'TYPE' => 'string'
+            ),
             'SELECT_FIELDS' => $paramElementsFields,
             'SELECT_PROPS' => array(
                 'PARENT' => 'BASE',
