@@ -23,8 +23,8 @@ class ElementsRouter extends BasisRouter
     {
         $this->defaultUrlTemplates404 = array(
             'index' => '',
-            'section' => '#SECTION_CODE#/',
-            'detail' => '#SECTION_CODE#/#ELEMENT_CODE#/'
+            'section' => '#SECTION_ID#/',
+            'detail' => '#SECTION_ID#/#ELEMENT_ID#/'
         );
 
         $this->componentVariables = array(
