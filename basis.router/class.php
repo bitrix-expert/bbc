@@ -61,6 +61,21 @@ abstract class BasisRouter extends \CBitrixComponent
     }
 
     /**
+     * Is search request
+     *
+     * @return bool
+     */
+    protected function isSearchRequest()
+    {
+        if (strlen($_GET['q']) > 0 && $this->page !== 'detail')
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Set type of the page
      */
     protected function setPage()
@@ -112,6 +127,11 @@ abstract class BasisRouter extends \CBitrixComponent
                 $this->page = $this->defaultSefPage;
             }
 
+            if ($this->isSearchRequest() && $this->arParams['USE_SEARCH'] === 'Y')
+            {
+                $this->page = 'search';
+            }
+
             \CComponentEngine::InitComponentVariables(
                 $this->page,
                 $this->componentVariables,
@@ -130,25 +150,34 @@ abstract class BasisRouter extends \CBitrixComponent
         $this->arResult['ALIASES'] = $variableAliases;
     }
 
-    final public function executeComponent()
+    /**
+     * Main logic basis router
+     */
+    final protected function executeBasis()
+    {
+        $this->includeModules();
+        $this->checkParams();
+        $this->startAjax();
+        $this->executeProlog();
+
+        $this->setSefDefaultParams();
+        $this->setPage();
+        $this->getResult();
+        $this->returnDatas($this->page);
+
+        $this->executeEpilog();
+        $this->executeFinal();
+        $this->stopAjax();
+    }
+
+    public function executeComponent()
     {
         try {
-            $this->includeModules();
-            $this->checkParams();
-            $this->startAjax();
-            $this->executeProlog();
-
-            $this->setSefDefaultParams();
-            $this->setPage();
-            $this->getResult();
-            $this->returnDatas($this->page);
-
-            $this->executeEpilog();
-            $this->executeFinal();
-            $this->stopAjax();
+            $this->executeBasis();
         }
         catch (\Exception $e)
-        {
+        {define('LOG_FILENAME', $_SERVER['DOCUMENT_ROOT'].'/log.txt');
+        AddMessage2Log($e);
             $this->catchException($e);
         }
     }

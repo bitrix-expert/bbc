@@ -54,6 +54,12 @@ try
                     'DEFAULT' => '#SECTION_CODE#/#ELEMENT_CODE#/',
                     'VARIABLES' => array('ELEMENT_CODE', 'SECTION_CODE')
                 )
+            ),
+            'USE_SEARCH' => array(
+                'PARENT' => 'OTHERS',
+                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_PARAMETERS_USE_SEARCH'),
+                'TYPE' => 'CHECKBOX',
+                'DEFAULT' => 'N'
             )
         )
     );
