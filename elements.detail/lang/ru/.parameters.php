@@ -11,6 +11,8 @@ $MESS['ELEMENT_CODE_TIP'] = 'Вместо фильтрации по иденти
 
 $MESS['ELEMENTS_DETAIL_PARAMETERS_FIELDS'] = 'Возвращаемые поля';
 $MESS['ELEMENTS_DETAIL_PARAMETERS_PROPERTIES'] = 'Возвращаемые свойства';
+$MESS['ELEMENTS_DETAIL_PARAMETERS_RESULT_PROCESSING_MODE'] = 'Расширенный режим обработки результатов';
+$MESS['RESULT_PROCESSING_MODE_TIP'] = 'Будут выбираться все свойства элементов инфоблока со всеми полями. Выполняются дополнительные запросы, повышается нагрузка на компонент.';
 
 $MESS['ELEMENTS_DETAIL_PARAMETERS_CACHE_GROUPS'] = 'Учитывать группы пользователя';
 $MESS['ELEMENTS_DETAIL_PARAMETERS_SET_404'] = 'Устанавливать 404 статус при отсутствии элемента';

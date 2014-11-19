@@ -7,6 +7,7 @@
         'ELEMENT_CODE' => $arResult['VARIABLES']['ELEMENT_CODE'],
         'SELECT_FIELDS' => $arParams['DETAIL_SELECT_FIELDS'],
         'SELECT_PROPS' => $arParams['DETAIL_SELECT_PROPS'],
+        'RESULT_PROCESSING_MODE' => $arParams['DETAIL_RESULT_PROCESSING_MODE'],
         'CACHE_GROUPS' => $arParams['CACHE_GROUPS'],
         'CACHE_TYPE' => $arParams['CACHE_TYPE'],
         'CACHE_TIME' => $arParams['CACHE_TIME'],

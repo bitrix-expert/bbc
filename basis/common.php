@@ -50,11 +50,6 @@ trait Common
     protected $cacheTemplate = true;
 
     /**
-     * @var string Component ID for AJAX request (default value result of CAjax::GetComponentID())
-     */
-    protected $ajaxComponentId;
-
-    /**
      * @var string Salt for component ID for AJAX request
      */
     protected $ajaxComponentIdSalt;
@@ -183,9 +178,14 @@ trait Common
      */
     private function startAjax()
     {
-        if (!$this->ajaxComponentId)
+        if (strlen($this->arParams['AJAX_PARAM_NAME']) <= 0)
         {
-            $this->ajaxComponentId = \CAjax::GetComponentID($this->getName(), $this->getTemplateName(), $this->ajaxComponentIdSalt);
+            $this->arParams['AJAX_PARAM_NAME'] = $this->ajaxRequestParam;
+        }
+
+        if (strlen($this->arParams['AJAX_COMPONENT_ID']) <= 0)
+        {
+            $this->arParams['AJAX_COMPONENT_ID'] = \CAjax::GetComponentID($this->getName(), $this->getTemplateName(), $this->ajaxComponentIdSalt);
         }
 
         if ($this->isAjax())
@@ -272,6 +272,16 @@ trait Common
 
     }
 
+    protected function executeGetResultCommon()
+    {
+        if (strlen($this->arParams['AJAX_PARAM_NAME']) > 0 && strlen($this->arParams['AJAX_COMPONENT_ID']) > 0)
+        {
+            $this->arResult['AJAX_REQUEST_PARAMS'] = $this->arParams['AJAX_PARAM_NAME'].'='.$this->arParams['AJAX_COMPONENT_ID'];
+
+            $this->setResultCacheKeys(array('AJAX_REQUEST_PARAMS'));
+        }
+    }
+
     /**
      * Execute after getting results. Not cached
      */
@@ -288,19 +298,6 @@ trait Common
         if ($this->isAjax())
         {
             exit;
-        }
-    }
-
-    /**
-     * Setting component AJAX parameters
-     */
-    private function setAjaxParams()
-    {
-        if ($this->ajaxRequestParam && $this->ajaxComponentId)
-        {
-            $this->arResult['AJAX_COMPONENT_ID'] = $this->ajaxComponentId;
-            $this->arResult['AJAX_PARAM_NAME'] = $this->ajaxRequestParam;
-            $this->arResult['AJAX_REQUEST_PARAMS'] = $this->ajaxRequestParam.'='.$this->ajaxComponentId;
         }
     }
 
@@ -417,9 +414,9 @@ trait Common
     public function isAjax()
     {
         if (
-            $this->ajaxComponentId
-            && $this->ajaxRequestParam
-            && $_REQUEST[$this->ajaxRequestParam] === $this->ajaxComponentId
+            strlen($this->arResult['AJAX_COMPONENT_ID']) > 0
+            && strlen($this->arResult['AJAX_PARAM_NAME']) > 0
+            && $_REQUEST[$this->arResult['AJAX_PARAM_NAME']] === $this->arResult['AJAX_COMPONENT_ID']
             && isset($_SERVER['HTTP_X_REQUESTED_WITH'])
             && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']))
         {

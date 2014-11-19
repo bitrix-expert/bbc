@@ -115,6 +115,12 @@ try
                 'VALUES' => $elementProperties,
                 'ADDITIONAL_VALUES' => 'Y'
             ),
+            'RESULT_PROCESSING_MODE' => array(
+                'PARENT' => 'BASE',
+                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_PARAMETERS_RESULT_PROCESSING_MODE'),
+                'TYPE' => 'CHECKBOX',
+                'DEFAULT' => 'N'
+            ),
             'SET_SEO_TAGS' => array(
                 'PARENT' => 'SEO',
                 'NAME' => Loc::getMessage('ELEMENTS_DETAIL_PARAMETERS_SET_SEO_TAGS'),

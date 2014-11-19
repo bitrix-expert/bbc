@@ -17,6 +17,8 @@ $MESS['ELEMENTS_LIST_PARAMETERS_SORT_ORDER_ASC'] = 'по возрастанию'
 $MESS['ELEMENTS_LIST_PARAMETERS_SORT_ORDER_DESC'] = 'по убыванию';
 $MESS['ELEMENTS_LIST_PARAMETERS_FIELDS'] = 'Возвращаемые поля';
 $MESS['ELEMENTS_LIST_PARAMETERS_PROPERTIES'] = 'Возвращаемые свойства';
+$MESS['ELEMENTS_LIST_PARAMETERS_RESULT_PROCESSING_MODE'] = 'Расширенный режим обработки результатов';
+$MESS['RESULT_PROCESSING_MODE_TIP'] = 'Будут выбираться все свойства элементов инфоблока со всеми полями. Выполняются дополнительные запросы, повышается нагрузка на компонент.';
 
 $MESS['ELEMENTS_LIST_PARAMETERS_NAV_CATEGORIES'] = 'Страницы';
 $MESS['ELEMENTS_LIST_PARAMETERS_NAV_SAVE_SESSION'] = 'Записывать номер страницы в сессию';

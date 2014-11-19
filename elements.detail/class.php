@@ -51,12 +51,40 @@ class ElementsDetail extends Basis
             $this->getParamsSelected()
         );
 
-        if ($element = $rsElement->GetNextElement())
+        if ($this->arParams['RESULT_PROCESSING_MODE'] === 'Y')
         {
-            $arElement = $element->GetFields();
-            $arElement['PROPERTIES'] = $element->GetProperties();
+            $processingMethod = 'GetNextElement';
+        }
+        else
+        {
+            $processingMethod = 'GetNext';
+        }
+
+        if ($element = $rsElement->$processingMethod())
+        {
+            if ($this->arParams['RESULT_PROCESSING_MODE'] === 'Y')
+            {
+                $arElement = $element->GetFields();
+                $arElement['PROPERTIES'] = $element->GetProperties();
+            }
+            else
+            {
+                $arElement = $element;
+            }
 
             $this->arResult = array_merge($this->arResult, $arElement);
+
+            $this->setResultCacheKeys(array(
+                'ID',
+                'IBLOCK_ID',
+                'CODE',
+                'NAME',
+                'IBLOCK_SECTION_ID',
+                'IBLOCK',
+                'LIST_PAGE_URL',
+                'SECTION_URL',
+                'SECTION'
+            ));
         }
         elseif ($this->arParams['SET_404'] === 'Y')
         {

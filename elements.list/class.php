@@ -42,15 +42,36 @@ class ElementsList extends Basis
             ))
         );
 
-        while ($element = $rsElements->GetNextElement())
+        if ($this->arParams['RESULT_PROCESSING_MODE'] === 'Y')
         {
-            $arElement = $element->GetFields();
-            $arElement['PROPERTIES'] = $element->GetProperties();
-
-            $this->arResult['ELEMENTS'][] = $arElement;
+            $processingMethod = 'GetNextElement';
+        }
+        else
+        {
+            $processingMethod = 'GetNext';
         }
 
-        if ($this->arParams['SET_404'] === 'Y' && empty($this->arResult['ELEMENTS']) && empty($this->arParams['EX_FILTER']))
+        while ($element = $rsElements->$processingMethod())
+        {
+            if ($this->arParams['RESULT_PROCESSING_MODE'] === 'Y')
+            {
+                $arElement = $element->GetFields();
+                $arElement['PROPERTIES'] = $element->GetProperties();
+            }
+            else
+            {
+                $arElement = $element;
+            }
+
+            $this->arResult['ELEMENTS'][] = $arElement;
+
+            $this->setResultCacheKeys(array(
+                'NAV_CACHED_DATA',
+                'ELEMENTS'
+            ));
+        }
+
+        if ($this->arParams['SET_404'] === 'Y' && empty($this->arResult['ELEMENTS']))
         {
             $this->return404();
         }

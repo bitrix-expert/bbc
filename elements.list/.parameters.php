@@ -167,6 +167,12 @@ try
                 'VALUES' => $elementProperties,
                 'ADDITIONAL_VALUES' => 'Y'
             ),
+            'RESULT_PROCESSING_MODE' => array(
+                'PARENT' => 'BASE',
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_RESULT_PROCESSING_MODE'),
+                'TYPE' => 'CHECKBOX',
+                'DEFAULT' => 'N'
+            ),
             'PAGER_SAVE_SESSION' => array(
                 'PARENT' => 'PAGER_SETTINGS',
                 'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_NAV_SAVE_SESSION'),

@@ -75,6 +75,10 @@ try
                 'RENAME' => 'LIST_SELECT_PROPS',
                 'MOVE' => 'LIST'
             ),
+            'RESULT_PROCESSING_MODE' => array(
+                'RENAME' => 'LIST_RESULT_PROCESSING_MODE',
+                'MOVE' => 'LIST'
+            ),
             'SORT_BY_1' => array(
                 'MOVE' => 'LIST'
             ),
@@ -110,6 +114,10 @@ try
             ),
             'SELECT_PROPS' => array(
                 'RENAME' => 'DETAIL_SELECT_PROPS',
+                'MOVE' => 'DETAIL'
+            ),
+            'RESULT_PROCESSING_MODE' => array(
+                'RENAME' => 'DETAIL_RESULT_PROCESSING_MODE',
                 'MOVE' => 'DETAIL'
             ),
             'DATE_FORMAT' => array(

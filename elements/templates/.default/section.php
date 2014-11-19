@@ -11,6 +11,7 @@
         'SORT_ORDER_2' => $arParams['SORT_ORDER_2'],
         'SELECT_FIELDS' => $arParams['LIST_SELECT_FIELDS'],
         'SELECT_PROPS' => $arParams['LIST_SELECT_PROPS'],
+        'RESULT_PROCESSING_MODE' => $arParams['LIST_RESULT_PROCESSING_MODE'],
         'CACHE_GROUPS' => $arParams['CACHE_GROUPS'],
         'CACHE_TYPE' => $arParams['CACHE_TYPE'],
         'CACHE_TIME' => $arParams['CACHE_TIME'],
