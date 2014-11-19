@@ -66,7 +66,7 @@ try
 
         while ($arProperty = $rsProperties->Fetch())
         {
-            $elementProperties['PROPERTY_'.$arProperty['CODE']] = '['.$arProperty['CODE'].'] '.$arProperty['NAME'];
+            $elementProperties[$arProperty['CODE']] = '['.$arProperty['CODE'].'] '.$arProperty['NAME'];
         }
     }
 

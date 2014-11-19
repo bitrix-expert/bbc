@@ -346,9 +346,10 @@ trait Elements
      * Returns array with selected fields and properties for uses in \CIBlock...::GetList()
      *
      * @param array $additionalFields Additional fields
+     * @param string $propsPrefix Prefix for properties keys
      * @return array
      */
-    protected function getParamsSelected($additionalFields = array())
+    protected function getParamsSelected($additionalFields = array(), $propsPrefix = 'PROPERTY_')
     {
         $fields = array(
             'ID',
@@ -370,7 +371,7 @@ trait Elements
         {
             if (trim($propCode))
             {
-                $fields[] = $propCode;
+                $fields[] = $propsPrefix.$propCode;
             }
         }
 
