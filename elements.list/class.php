@@ -65,10 +65,7 @@ class ElementsList extends Basis
 
             $this->arResult['ELEMENTS'][] = $arElement;
 
-            $this->setResultCacheKeys(array(
-                'NAV_CACHED_DATA',
-                'ELEMENTS'
-            ));
+            $this->setResultCacheKeys(array('NAV_CACHED_DATA'));
         }
 
         if ($this->arParams['SET_404'] === 'Y' && empty($this->arResult['ELEMENTS']))

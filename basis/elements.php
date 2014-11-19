@@ -379,7 +379,7 @@ trait Elements
             $fields = array_merge($fields, $additionalFields);
         }
 
-        return $fields;
+        return array_unique($fields);
     }
 
     protected function executeEpilogElements()
