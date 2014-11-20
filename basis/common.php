@@ -55,24 +55,9 @@ trait Common
     protected $ajaxComponentIdSalt;
 
     /**
-     * @var string Name of parameter for AJAX request (example: index.php?compid=…)
-     */
-    protected $ajaxRequestParam = 'compid';
-
-    /**
-     * @var bool Reload page headers after AJAX request
-     */
-    protected $ajaxReloadHead = false;
-
-    /**
-     * @var bool If true, will be set to header "Content-Type: application/json"
-     */
-    protected $ajaxJson = false;
-
-    /**
      * @var string Template page name
      */
-    protected $page;
+    protected $templatePage;
 
     /**
      * @var array List keys from $this->arParams for checking
@@ -178,9 +163,14 @@ trait Common
      */
     private function startAjax()
     {
+        if ($this->arParams['USE_AJAX'] !== 'Y')
+        {
+            return false;
+        }
+
         if (strlen($this->arParams['AJAX_PARAM_NAME']) <= 0)
         {
-            $this->arParams['AJAX_PARAM_NAME'] = $this->ajaxRequestParam;
+            $this->arParams['AJAX_PARAM_NAME'] = 'compid';
         }
 
         if (strlen($this->arParams['AJAX_COMPONENT_ID']) <= 0)
@@ -192,7 +182,7 @@ trait Common
         {
             global $APPLICATION;
 
-            if ($this->ajaxReloadHead)
+            if ($this->arParams['AJAX_HEAD_RELOAD'] === 'Y')
             {
                 $APPLICATION->ShowAjaxHead();
             }
@@ -201,10 +191,15 @@ trait Common
                 $APPLICATION->RestartBuffer();
             }
 
-            if ($this->ajaxJson)
+            if ($this->arParams['AJAX_TYPE'] === 'JSON')
             {
                 header('Content-Type: application/json');
             }
+        }
+
+        if (strlen($this->arParams['AJAX_TEMPLATE_PAGE']) > 0)
+        {
+            $this->templatePage = basename($this->arParams['AJAX_TEMPLATE_PAGE']);
         }
     }
 
@@ -227,7 +222,7 @@ trait Common
 
         if ($this->arParams['CACHE_TYPE'] && $this->arParams['CACHE_TYPE'] !== 'N' && $this->arParams['CACHE_TIME'] > 0)
         {
-            $this->cacheAdditionalId[] = $this->page;
+            $this->cacheAdditionalId[] = $this->templatePage;
 
             if ($this->arParams['CACHE_GROUPS'] === 'Y')
             {
@@ -295,7 +290,7 @@ trait Common
      */
     private function stopAjax()
     {
-        if ($this->isAjax())
+        if ($this->isAjax() && $this->arParams['USE_AJAX'] === 'Y')
         {
             exit;
         }
@@ -389,11 +384,11 @@ trait Common
     /**
      * Show results. Default: include template of the component
      *
-     * @uses $this->page
+     * @uses $this->templatePage
      */
     protected function returnDatas()
     {
-        $this->includeComponentTemplate($this->page);
+        $this->includeComponentTemplate($this->templatePage);
     }
 
     private function executeFinal()

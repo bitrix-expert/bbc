@@ -176,8 +176,7 @@ abstract class BasisRouter extends \CBitrixComponent
             $this->executeBasis();
         }
         catch (\Exception $e)
-        {define('LOG_FILENAME', $_SERVER['DOCUMENT_ROOT'].'/log.txt');
-        AddMessage2Log($e);
+        {
             $this->catchException($e);
         }
     }

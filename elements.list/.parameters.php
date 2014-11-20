@@ -91,26 +91,29 @@ try
         }
     }
 
-    $paramElementsFields = \CIBlockParameters::GetFieldCode(Loc::getMessage('ELEMENTS_LIST_PARAMETERS_FIELDS'), 'BASE');
+    $paramElementsFields = \CIBlockParameters::GetFieldCode(Loc::getMessage('ELEMENTS_LIST_FIELDS'), 'BASE');
 
     $sortOrders = array(
-        'ASC' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_SORT_ORDER_ASC'),
-        'DESC' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_SORT_ORDER_DESC')
+        'ASC' => Loc::getMessage('ELEMENTS_LIST_SORT_ORDER_ASC'),
+        'DESC' => Loc::getMessage('ELEMENTS_LIST_SORT_ORDER_DESC')
     );
 
     $arComponentParameters = array(
         'GROUPS' => array(
-            'OTHERS' => array(
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_GROUP_OTHERS')
+            'AJAX' => array(
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_GROUP_AJAX')
             ),
             'SEO' => array(
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_GROUP_SEO')
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_GROUP_SEO')
             ),
+            'OTHERS' => array(
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_GROUP_OTHERS')
+            )
         ),
         'PARAMETERS' => array(
             'IBLOCK_TYPE' => array(
                 'PARENT' => 'BASE',
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_IBLOCK_TYPE'),
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_IBLOCK_TYPE'),
                 'TYPE' => 'LIST',
                 'VALUES' => $iblockTypes,
                 'DEFAULT' => '',
@@ -118,50 +121,50 @@ try
             ),
             'IBLOCK_ID' => array(
                 'PARENT' => 'BASE',
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_IBLOCK_ID'),
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_IBLOCK_ID'),
                 'TYPE' => 'LIST',
                 'VALUES' => $iblocks,
                 'REFRESH' => 'Y'
             ),
             'SECTION_ID' => array(
                 'PARENT' => 'BASE',
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_SECTION_ID'),
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_SECTION_ID'),
                 'TYPE' => 'LIST',
                 'VALUES' => $sections
             ),
             'SECTION_CODE' => array(
                 'PARENT' => 'BASE',
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_SECTION_CODE'),
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_SECTION_CODE'),
                 'TYPE' => 'STRING'
             ),
             'SORT_BY_1' => array(
                 'PARENT' => 'BASE',
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_SORT_BY_1'),
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_SORT_BY_1'),
                 'TYPE' => 'LIST',
                 'VALUES' => \CIBlockParameters::GetElementSortFields()
             ),
             'SORT_ORDER_1' => array(
                 'PARENT' => 'BASE',
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_SORT_ORDER_1'),
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_SORT_ORDER_1'),
                 'TYPE' => 'LIST',
                 'VALUES' => $sortOrders
             ),
             'SORT_BY_2' => array(
                 'PARENT' => 'BASE',
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_SORT_BY_2'),
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_SORT_BY_2'),
                 'TYPE' => 'LIST',
                 'VALUES' => \CIBlockParameters::GetElementSortFields()
             ),
             'SORT_ORDER_2' => array(
                 'PARENT' => 'BASE',
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_SORT_ORDER_2'),
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_SORT_ORDER_2'),
                 'TYPE' => 'LIST',
                 'VALUES' => $sortOrders
             ),
             'SELECT_FIELDS' => $paramElementsFields,
             'SELECT_PROPS' => array(
                 'PARENT' => 'BASE',
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_PROPERTIES'),
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_PROPERTIES'),
                 'TYPE' => 'LIST',
                 'MULTIPLE' => 'Y',
                 'VALUES' => $elementProperties,
@@ -169,47 +172,74 @@ try
             ),
             'RESULT_PROCESSING_MODE' => array(
                 'PARENT' => 'BASE',
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_RESULT_PROCESSING_MODE'),
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_RESULT_PROCESSING_MODE'),
                 'TYPE' => 'CHECKBOX',
                 'DEFAULT' => 'N'
             ),
             'PAGER_SAVE_SESSION' => array(
                 'PARENT' => 'PAGER_SETTINGS',
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_NAV_SAVE_SESSION'),
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_NAV_SAVE_SESSION'),
                 'TYPE' => 'CHECKBOX',
                 'DEFAULT' => 'N'
             ),
             'ELEMENTS_COUNT' => array(
                 'PARENT' => 'PAGER_SETTINGS',
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_ELEMENTS_COUNT'),
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_ELEMENTS_COUNT'),
                 'TYPE' => 'STRING',
                 'DEFAULT' => '10'
             ),
+            'USE_AJAX' => array(
+                'PARENT' => 'AJAX',
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_USE_AJAX'),
+                'TYPE' => 'CHECKBOX',
+                'DEFAULT' => 'Y'
+            ),
+            'AJAX_TEMPLATE_PAGE' => array(
+                'PARENT' => 'AJAX',
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_AJAX_TEMPLATE_PAGE'),
+                'TYPE' => 'STRING',
+                'DEFAULT' => ''
+            ),
+            'AJAX_HEAD_RELOAD' => array(
+                'PARENT' => 'AJAX',
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_AJAX_HEAD_RELOAD'),
+                'TYPE' => 'CHECKBOX',
+                'DEFAULT' => 'Y'
+            ),
+            'AJAX_TYPE' => array(
+                'PARENT' => 'AJAX',
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_AJAX_TYPE'),
+                'TYPE' => 'LIST',
+                'VALUES' => array(
+                    'DEFAULT' => Loc::getMessage('ELEMENTS_LIST_AJAX_TYPE_DEFAULT'),
+                    'JSON' => Loc::getMessage('ELEMENTS_LIST_AJAX_TYPE_JSON')
+                )
+            ),
             'SET_SEO_TAGS' => array(
                 'PARENT' => 'SEO',
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_SET_SEO_TAGS'),
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_SET_SEO_TAGS'),
                 'TYPE' => 'CHECKBOX',
                 'DEFAULT' => 'Y'
             ),
             'SET_404' => array(
                 'PARENT' => 'OTHERS',
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_SET_404'),
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_SET_404'),
                 'TYPE' => 'CHECKBOX',
                 'DEFAULT' => 'N'
             ),
             'CHECK_PERMISSIONS' => array(
                 'PARENT' => 'OTHERS',
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_CHECK_PERMISSIONS'),
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_CHECK_PERMISSIONS'),
                 'TYPE' => 'CHECKBOX',
                 'DEFAULT' => 'N'
             ),
             'DATE_FORMAT' => \CIBlockParameters::GetDateFormat(
-                Loc::getMessage('ELEMENTS_LIST_PARAMETERS_DATE_FORMAT'),
+                Loc::getMessage('ELEMENTS_LIST_DATE_FORMAT'),
                 'OTHERS'
             ),
             'CACHE_GROUPS' => array(
                 'PARENT' => 'CACHE_SETTINGS',
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_PARAMETERS_CACHE_GROUPS'),
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_CACHE_GROUPS'),
                 'TYPE' => 'CHECKBOX',
                 'DEFAULT' => 'N'
             ),
@@ -219,7 +249,7 @@ try
         )
     );
 
-    \CIBlockParameters::AddPagerSettings($arComponentParameters, Loc::getMessage('ELEMENTS_LIST_PARAMETERS_NAV_TITLE'), true, true);
+    \CIBlockParameters::AddPagerSettings($arComponentParameters, Loc::getMessage('ELEMENTS_LIST_NAV_TITLE'), true, true);
 }
 catch (\Exception $e)
 {
