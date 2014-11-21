@@ -33,11 +33,6 @@ abstract class BasisRouter extends \CBitrixComponent
     protected $componentVariables;
 
     /**
-     * @var string Template page
-     */
-    protected $page;
-
-    /**
      * @var string Template page default
      */
     protected $defaultPage = 'list';
@@ -67,7 +62,7 @@ abstract class BasisRouter extends \CBitrixComponent
      */
     protected function isSearchRequest()
     {
-        if (strlen($_GET['q']) > 0 && $this->page !== 'detail')
+        if (strlen($_GET['q']) > 0 && $this->templatePage !== 'detail')
         {
             return true;
         }
@@ -96,13 +91,13 @@ abstract class BasisRouter extends \CBitrixComponent
                 $this->arParams['VARIABLE_ALIASES']
             );
 
-            $this->page = \CComponentEngine::ParseComponentPath(
+            $this->templatePage = \CComponentEngine::ParseComponentPath(
                 $this->arParams['SEF_FOLDER'],
                 $urlTemplates,
                 $variables
             );
 
-            if (!$this->page)
+            if (!$this->templatePage)
             {
                 if ($this->arParams['SET_404'] === 'Y')
                 {
@@ -124,16 +119,16 @@ abstract class BasisRouter extends \CBitrixComponent
                     }
                 }
 
-                $this->page = $this->defaultSefPage;
+                $this->templatePage = $this->defaultSefPage;
             }
 
             if ($this->isSearchRequest() && $this->arParams['USE_SEARCH'] === 'Y')
             {
-                $this->page = 'search';
+                $this->templatePage = 'search';
             }
 
             \CComponentEngine::InitComponentVariables(
-                $this->page,
+                $this->templatePage,
                 $this->componentVariables,
                 $variableAliases,
                 $variables
@@ -141,7 +136,7 @@ abstract class BasisRouter extends \CBitrixComponent
         }
         else
         {
-            $this->page = $this->defaultPage;
+            $this->templatePage = $this->defaultPage;
         }
 
         $this->arResult['FOLDER'] = $this->arParams['SEF_FOLDER'];
@@ -163,7 +158,7 @@ abstract class BasisRouter extends \CBitrixComponent
         $this->setSefDefaultParams();
         $this->setPage();
         $this->getResult();
-        $this->returnDatas($this->page);
+        $this->returnDatas();
 
         $this->executeEpilog();
         $this->executeFinal();
