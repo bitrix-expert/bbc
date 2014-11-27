@@ -195,11 +195,11 @@ trait Common
             {
                 header('Content-Type: application/json');
             }
-        }
 
-        if (strlen($this->arParams['AJAX_TEMPLATE_PAGE']) > 0)
-        {
-            $this->templatePage = basename($this->arParams['AJAX_TEMPLATE_PAGE']);
+            if (strlen($this->arParams['AJAX_TEMPLATE_PAGE']) > 0)
+            {
+                $this->templatePage = basename($this->arParams['AJAX_TEMPLATE_PAGE']);
+            }
         }
     }
 
