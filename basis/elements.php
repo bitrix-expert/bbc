@@ -9,7 +9,8 @@
  */
 namespace Components\Basis;
 
-use \Bitrix\Iblock\InheritedProperty;
+use Bitrix\Iblock\InheritedProperty;
+use Bitrix\Main\Page\Asset;
 
 
 if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
@@ -22,7 +23,20 @@ trait Elements
      */
     private $navStartParams;
 
+    /**
+     * @var array|bool Group parameters for \CIBlockElement::GetList()
+     */
+    private $groupingParams;
+
+    /**
+     * @var array Values of global filter
+     */
     private $globalFilterValues = array();
+
+    /**
+     * @var bool Show include areas
+     */
+    protected $showEditButtons = true;
 
     protected function executePrologElements()
     {
@@ -66,12 +80,12 @@ trait Elements
      */
     protected function generateNav($result)
     {
+        /**
+         * @global object $navComponentObject
+         */
+
         if ($this->arParams['DISPLAY_BOTTOM_PAGER'] === 'Y' || $this->arParams['DISPLAY_TOP_PAGER'] === 'Y')
         {
-            /**
-             * @global object $navComponentObject
-             */
-
             $this->arResult['NAV_STRING'] = $result->GetPageNavStringEx(
                 $navComponentObject,
                 $this->arParams['PAGER_TITLE'],
@@ -134,11 +148,14 @@ trait Elements
 
     /**
      * Setting meta tags for current page
+     *
      * <ul> Uses:
      * <li> title
      * <li> description
      * <li> keywords
      * </ul>
+     *
+     * @uses arResult['SEO_TAGS']
      */
     protected function setSeoTags()
     {
@@ -162,40 +179,131 @@ trait Elements
 
     /**
      * Setting open graph tags for current page
+     *
      * <ul> Uses:
      * <li> og:title
      * <li> og:type
      * <li> og:url
      * <li> og:image
      * </ul>
+     *
+     * @uses arResult['OG_TAGS']
      */
     protected function setOgTags()
     {
-        global $APPLICATION;
-
         if ($this->arResult['OG_TAGS']['TITLE'])
         {
-            $APPLICATION->AddHeadString('<meta property="og:title" content="'.$this->arResult['OG_TAGS']['TITLE'].'" />', true);
+            Asset::getInstance()->addString('<meta property="og:title" content="'.$this->arResult['OG_TAGS']['TITLE'].'" />', true);
         }
 
         if ($this->arResult['OG_TAGS']['DESCRIPTION'])
         {
-            $APPLICATION->AddHeadString('<meta property="og:description" content="'.$this->arResult['OG_TAGS']['DESCRIPTION'].'" />', true);
+            Asset::getInstance()->addString('<meta property="og:description" content="'.$this->arResult['OG_TAGS']['DESCRIPTION'].'" />', true);
         }
 
         if ($this->arResult['OG_TAGS']['TYPE'])
         {
-            $APPLICATION->AddHeadString('<meta property="og:type" content="'.$this->arResult['OG_TAGS']['TYPE'].'" />', true);
+            Asset::getInstance()->addString('<meta property="og:type" content="'.$this->arResult['OG_TAGS']['TYPE'].'" />', true);
         }
 
         if ($this->arResult['OG_TAGS']['URL'])
         {
-            $APPLICATION->AddHeadString('<meta property="og:url" content="'.$this->arResult['OG_TAGS']['URL'].'" />', true);
+            Asset::getInstance()->addString('<meta property="og:url" content="'.$this->arResult['OG_TAGS']['URL'].'" />', true);
         }
 
         if ($this->arResult['OG_TAGS']['IMAGE'])
         {
-            $APPLICATION->AddHeadString('<meta property="og:image" content="'.$this->arResult['OG_TAGS']['IMAGE'].'" />', true);
+            Asset::getInstance()->addString('<meta property="og:image" content="'.$this->arResult['OG_TAGS']['IMAGE'].'" />', true);
+        }
+    }
+
+    /**
+     * Add to page buttons for edit elements and sections of info-block
+     */
+    protected function setEditButtons()
+    {
+        global $APPLICATION;
+
+        if (!$APPLICATION->GetShowIncludeAreas() || $this->showEditButtons === false)
+        {
+            return false;
+        }
+
+        $buttons = \CIBlock::GetPanelButtons(
+            $this->arParams['IBLOCK_ID'],
+            $this->arResult['ID'],
+            $this->arParams['SECTION_ID'], // @todo Can be SECTION_CODE
+            array()
+        );
+
+        $this->addIncludeAreaIcons(\CIBlock::GetComponentMenu($APPLICATION->GetPublicShowMode(), $buttons));
+
+        if (is_array($buttons['intranet']))
+        {
+            Asset::getInstance()->addJs(BX_ROOT.'/js/main/utils.js');
+
+            foreach ($buttons['intranet'] as $button)
+            {
+                $this->addEditButton($button);
+            }
+        }
+    }
+
+    /**
+     * Getting global filter and write his to component parameters
+     */
+    private function setGlobalFilters()
+    {
+        if (strlen($this->arParams['EX_FILTER_NAME']) > 0
+            && preg_match("/^[A-Za-z_][A-Za-z01-9_]*$/", $this->arParams['EX_FILTER_NAME'])
+            && is_array($GLOBALS[$this->arParams['EX_FILTER_NAME']])
+        )
+        {
+            $this->globalFilterValues = $GLOBALS[$this->arParams['EX_FILTER_NAME']];
+
+            $this->addCacheAdditionalId($GLOBALS[$this->arParams['EX_FILTER_NAME']]);
+        }
+    }
+
+    /**
+     * Add new fields to global filter
+     *
+     * @param array $fields
+     */
+    protected function addGlobalFilters(array $fields)
+    {
+        if (is_array($fields) && !empty($fields))
+        {
+            $this->globalFilterValues = array_merge_recursive($this->globalFilterValues, $fields);
+            $this->addCacheAdditionalId($fields);
+        }
+    }
+
+    /**
+     * Add parameters to grouping
+     *
+     * @param array $additionalFields
+     * @uses groupingParams
+     */
+    protected function addParamsGrouping($additionalFields = array())
+    {
+        if (is_array($additionalFields) && !empty($additionalFields))
+        {
+            $this->groupingParams = array_merge($this->groupingParams, $additionalFields);
+        }
+    }
+
+    /**
+     * Add parameters to pagination settings
+     *
+     * @param array $additionalFields
+     * @uses navStartParams
+     */
+    protected function addParamsNavStart($additionalFields = array())
+    {
+        if (is_array($additionalFields) && !empty($additionalFields))
+        {
+            $this->navStartParams = array_merge($this->navStartParams, $additionalFields);
         }
     }
 
@@ -240,35 +348,6 @@ trait Elements
         }
 
         return $fields;
-    }
-
-    /**
-     * Getting global filter and write his to component parameters
-     */
-    private function setGlobalFilters()
-    {
-        if (strlen($this->arParams['EX_FILTER_NAME']) > 0
-            && preg_match("/^[A-Za-z_][A-Za-z01-9_]*$/", $this->arParams['EX_FILTER_NAME'])
-            && is_array($GLOBALS[$this->arParams['EX_FILTER_NAME']])
-        )
-        {
-            $this->globalFilterValues = $GLOBALS[$this->arParams['EX_FILTER_NAME']];
-
-            $this->addCacheAdditionalId($GLOBALS[$this->arParams['EX_FILTER_NAME']]);
-        }
-    }
-
-    /**
-     * Add new fields to global filter
-     *
-     * @param array $fields
-     */
-    public function addGlobalFilters(array $fields)
-    {
-        if (is_array($fields) && !empty($fields))
-        {
-            $this->globalFilterValues = array_merge_recursive($this->globalFilterValues, $fields);
-        }
     }
 
     /**
@@ -326,17 +405,41 @@ trait Elements
 
         if (is_array($additionalFields) && !empty($additionalFields))
         {
-            $this->globalFilterValues = array_merge($this->globalFilterValues, $additionalFields);
+            $this->globalFilterValues = array_merge_recursive($this->globalFilterValues, $additionalFields);
         }
 
         return $this->globalFilterValues;
     }
 
+    /**
+     * Returns array with group parameters for uses in \CIBlock...::GetList()
+     *
+     * @param array $additionalFields
+     * @uses groupingParams
+     * @return array|bool
+     */
+    protected function getParamsGrouping($additionalFields = array())
+    {
+        if (!empty($additionalFields))
+        {
+            $this->addParamsGrouping($additionalFields);
+        }
+
+        return $this->groupingParams;
+    }
+
+    /**
+     * Returns array with pagination parameters for uses in \CIBlock...::GetList()
+     *
+     * @param array $additionalFields
+     * @uses navStartParams
+     * @return array|bool
+     */
     protected function getParamsNavStart($additionalFields = array())
     {
-        if (is_array($additionalFields) && !empty($additionalFields))
+        if (!empty($additionalFields))
         {
-            $this->navStartParams = array_merge($this->navStartParams, $additionalFields);
+            $this->addParamsNavStart($additionalFields);
         }
 
         return $this->navStartParams;
@@ -383,9 +486,81 @@ trait Elements
         return array_unique($fields);
     }
 
+    protected function getProcessingMethod()
+    {
+        if ($this->arParams['RESULT_PROCESSING_MODE'] === 'EXTENDED')
+        {
+            return 'GetNextElement';
+        }
+        else
+        {
+            return 'GetNext';
+        }
+    }
+
+    /**
+     * Processing request of the elements
+     *
+     * @param \CIBlockResult $element
+     * @return array
+     */
+    private function processingElementsResult($element)
+    {
+        if ($this->arParams['RESULT_PROCESSING_MODE'] === 'EXTENDED')
+        {
+            $arElement = $element->GetFields();
+            $arElement['PROPS'] = $element->GetProperties();
+        }
+        else
+        {
+            $arElement = $element;
+
+            foreach ($this->arParams['SELECT_PROPS'] as $propCode)
+            {
+                if (trim($propCode))
+                {
+                    $arProp = explode('.', $propCode);
+                    $propCode = array_shift($arProp);
+                    $propValue = $element['PROPERTY_'.$propCode.'_VALUE'];
+
+                    if ($propValue)
+                    {
+                        $arElement['PROPS'][$propCode]['VALUE'] = $propValue;
+                    }
+                    
+                    foreach ($arProp as $field)
+                    {
+                        $arElement['PROPS'][$propCode]['LINKED'][$field] = $element['PROPERTY_'.$propCode.'_'.$field];
+                    }
+                }
+            }
+        }
+
+        if ($this->prepareElementsResult($arElement))
+        {
+            return $arElement;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Empty method for prepare result request of the elements
+     *
+     * @param \CIBlockResult $element
+     * @return bool
+     */
+    protected function prepareElementsResult($element)
+    {
+        return $element;
+    }
+
     protected function executeEpilogElements()
     {
         $this->setSeoTags();
         $this->setOgTags();
+        $this->setEditButtons();
     }
 }

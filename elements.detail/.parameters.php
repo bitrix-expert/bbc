@@ -70,21 +70,21 @@ try
         }
     }
 
-    $paramElementsFields = \CIBlockParameters::GetFieldCode(Loc::getMessage('ELEMENTS_DETAIL_PARAMETERS_FIELDS'), 'BASE');
+    $paramElementsFields = \CIBlockParameters::GetFieldCode(Loc::getMessage('ELEMENTS_DETAIL_FIELDS'), 'BASE');
 
     $arComponentParameters = array(
         'GROUPS' => array(
             'OTHERS' => array(
-                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_PARAMETERS_GROUP_OTHERS')
+                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_GROUP_OTHERS')
             ),
             'SEO' => array(
-                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_PARAMETERS_GROUP_SEO')
+                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_GROUP_SEO')
             ),
         ),
         'PARAMETERS' => array(
             'IBLOCK_TYPE' => array(
                 'PARENT' => 'BASE',
-                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_PARAMETERS_IBLOCK_TYPE'),
+                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_IBLOCK_TYPE'),
                 'TYPE' => 'LIST',
                 'VALUES' => $iblockTypes,
                 'DEFAULT' => '',
@@ -92,24 +92,24 @@ try
             ),
             'IBLOCK_ID' => array(
                 'PARENT' => 'BASE',
-                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_PARAMETERS_IBLOCK_ID'),
+                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_IBLOCK_ID'),
                 'TYPE' => 'LIST',
                 'VALUES' => $iblocks
             ),
             'ELEMENT_ID' => array(
                 'PARENT' => 'BASE',
-                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_PARAMETERS_ELEMENT_ID'),
+                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_ELEMENT_ID'),
                 'TYPE' => 'string'
             ),
             'ELEMENT_CODE' => array(
                 'PARENT' => 'BASE',
-                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_PARAMETERS_ELEMENT_CODE'),
+                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_ELEMENT_CODE'),
                 'TYPE' => 'string'
             ),
             'SELECT_FIELDS' => $paramElementsFields,
             'SELECT_PROPS' => array(
                 'PARENT' => 'BASE',
-                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_PARAMETERS_PROPERTIES'),
+                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_PROPERTIES'),
                 'TYPE' => 'LIST',
                 'MULTIPLE' => 'Y',
                 'VALUES' => $elementProperties,
@@ -117,29 +117,29 @@ try
             ),
             'RESULT_PROCESSING_MODE' => array(
                 'PARENT' => 'BASE',
-                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_PARAMETERS_RESULT_PROCESSING_MODE'),
+                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_RESULT_PROCESSING_MODE'),
                 'TYPE' => 'CHECKBOX',
                 'DEFAULT' => 'N'
             ),
             'SET_SEO_TAGS' => array(
                 'PARENT' => 'SEO',
-                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_PARAMETERS_SET_SEO_TAGS'),
+                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_SET_SEO_TAGS'),
                 'TYPE' => 'CHECKBOX',
                 'DEFAULT' => 'Y'
             ),
             'SET_404' => array(
                 'PARENT' => 'OTHERS',
-                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_PARAMETERS_SET_404'),
+                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_SET_404'),
                 'TYPE' => 'CHECKBOX',
                 'DEFAULT' => 'N'
             ),
             'DATE_FORMAT' => \CIBlockParameters::GetDateFormat(
-                Loc::getMessage('ELEMENTS_DETAIL_PARAMETERS_DATE_FORMAT'),
+                Loc::getMessage('ELEMENTS_DETAIL_DATE_FORMAT'),
                 'OTHERS'
             ),
             'CACHE_GROUPS' => array(
                 'PARENT' => 'CACHE_SETTINGS',
-                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_PARAMETERS_CACHE_GROUPS'),
+                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_CACHE_GROUPS'),
                 'TYPE' => 'CHECKBOX',
                 'DEFAULT' => 'N'
             ),

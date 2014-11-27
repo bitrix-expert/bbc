@@ -222,7 +222,10 @@ trait Common
 
         if ($this->arParams['CACHE_TYPE'] && $this->arParams['CACHE_TYPE'] !== 'N' && $this->arParams['CACHE_TIME'] > 0)
         {
-            $this->cacheAdditionalId[] = $this->templatePage;
+            if ($this->templatePage)
+            {
+                $this->cacheAdditionalId[] = $this->templatePage;
+            }
 
             if ($this->arParams['CACHE_GROUPS'] === 'Y')
             {
@@ -409,9 +412,9 @@ trait Common
     public function isAjax()
     {
         if (
-            strlen($this->arResult['AJAX_COMPONENT_ID']) > 0
-            && strlen($this->arResult['AJAX_PARAM_NAME']) > 0
-            && $_REQUEST[$this->arResult['AJAX_PARAM_NAME']] === $this->arResult['AJAX_COMPONENT_ID']
+            strlen($this->arParams['AJAX_COMPONENT_ID']) > 0
+            && strlen($this->arParams['AJAX_PARAM_NAME']) > 0
+            && $_REQUEST[$this->arParams['AJAX_PARAM_NAME']] === $this->arParams['AJAX_COMPONENT_ID']
             && isset($_SERVER['HTTP_X_REQUESTED_WITH'])
             && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']))
         {
