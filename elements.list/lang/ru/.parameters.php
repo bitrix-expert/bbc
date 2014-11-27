@@ -18,13 +18,18 @@ $MESS['ELEMENTS_LIST_SORT_ORDER_ASC'] = 'по возрастанию';
 $MESS['ELEMENTS_LIST_SORT_ORDER_DESC'] = 'по убыванию';
 $MESS['ELEMENTS_LIST_FIELDS'] = 'Возвращаемые поля';
 $MESS['ELEMENTS_LIST_PROPERTIES'] = 'Возвращаемые свойства';
-$MESS['ELEMENTS_LIST_RESULT_PROCESSING_MODE'] = 'Расширенный режим обработки результатов';
-$MESS['RESULT_PROCESSING_MODE_TIP'] = 'Будут выбираться все свойства элементов инфоблока со всеми полями. Выполняются дополнительные запросы, повышается нагрузка на компонент.';
+$MESS['ELEMENTS_LIST_RESULT_PROCESSING_MODE'] = 'Режим обработки результатов';
+$MESS['ELEMENTS_LIST_RESULT_PROCESSING_MODE_DEFAULT'] = 'Обычный';
+$MESS['ELEMENTS_LIST_RESULT_PROCESSING_MODE_EXTENDED'] = 'Расширенный';
+$MESS['ELEMENTS_LIST_EX_FILTER_NAME'] = 'Имя глобальной переменной фильтра';
+$MESS['EX_FILTER_NAME_TIP'] = 'Задается имя глобальной переменной, в которой передается массив параметров для фильтра.';
 
 $MESS['ELEMENTS_LIST_USE_AJAX'] = 'Включить аякс-режим';
-$MESS['ELEMENTS_LIST_AJAX_TEMPLATE_PAGE'] = 'Название страницы шаблона, выполняемой в аякс-режиме';
-$MESS['ELEMENTS_LIST_AJAX_HEAD_RELOAD'] = 'Перезагружать заголовки страницы в аякс-режиме';
+$MESS['ELEMENTS_LIST_AJAX_TEMPLATE_PAGE'] = 'Файл шаблона для аякс-режима';
+$MESS['AJAX_TEMPLATE_PAGE_TIP'] = 'Файл шаблона, выполняемый в аякс-режиме. Напр., в обычной работе компонента используется файл template.php, для аякс-режима можно создать в шаблоне файл ajax.php';
+$MESS['ELEMENTS_LIST_AJAX_HEAD_RELOAD'] = 'Перезагружать заголовки страницы';
 $MESS['ELEMENTS_LIST_AJAX_TYPE'] = 'Тип режима';
+$MESS['AJAX_TYPE_TIP'] = 'В JSON-режиме компонент установит заголовки типа данных';
 $MESS['ELEMENTS_LIST_AJAX_TYPE_DEFAULT'] = 'Обычный';
 $MESS['ELEMENTS_LIST_AJAX_TYPE_JSON'] = 'JSON';
 

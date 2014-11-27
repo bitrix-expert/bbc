@@ -18,16 +18,16 @@ Loc::loadMessages(__FILE__);
 
 
 $arComponentDescription = array(
-    'NAME' => Loc::getMessage('ELEMENTS_DETAIL_DESC_NAME'),
-    'DESCRIPTION' => Loc::getMessage('ELEMENTS_DETAIL_DESC_DESCRIPTION'),
+    'NAME' => Loc::getMessage('ELEMENTS_DETAIL_NAME'),
+    'DESCRIPTION' => Loc::getMessage('ELEMENTS_DETAIL_DESCRIPTION'),
     'SORT' => 30,
     'PATH' => array(
         'ID' => 'basis',
-        'NAME' => Loc::getMessage('ELEMENTS_DETAIL_DESC_GROUP'),
+        'NAME' => Loc::getMessage('ELEMENTS_DETAIL_GROUP'),
         'SORT' => 10,
         'CHILD' => array(
             'ID' => 'elements',
-            'NAME' => Loc::getMessage('ELEMENTS_DETAIL_DESC_CHILD_GROUP'),
+            'NAME' => Loc::getMessage('ELEMENTS_DETAIL_CHILD_GROUP'),
             'SORT' => 10
         )
     ),

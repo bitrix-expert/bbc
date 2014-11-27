@@ -173,8 +173,17 @@ try
             'RESULT_PROCESSING_MODE' => array(
                 'PARENT' => 'BASE',
                 'NAME' => Loc::getMessage('ELEMENTS_LIST_RESULT_PROCESSING_MODE'),
-                'TYPE' => 'CHECKBOX',
-                'DEFAULT' => 'N'
+                'TYPE' => 'LIST',
+                'VALUES' => array(
+                    'DEFAULT' => Loc::getMessage('ELEMENTS_LIST_RESULT_PROCESSING_MODE_DEFAULT'),
+                    'EXTENDED' => Loc::getMessage('ELEMENTS_LIST_RESULT_PROCESSING_MODE_EXTENDED')
+                )
+            ),
+            'EX_FILTER_NAME' => array(
+                'PARENT' => 'BASE',
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_EX_FILTER_NAME'),
+                'TYPE' => 'STRING',
+                'DEFAULT' => ''
             ),
             'PAGER_SAVE_SESSION' => array(
                 'PARENT' => 'PAGER_SETTINGS',
@@ -194,18 +203,6 @@ try
                 'TYPE' => 'CHECKBOX',
                 'DEFAULT' => 'Y'
             ),
-            'AJAX_TEMPLATE_PAGE' => array(
-                'PARENT' => 'AJAX',
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_AJAX_TEMPLATE_PAGE'),
-                'TYPE' => 'STRING',
-                'DEFAULT' => ''
-            ),
-            'AJAX_HEAD_RELOAD' => array(
-                'PARENT' => 'AJAX',
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_AJAX_HEAD_RELOAD'),
-                'TYPE' => 'CHECKBOX',
-                'DEFAULT' => 'Y'
-            ),
             'AJAX_TYPE' => array(
                 'PARENT' => 'AJAX',
                 'NAME' => Loc::getMessage('ELEMENTS_LIST_AJAX_TYPE'),
@@ -214,6 +211,18 @@ try
                     'DEFAULT' => Loc::getMessage('ELEMENTS_LIST_AJAX_TYPE_DEFAULT'),
                     'JSON' => Loc::getMessage('ELEMENTS_LIST_AJAX_TYPE_JSON')
                 )
+            ),
+            'AJAX_HEAD_RELOAD' => array(
+                'PARENT' => 'AJAX',
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_AJAX_HEAD_RELOAD'),
+                'TYPE' => 'CHECKBOX',
+                'DEFAULT' => 'N'
+            ),
+            'AJAX_TEMPLATE_PAGE' => array(
+                'PARENT' => 'AJAX',
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_AJAX_TEMPLATE_PAGE'),
+                'TYPE' => 'STRING',
+                'DEFAULT' => ''
             ),
             'SET_SEO_TAGS' => array(
                 'PARENT' => 'SEO',

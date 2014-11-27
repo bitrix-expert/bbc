@@ -29,28 +29,28 @@ try
     $currentParameters = array(
         'GROUPS' => array(
             'LIST' => array(
-                'NAME' => Loc::getMessage('ELEMENTS_PARAMETERS_GROUP_LIST'),
+                'NAME' => Loc::getMessage('ELEMENTS_GROUP_LIST'),
                 'SORT' => '200'
             ),
             'DETAIL' => array(
-                'NAME' => Loc::getMessage('ELEMENTS_PARAMETERS_GROUP_DETAIL'),
+                'NAME' => Loc::getMessage('ELEMENTS_GROUP_DETAIL'),
                 'SORT' => '300'
             )
         ),
         'PARAMETERS' => array(
             'SEF_MODE' => array(
                 'index' => array(
-                    'NAME' => Loc::getMessage('ELEMENTS_PARAMETERS_SEF_INDEX'),
+                    'NAME' => Loc::getMessage('ELEMENTS_SEF_INDEX'),
                     'DEFAULT' => '',
                     'VARIABLES' => array()
                 ),
                 'section' => array(
-                    'NAME' => Loc::getMessage('ELEMENTS_PARAMETERS_SEF_SECTION'),
+                    'NAME' => Loc::getMessage('ELEMENTS_SEF_SECTION'),
                     'DEFAULT' => '#SECTION_CODE#/',
                     'VARIABLES' => array('SECTION_CODE')
                 ),
                 'detail' => array(
-                    'NAME' => Loc::getMessage('ELEMENTS_PARAMETERS_SEF_DETAIL'),
+                    'NAME' => Loc::getMessage('ELEMENTS_SEF_DETAIL'),
                     'DEFAULT' => '#SECTION_CODE#/#ELEMENT_CODE#/',
                     'VARIABLES' => array('ELEMENT_CODE', 'SECTION_CODE')
                 )

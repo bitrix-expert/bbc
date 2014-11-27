@@ -34,7 +34,7 @@ class ElementsList extends Basis
         $rsElements = \CIBlockElement::GetList(
             $this->getParamsSort(),
             $this->getParamsFilters(),
-            false,
+            $this->getParamsGrouping(),
             $this->getParamsNavStart(),
             $this->getParamsSelected(array(
                 'DETAIL_PAGE_URL',
@@ -42,30 +42,19 @@ class ElementsList extends Basis
             ))
         );
 
-        if ($this->arParams['RESULT_PROCESSING_MODE'] === 'Y')
+        if (!isset($this->arResult['ELEMENTS']))
         {
-            $processingMethod = 'GetNextElement';
+        	$this->arResult['ELEMENTS'] = array();
         }
-        else
-        {
-            $processingMethod = 'GetNext';
-        }
+
+        $processingMethod = $this->getProcessingMethod();
 
         while ($element = $rsElements->$processingMethod())
         {
-            if ($this->arParams['RESULT_PROCESSING_MODE'] === 'Y')
+            if ($arElement = $this->processingElementsResult($element))
             {
-                $arElement = $element->GetFields();
-                $arElement['PROPERTIES'] = $element->GetProperties();
+                $this->arResult['ELEMENTS'][] = $arElement;
             }
-            else
-            {
-                $arElement = $element;
-            }
-
-            $this->arResult['ELEMENTS'][] = $arElement;
-
-            $this->setResultCacheKeys(array('NAV_CACHED_DATA'));
         }
 
         if ($this->arParams['SET_404'] === 'Y' && empty($this->arResult['ELEMENTS']))
@@ -74,5 +63,6 @@ class ElementsList extends Basis
         }
 
         $this->generateNav($rsElements);
+        $this->setResultCacheKeys(array('NAV_CACHED_DATA'));
     }
 }
