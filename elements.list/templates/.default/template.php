@@ -4,7 +4,7 @@
     <?=$arResult['NAV_STRING']?>
 <?}?>
 
-<?foreach ($arResult['ELEMENTS'] as $element) {echo '<pre>'; print_r($element); echo '</pre>';?>
+<?foreach ($arResult['ELEMENTS'] as $element) {?>
 
     <h1><?=$element['NAME']?></h1>
 

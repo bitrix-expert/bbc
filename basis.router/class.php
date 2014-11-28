@@ -18,7 +18,7 @@ use Bitrix\Main;
 /**
  * Abstraction basis router component
  */
-abstract class BasisRouter extends \CBitrixComponent
+abstract class BasisRouter extends \CBitrixComponent implements BasisInterface
 {
     use Common;
 
@@ -145,10 +145,7 @@ abstract class BasisRouter extends \CBitrixComponent
         $this->arResult['ALIASES'] = $variableAliases;
     }
 
-    /**
-     * Main logic basis router
-     */
-    final protected function executeBasis()
+    final public function executeBasis()
     {
         $this->includeModules();
         $this->checkParams();

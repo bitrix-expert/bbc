@@ -99,32 +99,39 @@ trait Elements
 
     protected function executeGetResultElements()
     {
+        // todo Move to getFilterParams()
+        if ($this->arParams['SECTION_CODE'] && !$this->arParams['SECTION_ID'])
+        {
+            $this->arParams['SECTION_ID'] = \CIBlockFindTools::GetSectionID(
+                0,
+                $this->arParams['SECTION_CODE'],
+                array()
+            );
+        }
+
+        if ($this->arParams['ELEMENT_CODE'] && !$this->arParams['ELEMENT_ID'])
+        {
+            $this->arParams['ELEMENT_ID'] = \CIBlockFindTools::GetElementID(
+                0,
+                $this->arParams['ELEMENT_CODE'],
+                $this->arParams['SECTION_ID'],
+                $this->arParams['SECTION_CODE'],
+                array()
+            );
+        }
+
+        $this->getInheritedProps();
+        $this->getSectionParams();
+    }
+
+    private function getInheritedProps()
+    {
         if ($this->arParams['SET_SEO_TAGS'] !== 'Y' || !$this->arParams['IBLOCK_ID'])
         {
             return;
         }
 
-        if ($this->arParams['SECTION_ID'])
-        {
-            $rsSeoValues = new InheritedProperty\SectionValues($this->arParams['IBLOCK_ID'], $this->arParams['SECTION_ID']);
-            $arSeoValues = $rsSeoValues->getValues();
-
-            if (!$this->arResult['SEO_TAGS']['TITLE'])
-            {
-                $this->arResult['SEO_TAGS']['TITLE'] = $arSeoValues['SECTION_META_TITLE'];
-            }
-
-            if (!$this->arResult['SEO_TAGS']['DESCRIPTION'])
-            {
-                $this->arResult['SEO_TAGS']['DESCRIPTION'] = $arSeoValues['SECTION_META_DESCRIPTION'];
-            }
-
-            if (!$this->arResult['SEO_TAGS']['KEYWORDS'])
-            {
-                $this->arResult['SEO_TAGS']['KEYWORDS'] = $arSeoValues['SECTION_META_KEYWORDS'];
-            }
-        }
-        elseif ($this->arParams['ELEMENT_ID'])
+        if ($this->arParams['ELEMENT_ID'])
         {
             $rsSeoValues = new InheritedProperty\ElementValues($this->arParams['IBLOCK_ID'], $this->arParams['ELEMENT_ID']);
             $arSeoValues = $rsSeoValues->getValues();
@@ -144,10 +151,64 @@ trait Elements
                 $this->arResult['SEO_TAGS']['KEYWORDS'] = $arSeoValues['ELEMENT_META_KEYWORDS'];
             }
         }
+        elseif ($this->arParams['SECTION_ID'])
+        {
+            $rsSeoValues = new InheritedProperty\SectionValues($this->arParams['IBLOCK_ID'], $this->arParams['SECTION_ID']);
+            $arSeoValues = $rsSeoValues->getValues();
+
+            if (!$this->arResult['SEO_TAGS']['TITLE'])
+            {
+                $this->arResult['SEO_TAGS']['TITLE'] = $arSeoValues['SECTION_META_TITLE'];
+            }
+
+            if (!$this->arResult['SEO_TAGS']['DESCRIPTION'])
+            {
+                $this->arResult['SEO_TAGS']['DESCRIPTION'] = $arSeoValues['SECTION_META_DESCRIPTION'];
+            }
+
+            if (!$this->arResult['SEO_TAGS']['KEYWORDS'])
+            {
+                $this->arResult['SEO_TAGS']['KEYWORDS'] = $arSeoValues['SECTION_META_KEYWORDS'];
+            }
+        }
+
+        $this->setResultCacheKeys(array('SEO_TAGS'));
+    }
+    
+    private function getSectionParams()
+    {
+        if ($this->arResult['IBLOCK_SECTION_ID'])
+        {
+            $this->arParams['SECTION_ID'] = $this->arResult['IBLOCK_SECTION_ID'];
+        }
+
+        if ($this->arParams['SECTION_ID'] > 0)
+        {
+            $this->arResult['SECTION'] = array('PATH' => array());
+
+            $rsPath = \CIBlockSection::GetNavChain($this->arParams['IBLOCK_ID'], $this->arParams['SECTION_ID']);
+            $rsPath->SetUrlTemplates('', $this->arParams['SECTION_URL'], $this->arParams['IBLOCK_URL']);
+
+            while ($arPath = $rsPath->GetNext())
+            {
+                $ipropValues = new InheritedProperty\SectionValues($this->arParams['IBLOCK_ID'], $arPath['ID']);
+                $arPath['IPROPERTY_VALUES'] = $ipropValues->getValues();
+                $this->arResult['SECTION']['PATH'][] = $arPath;
+            }
+
+            $ipropValues = new InheritedProperty\SectionValues($this->arParams['IBLOCK_ID'], $this->arParams['SECTION_ID']);
+            $this->arResult['IPROPERTY_VALUES'] = $ipropValues->getValues();
+        }
+        else
+        {
+            $this->arResult['SECTION'] = false;
+        }
+
+        $this->setResultCacheKeys(array('SECTION'));
     }
 
     /**
-     * Setting meta tags for current page
+     * Setting meta tags
      *
      * <ul> Uses:
      * <li> title
@@ -174,6 +235,42 @@ trait Elements
         if ($this->arResult['SEO_TAGS']['KEYWORDS'])
         {
             $APPLICATION->SetPageProperty('keywords', $this->arResult['SEO_TAGS']['KEYWORDS']);
+        }
+    }
+
+    protected function setNavChain()
+    {
+        global $APPLICATION;
+
+        if ($this->arParams['ADD_SECTIONS_CHAIN'] && is_array($this->arResult['SECTION']))
+        {
+            foreach ($this->arResult['SECTION']['PATH'] as $path)
+            {
+                if ($path['IPROPERTY_VALUES']['SECTION_PAGE_TITLE'])
+                {
+                    $APPLICATION->AddChainItem($path['IPROPERTY_VALUES']['SECTION_PAGE_TITLE'], $path['~SECTION_PAGE_URL']);
+                }
+                else
+                {
+                    $APPLICATION->AddChainItem($path['NAME'], $path['~SECTION_PAGE_URL']);
+                }
+            }
+        }
+
+        if ($this->arParams['ADD_IBLOCK_CHAIN'] && $this->arResult['NAME'])
+        {
+            if ($this->arParams['ADD_SECTIONS_CHAIN'] && is_array($this->arResult['SECTION']))
+            {
+                // todo Add parameters
+                $APPLICATION->AddChainItem(
+                    $this->arResult['NAME'],
+                    strlen($this->arParams['IBLOCK_URL']) > 0 ? $this->arParams['IBLOCK_URL'] : $this->arResult['LIST_PAGE_URL']
+                );
+            }
+            else
+            {
+                $APPLICATION->AddChainItem($this->arResult['NAME']);
+            }
         }
     }
 
@@ -232,7 +329,7 @@ trait Elements
         $buttons = \CIBlock::GetPanelButtons(
             $this->arParams['IBLOCK_ID'],
             $this->arResult['ID'],
-            $this->arParams['SECTION_ID'], // @todo Can be SECTION_CODE
+            $this->arParams['SECTION_ID'],
             array()
         );
 
@@ -384,6 +481,11 @@ trait Elements
             $additionalFields['SECTION_ID'] = $this->arParams['SECTION_ID'];
         }
 
+        if ($this->arParams['INCLUDE_SUBSECTIONS'] === 'Y' && !$additionalFields['INCLUDE_SUBSECTIONS'])
+        {
+            $additionalFields['INCLUDE_SUBSECTIONS'] = 'Y';
+        }
+
         if ($this->arParams['ELEMENT_CODE'] && !$additionalFields['CODE'])
         {
             $additionalFields['CODE'] = $this->arParams['ELEMENT_CODE'];
@@ -457,6 +559,7 @@ trait Elements
         $fields = array(
             'ID',
             'IBLOCK_ID',
+            'IBLOCK_SECTION_ID',
             'NAME'
         );
 
@@ -526,11 +629,11 @@ trait Elements
                     if ($propValue)
                     {
                         $arElement['PROPS'][$propCode]['VALUE'] = $propValue;
-                    }
-                    
-                    foreach ($arProp as $field)
-                    {
-                        $arElement['PROPS'][$propCode]['LINKED'][$field] = $element['PROPERTY_'.$propCode.'_'.$field];
+
+                        foreach ($arProp as $field)
+                        {
+                            $arElement['PROPS'][$propCode]['LINKED'][$field] = $element['PROPERTY_'.$propCode.'_'.$field];
+                        }
                     }
                 }
             }
@@ -561,6 +664,7 @@ trait Elements
     {
         $this->setSeoTags();
         $this->setOgTags();
+        $this->setNavChain();
         $this->setEditButtons();
     }
 }

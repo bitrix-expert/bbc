@@ -137,6 +137,12 @@ try
                 'NAME' => Loc::getMessage('ELEMENTS_LIST_SECTION_CODE'),
                 'TYPE' => 'STRING'
             ),
+            'INCLUDE_SUBSECTIONS' => array(
+                'PARENT' => 'BASE',
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_INCLUDE_SUBSECTIONS'),
+                'TYPE' => 'CHECKBOX',
+                'DEFAULT' => 'N'
+            ),
             'SORT_BY_1' => array(
                 'PARENT' => 'BASE',
                 'NAME' => Loc::getMessage('ELEMENTS_LIST_SORT_BY_1'),
@@ -227,6 +233,18 @@ try
             'SET_SEO_TAGS' => array(
                 'PARENT' => 'SEO',
                 'NAME' => Loc::getMessage('ELEMENTS_LIST_SET_SEO_TAGS'),
+                'TYPE' => 'CHECKBOX',
+                'DEFAULT' => 'Y'
+            ),
+            'ADD_IBLOCK_CHAIN' => array(
+                'PARENT' => 'SEO',
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_ADD_IBLOCK_CHAIN'),
+                'TYPE' => 'CHECKBOX',
+                'DEFAULT' => 'N'
+            ),
+            'ADD_SECTIONS_CHAIN' => array(
+                'PARENT' => 'SEO',
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_ADD_SECTIONS_CHAIN'),
                 'TYPE' => 'CHECKBOX',
                 'DEFAULT' => 'Y'
             ),

@@ -6,8 +6,9 @@ $MESS['ELEMENTS_LIST_GROUP_OTHERS'] = 'Прочее';
 
 $MESS['ELEMENTS_LIST_IBLOCK_TYPE'] = 'Тип инфоблока';
 $MESS['ELEMENTS_LIST_IBLOCK_ID'] = 'Инфоблок';
-$MESS['ELEMENTS_LIST_SECTION_ID'] = 'Секция';
-$MESS['ELEMENTS_LIST_SECTION_CODE'] = 'Символьный код секции';
+$MESS['ELEMENTS_LIST_SECTION_ID'] = 'Раздел';
+$MESS['ELEMENTS_LIST_SECTION_CODE'] = 'Символьный код раздела';
+$MESS['ELEMENTS_LIST_INCLUDE_SUBSECTIONS'] = 'Включая элементы подразделов';
 $MESS['SECTION_CODE_TIP'] = 'Заполняется, если выборка по идентификаторам (из списка выше) не подходит';
 $MESS['ELEMENTS_LIST_ELEMENTS_COUNT'] = 'Кол-во элементов на странице';
 $MESS['ELEMENTS_LIST_SORT_BY_1'] = 'Поле первичной сортировки';
@@ -43,3 +44,5 @@ $MESS['ELEMENTS_LIST_CHECK_PERMISSIONS'] = 'Учитывать права дос
 
 $MESS['ELEMENTS_LIST_SET_SEO_TAGS'] = 'Устанавливать СЕО-теги в разделе';
 $MESS['ELEMENTS_LIST_SET_SEO_TAGS_TIP'] = 'Заголовок, описание и ключевые слова страницы';
+$MESS['ELEMENTS_LIST_ADD_IBLOCK_CHAIN'] = 'Устанавливать в хлебные крошки название инфоблока';
+$MESS['ELEMENTS_LIST_ADD_SECTIONS_CHAIN'] = 'Устанавливать в хлебные крошки названия разделов инфоблока';

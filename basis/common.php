@@ -19,6 +19,25 @@ if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 Loc::loadMessages(__DIR__.'/class.php');
 
 
+interface BasisInterface
+{
+    /**
+     * Code for exceptions, which set HTTP status 404
+     */
+    const EXC_404 = '404|';
+
+    /**
+     * Code for exceptions for loggin and alerts site administrations
+     */
+    const EXC_LOG = 'log|';
+
+    /**
+     * Main logic in basis component
+     */
+    public function executeBasis();
+}
+
+
 /**
  * Common main trait for all basis components
  */
@@ -195,7 +214,6 @@ trait Common
             {
                 header('Content-Type: application/json');
             }
-
 
             if (strlen($this->arParams['AJAX_TEMPLATE_PAGE']) > 0)
             {

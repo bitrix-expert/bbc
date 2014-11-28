@@ -45,34 +45,18 @@ class ElementsDetail extends Basis
             array(),
             $this->getParamsFilters(),
             false,
-            array(
-                'nTopCount' => 1
-            ),
+            false,
             $this->getParamsSelected()
         );
 
-        if ($this->arParams['RESULT_PROCESSING_MODE'] === 'Y')
-        {
-            $processingMethod = 'GetNextElement';
-        }
-        else
-        {
-            $processingMethod = 'GetNext';
-        }
+        $processingMethod = $this->getProcessingMethod();
 
         if ($element = $rsElement->$processingMethod())
         {
-            if ($this->arParams['RESULT_PROCESSING_MODE'] === 'Y')
+            if ($arElement = $this->processingElementsResult($element))
             {
-                $arElement = $element->GetFields();
-                $arElement['PROPERTIES'] = $element->GetProperties();
+                $this->arResult = array_merge($this->arResult, $arElement);
             }
-            else
-            {
-                $arElement = $element;
-            }
-
-            $this->arResult = array_merge($this->arResult, $arElement);
 
             $this->setResultCacheKeys(array(
                 'ID',

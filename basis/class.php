@@ -17,7 +17,7 @@ include_once __DIR__.'/elements.php';
 /**
  * Abstraction basis component
  */
-abstract class Basis extends \CBitrixComponent
+abstract class Basis extends \CBitrixComponent implements BasisInterface
 {
     use Common;
 
@@ -97,10 +97,7 @@ abstract class Basis extends \CBitrixComponent
         }
     }
 
-    /**
-     * Main logic in basis component
-     */
-    final protected function executeBasis()
+    final public function executeBasis()
     {
         $this->getUsedTraits();
         $this->includeModules();
