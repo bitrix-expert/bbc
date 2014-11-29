@@ -609,15 +609,15 @@ trait Elements
      */
     private function processingElementsResult($element)
     {
+        $arElement = $element;
+
         if ($this->arParams['RESULT_PROCESSING_MODE'] === 'EXTENDED')
         {
             $arElement = $element->GetFields();
             $arElement['PROPS'] = $element->GetProperties();
         }
-        else
+        elseif (!empty($this->arParams['SELECT_PROPS']))
         {
-            $arElement = $element;
-
             foreach ($this->arParams['SELECT_PROPS'] as $propCode)
             {
                 if (trim($propCode))

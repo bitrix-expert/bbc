@@ -24,12 +24,12 @@ interface BasisInterface
     /**
      * Code for exceptions, which set HTTP status 404
      */
-    const EXC_404 = '404|';
+    const EX_CODE_404 = '404|';
 
     /**
      * Code for exceptions for loggin and alerts site administrations
      */
-    const EXC_LOG = 'log|';
+    const EX_CODE_LOG = 'log|';
 
     /**
      * Main logic in basis component
