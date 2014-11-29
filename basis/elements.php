@@ -648,7 +648,7 @@ trait Elements
             }
         }
 
-        if ($this->prepareElementsResult($arElement))
+        if ($arElement = $this->prepareElementsResult($arElement))
         {
             return $arElement;
         }
