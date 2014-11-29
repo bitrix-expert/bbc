@@ -563,21 +563,27 @@ trait Elements
             'NAME'
         );
 
-        foreach ($this->arParams['SELECT_FIELDS'] as $field)
+        if (!empty($this->arParams['SELECT_FIELDS']))
         {
-            if (trim($field))
+            foreach ($this->arParams['SELECT_FIELDS'] as $field)
             {
-                $fields[] = $field;
+                if (trim($field))
+                {
+                    $fields[] = $field;
+                }
             }
+
+            unset($field);
         }
 
-        unset($field);
-
-        foreach ($this->arParams['SELECT_PROPS'] as $propCode)
+        if (!empty($this->arParams['SELECT_PROPS']))
         {
-            if (trim($propCode))
+            foreach ($this->arParams['SELECT_PROPS'] as $propCode)
             {
-                $fields[] = $propsPrefix.$propCode;
+                if (trim($propCode))
+                {
+                    $fields[] = $propsPrefix.$propCode;
+                }
             }
         }
 
