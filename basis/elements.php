@@ -659,9 +659,9 @@ trait Elements
     }
 
     /**
-     * Empty method for prepare result request of the elements
+     * Method for prepare result request of the elements
      *
-     * @param \CIBlockResult $element
+     * @param \CIBlockResult $element Result element fields
      * @return bool
      */
     protected function prepareElementsResult($element)
