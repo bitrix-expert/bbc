@@ -118,8 +118,11 @@ try
             'RESULT_PROCESSING_MODE' => array(
                 'PARENT' => 'BASE',
                 'NAME' => Loc::getMessage('ELEMENTS_DETAIL_RESULT_PROCESSING_MODE'),
-                'TYPE' => 'CHECKBOX',
-                'DEFAULT' => 'N'
+                'TYPE' => 'LIST',
+                'VALUES' => array(
+                    'DEFAULT' => Loc::getMessage('ELEMENTS_DETAIL_RESULT_PROCESSING_MODE_DEFAULT'),
+                    'EXTENDED' => Loc::getMessage('ELEMENTS_DETAIL_RESULT_PROCESSING_MODE_EXTENDED')
+                )
             ),
             'SET_SEO_TAGS' => array(
                 'PARENT' => 'SEO',
