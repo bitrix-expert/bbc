@@ -625,11 +625,20 @@ trait Elements
                     $arProp = explode('.', $propCode);
                     $propCode = array_shift($arProp);
                     $propValue = $element['PROPERTY_'.$propCode.'_VALUE'];
+                    $propDescr = $element['PROPERTY_'.$propCode.'_DESCRIPTION'];
 
                     if ($propValue)
                     {
                         $arElement['PROPS'][$propCode]['VALUE'] = $propValue;
+                    }
 
+                    if ($propDescr)
+                    {
+                        $arElement['PROPS'][$propCode]['DESCRIPTION'] = $propDescr;
+                    }
+
+                    if (!empty($arElement['PROPS'][$propCode]))
+                    {
                         foreach ($arProp as $field)
                         {
                             $arElement['PROPS'][$propCode]['LINKED'][$field] = $element['PROPERTY_'.$propCode.'_'.$field];
