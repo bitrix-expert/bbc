@@ -258,7 +258,7 @@ try
                 'PARENT' => 'OTHERS',
                 'NAME' => Loc::getMessage('ELEMENTS_LIST_CHECK_PERMISSIONS'),
                 'TYPE' => 'CHECKBOX',
-                'DEFAULT' => 'N'
+                'DEFAULT' => 'Y'
             ),
             'DATE_FORMAT' => \CIBlockParameters::GetDateFormat(
                 Loc::getMessage('ELEMENTS_LIST_DATE_FORMAT'),

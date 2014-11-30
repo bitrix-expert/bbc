@@ -500,7 +500,7 @@ trait Elements
             $additionalFields['CHECK_PERMISSIONS'] = $this->arParams['CHECK_PERMISSIONS'];
         }
 
-        if ($additionalFields['ACTIVE'] != false)
+        if (!isset($additionalFields['ACTIVE']))
         {
             $additionalFields['ACTIVE'] = 'Y';
         }
