@@ -51,6 +51,8 @@ trait Elements
             \CPageOption::SetOptionString('main', 'nav_page_in_session', 'N');
         }
 
+        $this->arParams['PAGER_DESC_NUMBERING'] = $this->arParams['PAGER_DESC_NUMBERING'] === 'Y';
+
         if ($this->arParams['DISPLAY_BOTTOM_PAGER'] === 'Y' || $this->arParams['DISPLAY_TOP_PAGER'] === 'Y')
         {
             $this->navStartParams = array(
@@ -64,7 +66,8 @@ trait Elements
         elseif ($this->arParams['ELEMENTS_COUNT'] > 0)
         {
             $this->navStartParams = array(
-                'nTopCount' => $this->arParams['ELEMENTS_COUNT']
+                'nTopCount' => $this->arParams['ELEMENTS_COUNT'],
+                'bDescPageNumbering' => $this->arParams['PAGER_DESC_NUMBERING']
             );
         }
         else
