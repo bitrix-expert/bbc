@@ -260,7 +260,7 @@ trait Elements
             }
         }
 
-        if ($this->arParams['ADD_ELEMENT_CHAIN'] && $this->arResult['NAME'])
+        if ($this->arParams['ADD_ELEMENT_CHAIN'] === 'Y' && $this->arResult['NAME'])
         {
             $APPLICATION->AddChainItem($this->arResult['NAME']);
         }
