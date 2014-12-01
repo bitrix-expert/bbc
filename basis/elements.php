@@ -260,20 +260,9 @@ trait Elements
             }
         }
 
-        if ($this->arParams['ADD_IBLOCK_CHAIN'] && $this->arResult['NAME'])
+        if ($this->arParams['ADD_ELEMENT_CHAIN'] && $this->arResult['NAME'])
         {
-            if ($this->arParams['ADD_SECTIONS_CHAIN'] && is_array($this->arResult['SECTION']))
-            {
-                // todo Add parameters
-                $APPLICATION->AddChainItem(
-                    $this->arResult['NAME'],
-                    strlen($this->arParams['IBLOCK_URL']) > 0 ? $this->arParams['IBLOCK_URL'] : $this->arResult['LIST_PAGE_URL']
-                );
-            }
-            else
-            {
-                $APPLICATION->AddChainItem($this->arResult['NAME']);
-            }
+            $APPLICATION->AddChainItem($this->arResult['NAME']);
         }
     }
 

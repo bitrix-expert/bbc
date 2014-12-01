@@ -230,17 +230,17 @@ try
                 'TYPE' => 'STRING',
                 'DEFAULT' => ''
             ),
+            'AJAX_COMPONENT_ID' => array(
+                'PARENT' => 'AJAX',
+                'NAME' => Loc::getMessage('ELEMENTS_LIST_AJAX_COMPONENT_ID'),
+                'TYPE' => 'STRING',
+                'DEFAULT' => ''
+            ),
             'SET_SEO_TAGS' => array(
                 'PARENT' => 'SEO',
                 'NAME' => Loc::getMessage('ELEMENTS_LIST_SET_SEO_TAGS'),
                 'TYPE' => 'CHECKBOX',
                 'DEFAULT' => 'Y'
-            ),
-            'ADD_IBLOCK_CHAIN' => array(
-                'PARENT' => 'SEO',
-                'NAME' => Loc::getMessage('ELEMENTS_LIST_ADD_IBLOCK_CHAIN'),
-                'TYPE' => 'CHECKBOX',
-                'DEFAULT' => 'N'
             ),
             'ADD_SECTIONS_CHAIN' => array(
                 'PARENT' => 'SEO',
