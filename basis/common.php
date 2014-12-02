@@ -19,25 +19,6 @@ if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 Loc::loadMessages(__DIR__.'/class.php');
 
 
-interface BasisInterface
-{
-    /**
-     * Code for exceptions, which set HTTP status 404
-     */
-    const EX_CODE_404 = '404|';
-
-    /**
-     * Code for exceptions for loggin and alerts site administrations
-     */
-    const EX_CODE_LOG = 'log|';
-
-    /**
-     * Main logic in basis component
-     */
-    public function executeBasis();
-}
-
-
 /**
  * Common main trait for all basis components
  */
@@ -47,11 +28,6 @@ trait Common
      * @var array The codes of modules that will be connected when performing component
      */
     protected $needModules = array();
-
-    /**
-     * @var string File name of log with last exception
-     */
-    protected $logException = 'exception.log';
 
     /**
      * @var array Additional cache ID
@@ -319,91 +295,6 @@ trait Common
     }
 
     /**
-     * Set status 404 and throw exception
-     *
-     * @throws \Exception
-     */
-    protected function return404()
-    {
-        @define('ERROR_404', 'Y');
-        \CHTTP::SetStatus('404 Not Found');
-
-        throw new \Exception('Page not found');
-    }
-
-    /**
-     * Called when an error occurs
-     *
-     * @param \Exception $e
-     */
-    protected function catchException(\Exception $e)
-    {
-        global $USER;
-
-        $adminEmail = Main\Config\Option::get('main', 'email_from');
-        $logFile = Application::getDocumentRoot().$this->__path.'/'.$this->logException;
-
-        $this->abortCache();
-
-        if ($USER->IsAdmin())
-        {
-            $this->showExceptionAdmin($e);
-        }
-        else
-        {
-            $this->showExceptionUser($e);
-        }
-
-        if (!is_file($logFile) && $adminEmail)
-        {
-            $date = date('Y-m-d H:m:s');
-
-            bxmail(
-                $adminEmail,
-                Loc::getMessage(
-                    'BASIS_COMPONENT_EXCEPTION_EMAIL_SUBJECT', array('#SITE_URL#' => SITE_SERVER_NAME)
-                ),
-                Loc::getMessage(
-                    'BASIS_COMPONENT_EXCEPTION_EMAIL_TEXT',
-                    array(
-                        '#URL#' => 'http://'.SITE_SERVER_NAME.Main\Context::getCurrent()->getRequest()->getRequestedPage(),
-                        '#DATE#' => $date,
-                        '#EXCEPTION_MESSAGE#' => $e->getMessage(),
-                        '#EXCEPTION#' => $e
-                    )
-                ),
-                'Content-Type: text/html; charset=utf-8'
-            );
-
-            $log = fopen($logFile, 'w');
-            fwrite($log, '['.$date.'] Catch exception: '.PHP_EOL.$e);
-            fclose($log);
-        }
-    }
-
-    /**
-     * Display of the error for user
-     *
-     * @param \Exception $e
-     */
-    protected function showExceptionUser(\Exception $e)
-    {
-        ShowError(Loc::getMessage('BASIS_COMPONENT_CATCH_EXCEPTION'));
-    }
-
-    /**
-     * Display of the error for admin
-     *
-     * @param \Exception $e
-     */
-    protected function showExceptionAdmin(\Exception $e)
-    {
-        ShowError($e->getMessage());
-
-        echo nl2br($e);
-    }
-
-    /**
      * Show results. Default: include template of the component
      *
      * @uses $this->templatePage
@@ -464,5 +355,144 @@ trait Common
     protected function addCacheAdditionalId($id)
     {
         $this->cacheAdditionalId[] = $id;
+    }
+}
+
+
+/**
+ * Working with exceptions
+ */
+trait Exceptions
+{
+    /**
+     * @var string File name of log with last exception
+     */
+    protected $logException = 'exception.log';
+
+    protected static $exCode404 = '404';
+
+    protected static $exCodeNotifyEmail = 'notify_email';
+
+    /**
+     * Set status 404 and throw exception
+     *
+     * @throws \Exception
+     * @deprecated Use exception with code 404
+     */
+    protected function return404()
+    {
+        @define('ERROR_404', 'Y');
+        \CHTTP::SetStatus('404 Not Found');
+
+        throw new \Exception('Page not found');
+    }
+
+    /**
+     * Called when an error occurs
+     *
+     * @param \Exception $e
+     */
+    protected function catchException(\Exception $e)
+    {
+        global $USER;
+
+        $this->abortCache();
+
+        if ($USER->IsAdmin())
+        {
+            $this->showExceptionAdmin($e);
+        }
+        else
+        {
+            $this->showExceptionUser($e);
+        }
+
+        $this->notifyExceptionEmail($e);
+    }
+
+    /**
+     * Returns string with exception code
+     *
+     * @param bool $set404 Set 404 HTTP status
+     * @param bool $notifyEmail Send error message to the admin email
+     * @return string
+     */
+    protected function getExceptionCode($customCode = array(), $set404 = false, $notifyEmail = true)
+    {
+        if ($set404)
+        {
+            $code = static::$exCode404.'|';
+        }
+
+        if ($notifyEmail)
+        {
+            $code = static::$exCodeNotifyEmail;
+        }
+
+        return $code;
+    }
+
+    protected function isExceptionCode(\Exception $e, $code)
+    {
+        return in_array($code, explode('|', $e->getCode()));
+    }
+
+    /**
+     * Send error message to the admin email
+     *
+     * @param \Exception $e
+     */
+    protected function notifyExceptionEmail($e)
+    {
+        $adminEmail = Main\Config\Option::get('main', 'email_from');
+        $logFile = Application::getDocumentRoot().$this->__path.'/'.$this->logException;
+
+        if (!is_file($logFile) && $adminEmail)
+        {
+            $date = date('Y-m-d H:m:s');
+
+            bxmail(
+                $adminEmail,
+                Loc::getMessage(
+                    'BASIS_COMPONENT_EXCEPTION_EMAIL_SUBJECT', array('#SITE_URL#' => SITE_SERVER_NAME)
+                ),
+                Loc::getMessage(
+                    'BASIS_COMPONENT_EXCEPTION_EMAIL_TEXT',
+                    array(
+                        '#URL#' => 'http://'.SITE_SERVER_NAME.Main\Context::getCurrent()->getRequest()->getRequestedPage(),
+                        '#DATE#' => $date,
+                        '#EXCEPTION_MESSAGE#' => $e->getMessage(),
+                        '#EXCEPTION#' => $e
+                    )
+                ),
+                'Content-Type: text/html; charset=utf-8'
+            );
+
+            $log = fopen($logFile, 'w');
+            fwrite($log, '['.$date.'] Catch exception: '.PHP_EOL.$e);
+            fclose($log);
+        }
+    }
+
+    /**
+     * Display of the error for user
+     *
+     * @param \Exception $e
+     */
+    protected function showExceptionUser(\Exception $e)
+    {
+        ShowError(Loc::getMessage('BASIS_COMPONENT_CATCH_EXCEPTION'));
+    }
+
+    /**
+     * Display of the error for admin
+     *
+     * @param \Exception $e
+     */
+    protected function showExceptionAdmin(\Exception $e)
+    {
+        ShowError($e->getMessage());
+
+        echo nl2br($e);
     }
 }

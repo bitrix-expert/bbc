@@ -17,9 +17,9 @@ include_once __DIR__.'/elements.php';
 /**
  * Abstraction basis component
  */
-abstract class Basis extends \CBitrixComponent implements BasisInterface
+abstract class Basis extends \CBitrixComponent
 {
-    use Common;
+    use Common, Exceptions;
 
     /**
      * @var bool Auto executing methods of prolog / epilog in the traits

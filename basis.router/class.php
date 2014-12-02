@@ -18,9 +18,9 @@ use Bitrix\Main;
 /**
  * Abstraction basis router component
  */
-abstract class BasisRouter extends \CBitrixComponent implements BasisInterface
+abstract class BasisRouter extends \CBitrixComponent
 {
-    use Common;
+    use Common, Exceptions;
 
     /**
      * @var array Paths of templates default
