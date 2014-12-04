@@ -31,6 +31,7 @@ class ElementsList extends Basis
 
     protected function getResult()
     {
+        echo '<pre>'; print_r($this->getParamsFilters()); echo '</pre>';
         $rsElements = \CIBlockElement::GetList(
             $this->getParamsSort(),
             $this->getParamsFilters(),

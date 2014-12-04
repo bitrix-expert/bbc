@@ -343,16 +343,6 @@ trait Elements
      */
     private function setParamsFilters()
     {
-        if (strlen($this->arParams['EX_FILTER_NAME']) > 0
-            && preg_match("/^[A-Za-z_][A-Za-z01-9_]*$/", $this->arParams['EX_FILTER_NAME'])
-            && is_array($GLOBALS[$this->arParams['EX_FILTER_NAME']])
-        )
-        {
-            $this->filterParams = $GLOBALS[$this->arParams['EX_FILTER_NAME']];
-
-            $this->addCacheAdditionalId($GLOBALS[$this->arParams['EX_FILTER_NAME']]);
-        }
-
         if ($this->arParams['IBLOCK_TYPE'])
         {
             $this->filterParams['IBLOCK_TYPE'] = $this->arParams['IBLOCK_TYPE'];
@@ -394,6 +384,16 @@ trait Elements
         if (!isset($this->filterParams['ACTIVE']))
         {
             $this->filterParams['ACTIVE'] = 'Y';
+        }
+
+        if (strlen($this->arParams['EX_FILTER_NAME']) > 0
+            && preg_match("/^[A-Za-z_][A-Za-z01-9_]*$/", $this->arParams['EX_FILTER_NAME'])
+            && is_array($GLOBALS[$this->arParams['EX_FILTER_NAME']])
+        )
+        {
+            $this->filterParams = array_merge_recursive($this->filterParams, $GLOBALS[$this->arParams['EX_FILTER_NAME']]);
+
+            $this->addCacheAdditionalId($GLOBALS[$this->arParams['EX_FILTER_NAME']]);
         }
     }
 
