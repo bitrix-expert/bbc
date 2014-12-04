@@ -31,7 +31,7 @@ trait Elements
     /**
      * @var array Values of global filter
      */
-    private $globalFilterValues = array();
+    private $filterParams = array();
 
     /**
      * @var bool Show include areas
@@ -41,7 +41,7 @@ trait Elements
     protected function executePrologElements()
     {
         $this->setNavStartParams();
-        $this->setGlobalFilters();
+        $this->setParamsFilters();
     }
 
     protected function setNavStartParams()
@@ -341,16 +341,59 @@ trait Elements
     /**
      * Getting global filter and write his to component parameters
      */
-    private function setGlobalFilters()
+    private function setParamsFilters()
     {
         if (strlen($this->arParams['EX_FILTER_NAME']) > 0
             && preg_match("/^[A-Za-z_][A-Za-z01-9_]*$/", $this->arParams['EX_FILTER_NAME'])
             && is_array($GLOBALS[$this->arParams['EX_FILTER_NAME']])
         )
         {
-            $this->globalFilterValues = $GLOBALS[$this->arParams['EX_FILTER_NAME']];
+            $this->filterParams = $GLOBALS[$this->arParams['EX_FILTER_NAME']];
 
             $this->addCacheAdditionalId($GLOBALS[$this->arParams['EX_FILTER_NAME']]);
+        }
+
+        if ($this->arParams['IBLOCK_TYPE'])
+        {
+            $this->filterParams['IBLOCK_TYPE'] = $this->arParams['IBLOCK_TYPE'];
+        }
+
+        if ($this->arParams['IBLOCK_ID'])
+        {
+            $this->filterParams['IBLOCK_ID'] = $this->arParams['IBLOCK_ID'];
+        }
+
+        if ($this->arParams['SECTION_CODE'])
+        {
+            $this->filterParams['SECTION_CODE'] = $this->arParams['SECTION_CODE'];
+        }
+        elseif ($this->arParams['SECTION_ID'])
+        {
+            $this->filterParams['SECTION_ID'] = $this->arParams['SECTION_ID'];
+        }
+
+        if ($this->arParams['INCLUDE_SUBSECTIONS'] === 'Y')
+        {
+            $this->filterParams['INCLUDE_SUBSECTIONS'] = 'Y';
+        }
+
+        if ($this->arParams['ELEMENT_CODE'])
+        {
+            $this->filterParams['CODE'] = $this->arParams['ELEMENT_CODE'];
+        }
+        elseif ($this->arParams['ELEMENT_ID'])
+        {
+            $this->filterParams['ID'] = $this->arParams['ELEMENT_ID'];
+        }
+
+        if ($this->arParams['CHECK_PERMISSIONS'])
+        {
+            $this->filterParams['CHECK_PERMISSIONS'] = $this->arParams['CHECK_PERMISSIONS'];
+        }
+
+        if (!isset($this->filterParams['ACTIVE']))
+        {
+            $this->filterParams['ACTIVE'] = 'Y';
         }
     }
 
@@ -363,7 +406,7 @@ trait Elements
     {
         if (is_array($fields) && !empty($fields))
         {
-            $this->globalFilterValues = array_merge_recursive($this->globalFilterValues, $fields);
+            $this->filterParams = array_merge_recursive($this->filterParams, $fields);
             $this->addCacheAdditionalId($fields);
         }
     }
@@ -454,55 +497,12 @@ trait Elements
      */
     protected function getParamsFilters($additionalFields = array())
     {
-        if ($this->arParams['IBLOCK_TYPE'] && !$additionalFields['IBLOCK_TYPE'])
-        {
-            $additionalFields['IBLOCK_TYPE'] = $this->arParams['IBLOCK_TYPE'];
-        }
-
-        if ($this->arParams['IBLOCK_ID'] > 0 && !$additionalFields['IBLOCK_ID'])
-        {
-            $additionalFields['IBLOCK_ID'] = $this->arParams['IBLOCK_ID'];
-        }
-
-        if ($this->arParams['SECTION_CODE'] && !$additionalFields['SECTION_CODE'])
-        {
-            $additionalFields['SECTION_CODE'] = $this->arParams['SECTION_CODE'];
-        }
-        elseif ($this->arParams['SECTION_ID'] > 0 && !$additionalFields['SECTION_ID'])
-        {
-            $additionalFields['SECTION_ID'] = $this->arParams['SECTION_ID'];
-        }
-
-        if ($this->arParams['INCLUDE_SUBSECTIONS'] === 'Y' && !$additionalFields['INCLUDE_SUBSECTIONS'])
-        {
-            $additionalFields['INCLUDE_SUBSECTIONS'] = 'Y';
-        }
-
-        if ($this->arParams['ELEMENT_CODE'] && !$additionalFields['CODE'])
-        {
-            $additionalFields['CODE'] = $this->arParams['ELEMENT_CODE'];
-        }
-        elseif ($this->arParams['ELEMENT_ID'] > 0 && !$additionalFields['ID'])
-        {
-            $additionalFields['ID'] = $this->arParams['ELEMENT_ID'];
-        }
-
-        if ($this->arParams['CHECK_PERMISSIONS'] && !$additionalFields['CHECK_PERMISSIONS'])
-        {
-            $additionalFields['CHECK_PERMISSIONS'] = $this->arParams['CHECK_PERMISSIONS'];
-        }
-
-        if (!isset($additionalFields['ACTIVE']))
-        {
-            $additionalFields['ACTIVE'] = 'Y';
-        }
-
         if (is_array($additionalFields) && !empty($additionalFields))
         {
-            $this->globalFilterValues = array_merge_recursive($this->globalFilterValues, $additionalFields);
+            $this->filterParams = array_merge_recursive($this->filterParams, $additionalFields);
         }
 
-        return $this->globalFilterValues;
+        return $this->filterParams;
     }
 
     /**
