@@ -21,3 +21,5 @@ $MESS['ELEMENTS_DETAIL_DATE_FORMAT'] = 'Формат даты';
 
 $MESS['ELEMENTS_DETAIL_SET_SEO_TAGS'] = 'Устанавливать СЕО-теги';
 $MESS['ELEMENTS_DETAIL_SET_SEO_TAGS_TIP'] = 'Заголовок, описание и ключевые слова страницы';
+$MESS['ELEMENTS_DETAIL_ADD_SECTIONS_CHAIN'] = 'Устанавливать в хлебные крошки названия разделов инфоблока';
+$MESS['ELEMENTS_DETAIL_ADD_ELEMENT_CHAIN'] = 'Устанавливать в хлебные крошки название элемента';

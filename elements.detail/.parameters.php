@@ -130,6 +130,18 @@ try
                 'TYPE' => 'CHECKBOX',
                 'DEFAULT' => 'Y'
             ),
+            'ADD_SECTIONS_CHAIN' => array(
+                'PARENT' => 'SEO',
+                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_ADD_SECTIONS_CHAIN'),
+                'TYPE' => 'CHECKBOX',
+                'DEFAULT' => 'Y'
+            ),
+            'ADD_ELEMENT_CHAIN' => array(
+                'PARENT' => 'SEO',
+                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_ADD_ELEMENT_CHAIN'),
+                'TYPE' => 'CHECKBOX',
+                'DEFAULT' => 'Y'
+            ),
             'SET_404' => array(
                 'PARENT' => 'OTHERS',
                 'NAME' => Loc::getMessage('ELEMENTS_DETAIL_SET_404'),

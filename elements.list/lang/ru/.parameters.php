@@ -27,6 +27,8 @@ $MESS['EX_FILTER_NAME_TIP'] = 'Задается имя глобальной пе
 
 $MESS['ELEMENTS_LIST_USE_AJAX'] = 'Включить аякс-режим';
 $MESS['ELEMENTS_LIST_AJAX_TEMPLATE_PAGE'] = 'Файл шаблона для аякс-режима';
+$MESS['ELEMENTS_LIST_AJAX_COMPONENT_ID'] = 'Идентификатор компонента';
+$MESS['AJAX_COMPONENT_ID_TIP'] = 'Генерируется автоматически. Если необходимо задать определённый идентификатор, пропишите его в поле (допускаются цифры и латиница)';
 $MESS['AJAX_TEMPLATE_PAGE_TIP'] = 'Файл шаблона, выполняемый в аякс-режиме. Напр., в обычной работе компонента используется файл template.php, для аякс-режима можно создать в шаблоне файл ajax.php';
 $MESS['ELEMENTS_LIST_AJAX_HEAD_RELOAD'] = 'Перезагружать заголовки страницы';
 $MESS['ELEMENTS_LIST_AJAX_TYPE'] = 'Тип режима';
@@ -44,5 +46,4 @@ $MESS['ELEMENTS_LIST_CHECK_PERMISSIONS'] = 'Учитывать права дос
 
 $MESS['ELEMENTS_LIST_SET_SEO_TAGS'] = 'Устанавливать СЕО-теги в разделе';
 $MESS['ELEMENTS_LIST_SET_SEO_TAGS_TIP'] = 'Заголовок, описание и ключевые слова страницы';
-$MESS['ELEMENTS_LIST_ADD_IBLOCK_CHAIN'] = 'Устанавливать в хлебные крошки название инфоблока';
 $MESS['ELEMENTS_LIST_ADD_SECTIONS_CHAIN'] = 'Устанавливать в хлебные крошки названия разделов инфоблока';

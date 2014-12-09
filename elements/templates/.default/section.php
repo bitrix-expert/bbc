@@ -13,7 +13,6 @@
         'SELECT_FIELDS' => $arParams['LIST_SELECT_FIELDS'],
         'SELECT_PROPS' => $arParams['LIST_SELECT_PROPS'],
         'RESULT_PROCESSING_MODE' => $arParams['LIST_RESULT_PROCESSING_MODE'],
-        'ADD_IBLOCK_CHAIN' => $arParams['ADD_IBLOCK_CHAIN'],
         'ADD_SECTIONS_CHAIN' => $arParams['ADD_SECTIONS_CHAIN'],
         'CACHE_GROUPS' => $arParams['CACHE_GROUPS'],
         'CACHE_TYPE' => $arParams['CACHE_TYPE'],
