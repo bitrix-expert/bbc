@@ -100,7 +100,7 @@ trait Elements
         }
     }
 
-    protected function executeGetResultElements()
+    protected function executeMainElements()
     {
         // todo Move to getFilterParams()
         if ($this->arParams['SECTION_CODE'] && !$this->arParams['SECTION_ID'])

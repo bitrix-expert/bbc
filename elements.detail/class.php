@@ -35,11 +35,11 @@ class ElementsDetail extends Basis
     {
         if (!$this->arParams['ELEMENT_ID'] && !$this->arParams['ELEMENT_CODE'])
         {
-            $this->return404();
+            $this->return404(true);
         }
     }
 
-    protected function getResult()
+    protected function executeMain()
     {
         $rsElement = \CIBlockElement::GetList(
             array(),

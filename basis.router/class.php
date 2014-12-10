@@ -20,7 +20,7 @@ use Bitrix\Main;
  */
 abstract class BasisRouter extends \CBitrixComponent
 {
-    use Common, Exceptions;
+    use Common;
 
     /**
      * @var array Paths of templates default
@@ -154,7 +154,7 @@ abstract class BasisRouter extends \CBitrixComponent
 
         $this->setSefDefaultParams();
         $this->setPage();
-        $this->getResult();
+        $this->executeMain();
         $this->returnDatas();
 
         $this->executeEpilog();

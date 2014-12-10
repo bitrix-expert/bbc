@@ -19,7 +19,7 @@ include_once __DIR__.'/elements.php';
  */
 abstract class Basis extends \CBitrixComponent
 {
-    use Common, Exceptions;
+    use Common;
 
     /**
      * @var bool Auto executing methods of prolog / epilog in the traits
@@ -49,8 +49,8 @@ abstract class Basis extends \CBitrixComponent
                 $type = 'Prolog';
             break;
 
-            case 'getResult':
-                $type = 'GetResult';
+            case 'main':
+                $type = 'Main';
             break;
 
             default:
@@ -109,8 +109,8 @@ abstract class Basis extends \CBitrixComponent
 
         if ($this->startCache())
         {
-            $this->getResult();
-            $this->executeTraits('getResult');
+            $this->executeMain();
+            $this->executeTraits('main');
 
             if ($this->cacheTemplate)
             {

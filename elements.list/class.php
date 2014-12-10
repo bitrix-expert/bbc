@@ -29,7 +29,7 @@ class ElementsList extends Basis
         'IBLOCK_ID' => array('type' => 'int')
     );
 
-    protected function getResult()
+    protected function executeMain()
     {
         $rsElements = \CIBlockElement::GetList(
             $this->getParamsSort(),
