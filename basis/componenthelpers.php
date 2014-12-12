@@ -57,10 +57,11 @@ class ComponentHelpers
      *                                      <li> DELETE — true or false
      *                                      </ul>
      * @param array $arCurrentValues Don't change the name! It's used in the .parameters.php file (Hello from Bitrix)
+     * @param bool $selectOnlyListed Select parameters only listed in $prepareParams
      * @return array Array for use in variable $arComponentParameters in the .parameters.php
      * @throws \Bitrix\Main\LoaderException
      */
-    public static function getParameters($component, $prepareParams = array(), array $arCurrentValues)
+    public static function getParameters($component, $prepareParams = array(), array $arCurrentValues, $selectOnlyListed = false)
     {
         $componentParams = \CComponentUtil::GetComponentProps($component, $arCurrentValues);
 
@@ -73,7 +74,7 @@ class ComponentHelpers
         {
             foreach ($componentParams['PARAMETERS'] as $code => &$params)
             {
-                if ($prepareParams[$code]['DELETE'])
+                if ($prepareParams[$code]['DELETE'] || ($selectOnlyListed === true && !isset($prepareParams[$code])))
                 {
                     unset($componentParams['PARAMETERS'][$code]);
                     continue;

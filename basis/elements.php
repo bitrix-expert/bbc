@@ -414,28 +414,47 @@ trait Elements
     /**
      * Add parameters to grouping
      *
-     * @param array $additionalFields
+     * @param array $fields
      * @uses groupingParams
      */
-    protected function addParamsGrouping($additionalFields = array())
+    protected function addParamsGrouping($fields = array())
     {
-        if (is_array($additionalFields) && !empty($additionalFields))
+        if (is_array($fields) && !empty($fields))
         {
-            $this->groupingParams = array_merge($this->groupingParams, $additionalFields);
+            $this->groupingParams = array_merge($this->groupingParams, $fields);
         }
     }
 
     /**
      * Add parameters to pagination settings
      *
-     * @param array $additionalFields
+     * @param array $params
      * @uses navStartParams
      */
-    protected function addParamsNavStart($additionalFields = array())
+    protected function addParamsNavStart($params = array())
     {
-        if (is_array($additionalFields) && !empty($additionalFields))
+        if (is_array($params) && !empty($params))
         {
-            $this->navStartParams = array_merge($this->navStartParams, $additionalFields);
+            $this->navStartParams = array_merge($this->navStartParams, $params);
+        }
+    }
+
+    /**
+     * Add selected fields and properties to parameters
+     *
+     * @param array $fields
+     * @param array $props
+     */
+    protected function addParamsSelected($fields = null, $props = null)
+    {
+        if (is_array($fields) && !empty($fields))
+        {
+            $this->arParams['SELECT_FIELDS'] = array_merge($this->arParams['SELECT_FIELDS'], $fields);
+        }
+
+        if (is_array($props) && !empty($props))
+        {
+            $this->arParams['SELECT_PROPS'] = array_merge($this->arParams['SELECT_PROPS'], $props);
         }
     }
 
