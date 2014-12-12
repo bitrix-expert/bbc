@@ -123,11 +123,11 @@ trait Elements
             );
         }
 
-        $this->getInheritedProps();
-        $this->getSectionParams();
+        $this->readInheritedProps();
+        $this->readSectionParams();
     }
 
-    private function getInheritedProps()
+    private function readInheritedProps()
     {
         if ($this->arParams['SET_SEO_TAGS'] !== 'Y' || !$this->arParams['IBLOCK_ID'])
         {
@@ -178,7 +178,7 @@ trait Elements
         $this->setResultCacheKeys(array('SEO_TAGS'));
     }
     
-    private function getSectionParams()
+    private function readSectionParams()
     {
         if ($this->arResult['IBLOCK_SECTION_ID'])
         {

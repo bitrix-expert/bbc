@@ -20,6 +20,10 @@ $MESS['ELEMENTS_DETAIL_SET_404'] = 'Устанавливать 404 статус 
 $MESS['ELEMENTS_DETAIL_DATE_FORMAT'] = 'Формат даты';
 
 $MESS['ELEMENTS_DETAIL_SET_SEO_TAGS'] = 'Устанавливать СЕО-теги';
+$MESS['ELEMENTS_DETAIL_OG_TAGS_TITLE'] = 'ОГ-тег с заголовком страницы';
+$MESS['ELEMENTS_DETAIL_OG_TAGS_DESCRIPTION'] = 'ОГ-тег с описанием страницы';
+$MESS['ELEMENTS_DETAIL_OG_TAGS_IMAGE'] = 'ОГ-тег с изображением страницы';
+$MESS['ELEMENTS_DETAIL_OG_TAGS_URL'] = 'ОГ-тег с адресом страницы';
 $MESS['ELEMENTS_DETAIL_SET_SEO_TAGS_TIP'] = 'Заголовок, описание и ключевые слова страницы';
 $MESS['ELEMENTS_DETAIL_ADD_SECTIONS_CHAIN'] = 'Устанавливать в хлебные крошки названия разделов инфоблока';
 $MESS['ELEMENTS_DETAIL_ADD_ELEMENT_CHAIN'] = 'Устанавливать в хлебные крошки название элемента';

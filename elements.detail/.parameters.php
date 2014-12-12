@@ -28,6 +28,30 @@ try
     $iblocks = array();
     $elementProperties = array();
 
+    $ogTagsFields = array(
+        'TITLE' => array(
+            0 => '',
+            'NAME' => 'Название элемента',
+            'SEO_TITLE' => 'Заголовок страницы (title)'
+        ),
+        'DESCRIPTION' => array(
+            0 => '',
+            'PREVIEW_TEXT' => 'Описание для анонса',
+            'DETAIL_TEXT' => 'Детальное описание',
+            'SEO_DESCRIPTION' => 'Описание страницы (description)'
+        ),
+        'IMAGE' => array(
+            0 => '',
+            'PREVIEW_PICTURE' => 'Картинка для анонса',
+            'DETAIL_PICTURE' => 'Детальная картинка'
+        ),
+        'URL' => array(
+            0 => '',
+            'SHORT_LINK' => 'Короткая ссылка на страницу',
+            'DETAIL_PAGE_URL' => 'Адрес страницы'
+        )
+    );
+
     if (isset($arCurrentValues['IBLOCK_TYPE']) && strlen($arCurrentValues['IBLOCK_TYPE']))
     {
         $rsIblocks = Iblock\IblockTable::getList(array(
@@ -64,9 +88,20 @@ try
             )
         );
 
-        while ($arProperty = $rsProperties->Fetch())
+        while ($property = $rsProperties->Fetch())
         {
-            $elementProperties[$arProperty['CODE']] = '['.$arProperty['CODE'].'] '.$arProperty['NAME'];
+            $elementProperties[$property['CODE']] = '['.$property['CODE'].'] '.$property['NAME'];
+
+            if ($property['PROPERTY_TYPE'] === 'S')
+            {
+                $ogTagsFields['TITLE']['PROPERTY_'.$property['CODE']] = $property['NAME'];
+                $ogTagsFields['DESCRIPTION']['PROPERTY_'.$property['CODE']] = $property['NAME'];
+            }
+
+            if ($property['PROPERTY_TYPE'] === 'F')
+            {
+                $ogTagsFields['IMAGE']['PROPERTY_'.$property['CODE']] = $property['NAME'];
+            }
         }
     }
 
@@ -129,6 +164,30 @@ try
                 'NAME' => Loc::getMessage('ELEMENTS_DETAIL_SET_SEO_TAGS'),
                 'TYPE' => 'CHECKBOX',
                 'DEFAULT' => 'Y'
+            ),
+            'OG_TAGS_TITLE' => array(
+                'PARENT' => 'SEO',
+                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_OG_TAGS_TITLE'),
+                'TYPE' => 'LIST',
+                'VALUES' => $ogTagsFields['TITLE']
+            ),
+            'OG_TAGS_DESCRIPTION' => array(
+                'PARENT' => 'SEO',
+                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_OG_TAGS_DESCRIPTION'),
+                'TYPE' => 'LIST',
+                'VALUES' => $ogTagsFields['DESCRIPTION']
+            ),
+            'OG_TAGS_IMAGE' => array(
+                'PARENT' => 'SEO',
+                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_OG_TAGS_IMAGE'),
+                'TYPE' => 'LIST',
+                'VALUES' => $ogTagsFields['IMAGE']
+            ),
+            'OG_TAGS_URL' => array(
+                'PARENT' => 'SEO',
+                'NAME' => Loc::getMessage('ELEMENTS_DETAIL_OG_TAGS_URL'),
+                'TYPE' => 'LIST',
+                'VALUES' => $ogTagsFields['URL']
             ),
             'ADD_SECTIONS_CHAIN' => array(
                 'PARENT' => 'SEO',
