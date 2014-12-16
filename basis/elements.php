@@ -42,6 +42,11 @@ trait Elements
     {
         $this->setNavStartParams();
         $this->setParamsFilters();
+
+        if ($this->arParams['OG_TAGS_IMAGE'])
+        {
+            $this->addParamsSelected(array($this->arParams['OG_TAGS_IMAGE']));
+        }
     }
 
     protected function setNavStartParams()
@@ -125,13 +130,17 @@ trait Elements
 
         $this->readInheritedProps();
         $this->readSectionParams();
+        $this->readOgDatas();
     }
 
     private function readInheritedProps()
     {
         if ($this->arParams['SET_SEO_TAGS'] !== 'Y' || !$this->arParams['IBLOCK_ID'])
         {
-            return;
+            if ($this->arParams['OG_TAGS_TITLE'] !== 'SEO_TITLE' && $this->arParams['OG_TAGS_DESCRIPTION'] !== 'SEO_DESCRIPTION')
+            {
+                return false;
+            }
         }
 
         if ($this->arParams['ELEMENT_ID'])
@@ -175,9 +184,12 @@ trait Elements
             }
         }
 
-        $this->setResultCacheKeys(array('SEO_TAGS'));
+        if (!empty($this->arResult['SEO_TAGS']))
+        {
+            $this->setResultCacheKeys(array('SEO_TAGS'));
+        }
     }
-    
+
     private function readSectionParams()
     {
         if ($this->arResult['IBLOCK_SECTION_ID'])
@@ -210,6 +222,93 @@ trait Elements
         $this->setResultCacheKeys(array('SECTION'));
     }
 
+    private function readOgDatas()
+    {
+        global $APPLICATION;
+
+        if (!$this->arResult['OG_TAGS']['TITLE'])
+        {
+            if ($this->arParams['OG_TAGS_TITLE'] === 'SEO_TITLE')
+            {
+                $this->arResult['OG_TAGS']['TITLE'] = $this->arResult['SEO_TAGS']['TITLE'];
+            }
+            elseif ($this->arParams['OG_TAGS_TITLE'])
+            {
+                $this->arResult['OG_TAGS']['TITLE'] = $this->arResult[$this->arParams['OG_TAGS_TITLE']];
+            }
+        }
+
+        if (!$this->arResult['OG_TAGS']['DESCRIPTION'])
+        {
+            if ($this->arParams['OG_TAGS_DESCRIPTION'] === 'SEO_DESCRIPTION')
+            {
+                $this->arResult['OG_TAGS']['DESCRIPTION'] = $this->arResult['SEO_TAGS']['DESCRIPTION'];
+            }
+            elseif ($this->arParams['OG_TAGS_DESCRIPTION'])
+            {
+                $this->arResult['OG_TAGS']['DESCRIPTION'] = $this->arResult[$this->arParams['OG_TAGS_DESCRIPTION']];
+            }
+        }
+
+        if (!$this->arResult['OG_TAGS']['IMAGE'] && $this->arParams['OG_TAGS_IMAGE'])
+        {
+            $file = \CFile::GetPath($this->arResult[$this->arParams['OG_TAGS_IMAGE']]);
+
+            if ($file)
+            {
+                $this->arResult['OG_TAGS']['IMAGE'] = 'http://'.SITE_SERVER_NAME.$file;
+            }
+        }
+
+        if ($this->arParams['OG_TAGS_URL'] === 'SHORT_LINK')
+        {
+            $this->arResult['OG_TAGS']['URL'] = $this->getShortLink($APPLICATION->GetCurPage());
+        }
+
+        if (!empty($this->arResult['OG_TAGS']))
+        {
+            $this->setResultCacheKeys(array('OG_TAGS'));
+        }
+    }
+
+    /**
+     * Returns short link
+     *
+     * @param string $fullLink
+     * @return string
+     */
+    public static function getShortLink($fullLink)
+    {
+        $prefix = 'http://'.SITE_SERVER_NAME.'/';
+
+        $rsShortLink = \CBXShortUri::GetList(
+            array(),
+            array(
+                'URI' => $fullLink
+            )
+        );
+
+        if ($shortLink = $rsShortLink->Fetch())
+        {
+            return $prefix.$shortLink['SHORT_URI'];
+        }
+
+        $shortLink = \CBXShortUri::GenerateShortUri();
+
+        $id = \CBXShortUri::Add(
+            array(
+                'URI' => $fullLink,
+                'SHORT_URI' => $shortLink,
+                'STATUS' => '301',
+            )
+        );
+
+        if ($id)
+        {
+            return $prefix.$shortLink;
+        }
+    }
+
     /**
      * Setting meta tags
      *
@@ -224,6 +323,11 @@ trait Elements
     protected function setSeoTags()
     {
         global $APPLICATION;
+
+        if ($this->arParams['SET_SEO_TAGS'] !== 'Y')
+        {
+            return false;
+        }
 
         if ($this->arResult['SEO_TAGS']['TITLE'])
         {
@@ -271,7 +375,6 @@ trait Elements
      *
      * <ul> Uses:
      * <li> og:title
-     * <li> og:type
      * <li> og:url
      * <li> og:image
      * </ul>
@@ -288,11 +391,6 @@ trait Elements
         if ($this->arResult['OG_TAGS']['DESCRIPTION'])
         {
             Asset::getInstance()->addString('<meta property="og:description" content="'.$this->arResult['OG_TAGS']['DESCRIPTION'].'" />', true);
-        }
-
-        if ($this->arResult['OG_TAGS']['TYPE'])
-        {
-            Asset::getInstance()->addString('<meta property="og:type" content="'.$this->arResult['OG_TAGS']['TYPE'].'" />', true);
         }
 
         if ($this->arResult['OG_TAGS']['URL'])

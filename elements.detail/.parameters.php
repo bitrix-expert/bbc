@@ -31,24 +31,23 @@ try
     $ogTagsFields = array(
         'TITLE' => array(
             0 => '',
-            'NAME' => 'Название элемента',
-            'SEO_TITLE' => 'Заголовок страницы (title)'
+            'NAME' => Loc::getMessage('ELEMENTS_DETAIL_ELEMENT_NAME'),
+            'SEO_TITLE' => Loc::getMessage('ELEMENTS_DETAIL_PAGE_TITLE')
         ),
         'DESCRIPTION' => array(
             0 => '',
-            'PREVIEW_TEXT' => 'Описание для анонса',
-            'DETAIL_TEXT' => 'Детальное описание',
-            'SEO_DESCRIPTION' => 'Описание страницы (description)'
+            'PREVIEW_TEXT' => Loc::getMessage('ELEMENTS_DETAIL_PREVIEW_TEXT'),
+            'DETAIL_TEXT' => Loc::getMessage('ELEMENTS_DETAIL_DETAIL_TEXT'),
+            'SEO_DESCRIPTION' => Loc::getMessage('ELEMENTS_DETAIL_PAGE_DESCRIPTION')
         ),
         'IMAGE' => array(
             0 => '',
-            'PREVIEW_PICTURE' => 'Картинка для анонса',
-            'DETAIL_PICTURE' => 'Детальная картинка'
+            'PREVIEW_PICTURE' => Loc::getMessage('ELEMENTS_DETAIL_PREVIEW_PICTURE'),
+            'DETAIL_PICTURE' => Loc::getMessage('ELEMENTS_DETAIL_DETAIIL_PICTURE')
         ),
         'URL' => array(
             0 => '',
-            'SHORT_LINK' => 'Короткая ссылка на страницу',
-            'DETAIL_PAGE_URL' => 'Адрес страницы'
+            'SHORT_LINK' => Loc::getMessage('ELEMENTS_DETAIL_SHORT_LINK')
         )
     );
 
@@ -100,7 +99,7 @@ try
 
             if ($property['PROPERTY_TYPE'] === 'F')
             {
-                $ogTagsFields['IMAGE']['PROPERTY_'.$property['CODE']] = $property['NAME'];
+//                $ogTagsFields['IMAGE']['PROPERTY_'.$property['CODE']] = $property['NAME']; // todo Add prepare to Elements::executePrologElements()
             }
         }
     }

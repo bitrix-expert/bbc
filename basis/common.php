@@ -389,7 +389,7 @@ trait Common
             $this->showExceptionUser($exception);
         }
 
-        if (($notifier === true) || ($this->exceptionNotifier && $notifier !== false))
+        if (($notifier === true) || ($this->exceptionNotifier && $notifier !== false) && BX_EXC_NOTIFY !== false)
         {
             $this->sendNotifyException($exception);
         }
