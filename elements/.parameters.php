@@ -129,6 +129,18 @@ try
             'DATE_FORMAT' => array(
                 'RENAME' => 'DETAIL_DATE_FORMAT',
                 'MOVE' => 'DETAIL'
+            ),
+            'OG_TAGS_TITLE' => array(
+                'RENAME' => 'DETAIL_OG_TAGS_TITLE'
+            ),
+            'OG_TAGS_DESCRIPTION' => array(
+                'RENAME' => 'DETAIL_OG_TAGS_DESCRIPTION'
+            ),
+            'OG_TAGS_IMAGE' => array(
+                'RENAME' => 'DETAIL_OG_TAGS_IMAGE'
+            ),
+            'OG_TAGS_URL' => array(
+                'RENAME' => 'DETAIL_OG_TAGS_URL'
             )
         ),
         $arCurrentValues
