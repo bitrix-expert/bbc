@@ -63,9 +63,9 @@ class ComponentHelpers
      */
     public static function getParameters($component, $prepareParams = array(), array $arCurrentValues, $selectOnlyListed = false)
     {
-        $componentParams = \CComponentUtil::GetComponentProps($component, $arCurrentValues);
-
         $additionalComponentParams = array();
+
+        $componentParams = \CComponentUtil::GetComponentProps($component, $arCurrentValues);
 
         if ($componentParams === false)
         {
@@ -102,7 +102,7 @@ class ComponentHelpers
 
             unset($params);
 
-            $componentParams = array_replace_recursive($componentParams, $additionalComponentParams);
+            $componentParams['PARAMETERS'] = array_replace_recursive($componentParams['PARAMETERS'], $additionalComponentParams);
         }
 
         return $componentParams;
