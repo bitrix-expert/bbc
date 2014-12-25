@@ -146,42 +146,52 @@ trait Elements
         if ($this->arParams['ELEMENT_ID'])
         {
             $rsSeoValues = new InheritedProperty\ElementValues($this->arParams['IBLOCK_ID'], $this->arParams['ELEMENT_ID']);
-            $arSeoValues = $rsSeoValues->getValues();
+            $seoValues = $rsSeoValues->getValues();
 
             if (!$this->arResult['SEO_TAGS']['TITLE'])
             {
-                $this->arResult['SEO_TAGS']['TITLE'] = $arSeoValues['ELEMENT_META_TITLE'];
+                $this->arResult['SEO_TAGS']['TITLE'] = $seoValues['ELEMENT_META_TITLE'];
             }
 
             if (!$this->arResult['SEO_TAGS']['DESCRIPTION'])
             {
-                $this->arResult['SEO_TAGS']['DESCRIPTION'] = $arSeoValues['ELEMENT_META_DESCRIPTION'];
+                $this->arResult['SEO_TAGS']['DESCRIPTION'] = $seoValues['ELEMENT_META_DESCRIPTION'];
             }
 
             if (!$this->arResult['SEO_TAGS']['KEYWORDS'])
             {
-                $this->arResult['SEO_TAGS']['KEYWORDS'] = $arSeoValues['ELEMENT_META_KEYWORDS'];
+                $this->arResult['SEO_TAGS']['KEYWORDS'] = $seoValues['ELEMENT_META_KEYWORDS'];
             }
         }
         elseif ($this->arParams['SECTION_ID'])
         {
             $rsSeoValues = new InheritedProperty\SectionValues($this->arParams['IBLOCK_ID'], $this->arParams['SECTION_ID']);
-            $arSeoValues = $rsSeoValues->getValues();
+            $seoValues = $rsSeoValues->getValues();
 
             if (!$this->arResult['SEO_TAGS']['TITLE'])
             {
-                $this->arResult['SEO_TAGS']['TITLE'] = $arSeoValues['SECTION_META_TITLE'];
+                $this->arResult['SEO_TAGS']['TITLE'] = $seoValues['SECTION_META_TITLE'];
             }
 
             if (!$this->arResult['SEO_TAGS']['DESCRIPTION'])
             {
-                $this->arResult['SEO_TAGS']['DESCRIPTION'] = $arSeoValues['SECTION_META_DESCRIPTION'];
+                $this->arResult['SEO_TAGS']['DESCRIPTION'] = $seoValues['SECTION_META_DESCRIPTION'];
             }
 
             if (!$this->arResult['SEO_TAGS']['KEYWORDS'])
             {
-                $this->arResult['SEO_TAGS']['KEYWORDS'] = $arSeoValues['SECTION_META_KEYWORDS'];
+                $this->arResult['SEO_TAGS']['KEYWORDS'] = $seoValues['SECTION_META_KEYWORDS'];
             }
+        }
+
+        if (!empty($this->arResult['SEO_TAGS']) && is_array($this->arResult['SEO_TAGS']))
+        {
+            foreach ($this->arResult['SEO_TAGS'] as &$field)
+            {
+                $field = strip_tags($field);
+            }
+
+            unset ($field);
         }
 
         if (!empty($this->arResult['SEO_TAGS']))
@@ -230,11 +240,11 @@ trait Elements
         {
             if ($this->arParams['OG_TAGS_TITLE'] === 'SEO_TITLE')
             {
-                $this->arResult['OG_TAGS']['TITLE'] = $this->arResult['SEO_TAGS']['TITLE'];
+                $this->arResult['OG_TAGS']['TITLE'] = strip_tags($this->arResult['SEO_TAGS']['TITLE']);
             }
             elseif ($this->arParams['OG_TAGS_TITLE'])
             {
-                $this->arResult['OG_TAGS']['TITLE'] = $this->arResult[$this->arParams['OG_TAGS_TITLE']];
+                $this->arResult['OG_TAGS']['TITLE'] = strip_tags($this->arResult[$this->arParams['OG_TAGS_TITLE']]);
             }
         }
 
@@ -242,11 +252,11 @@ trait Elements
         {
             if ($this->arParams['OG_TAGS_DESCRIPTION'] === 'SEO_DESCRIPTION')
             {
-                $this->arResult['OG_TAGS']['DESCRIPTION'] = $this->arResult['SEO_TAGS']['DESCRIPTION'];
+                $this->arResult['OG_TAGS']['DESCRIPTION'] = strip_tags($this->arResult['SEO_TAGS']['DESCRIPTION']);
             }
             elseif ($this->arParams['OG_TAGS_DESCRIPTION'])
             {
-                $this->arResult['OG_TAGS']['DESCRIPTION'] = $this->arResult[$this->arParams['OG_TAGS_DESCRIPTION']];
+                $this->arResult['OG_TAGS']['DESCRIPTION'] = strip_tags($this->arResult[$this->arParams['OG_TAGS_DESCRIPTION']]);
             }
         }
 
@@ -263,6 +273,16 @@ trait Elements
         if ($this->arParams['OG_TAGS_URL'] === 'SHORT_LINK')
         {
             $this->arResult['OG_TAGS']['URL'] = $this->getShortLink($APPLICATION->GetCurPage());
+        }
+
+        if (!empty($this->arResult['OG_TAGS']) && is_array($this->arResult['OG_TAGS']))
+        {
+            foreach ($this->arResult['OG_TAGS'] as &$field)
+            {
+                $field = strip_tags($field);
+            }
+
+            unset ($field);
         }
 
         if (!empty($this->arResult['OG_TAGS']))
