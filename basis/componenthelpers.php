@@ -65,6 +65,8 @@ class ComponentHelpers
     {
         $componentParams = \CComponentUtil::GetComponentProps($component, $arCurrentValues);
 
+        $additionalComponentParams = array();
+
         if ($componentParams === false)
         {
             throw new Main\LoaderException('Failed loading parameters for '.$component);
@@ -92,13 +94,15 @@ class ComponentHelpers
 
                 if ($prepareParams[$code]['RENAME'])
                 {
-                    $componentParams['PARAMETERS'][$prepareParams[$code]['RENAME']] = $params;
+                    $additionalComponentParams[$prepareParams[$code]['RENAME']] = $params;
 
                     unset($componentParams['PARAMETERS'][$code]);
                 }
             }
 
             unset($params);
+
+            $componentParams = array_replace_recursive($componentParams, $additionalComponentParams);
         }
 
         return $componentParams;
