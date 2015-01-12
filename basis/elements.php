@@ -5,8 +5,10 @@
  * @package components
  * @subpackage basis
  * @author Nik Samokhvalov <nik@samokhvalov.info>
- * @copyright Copyright (c) 2014, Nik Samokhvalov
+ * @copyright Copyright © 2014-2015 Nik Samokhvalov
+ * @license MIT
  */
+
 namespace Components\Basis;
 
 use Bitrix\Iblock\InheritedProperty;
