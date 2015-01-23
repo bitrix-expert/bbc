@@ -74,7 +74,7 @@ abstract class Basis extends \CBitrixComponent
     /**
      * Set to $this->usedTraits included traits
      */
-    private function getUsedTraits()
+    private function readUsedTraits()
     {
         if ($this->traitsAutoExecute)
         {
@@ -101,7 +101,7 @@ abstract class Basis extends \CBitrixComponent
 
     final public function executeBasis()
     {
-        $this->getUsedTraits();
+        $this->readUsedTraits();
         $this->includeModules();
         $this->checkAutomaticParams();
         $this->checkParams();
