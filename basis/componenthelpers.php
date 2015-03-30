@@ -9,7 +9,7 @@
  * @license MIT
  */
 
-namespace Components\Basis;
+namespace Expert\Bbc\Components;
 
 use Bitrix\Main;
 

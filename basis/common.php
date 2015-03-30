@@ -9,7 +9,7 @@
  * @license MIT
  */
 
-namespace Components\Basis;
+namespace Expert\Bbc\Components;
 
 use Bitrix\Main;
 use Bitrix\Main\Application;
@@ -414,10 +414,10 @@ trait Common
             bxmail(
                 $adminEmail,
                 Loc::getMessage(
-                    'BASIS_COMPONENT_EXCEPTION_EMAIL_SUBJECT', array('#SITE_URL#' => SITE_SERVER_NAME)
+                    'BBC_COMPONENT_EXCEPTION_EMAIL_SUBJECT', array('#SITE_URL#' => SITE_SERVER_NAME)
                 ),
                 Loc::getMessage(
-                    'BASIS_COMPONENT_EXCEPTION_EMAIL_TEXT',
+                    'BBC_COMPONENT_EXCEPTION_EMAIL_TEXT',
                     array(
                         '#URL#' => 'http://'.SITE_SERVER_NAME.Main\Context::getCurrent()->getRequest()->getRequestedPage(),
                         '#DATE#' => $date,
@@ -443,7 +443,7 @@ trait Common
     {
         // todo set HTTP status and constant
 
-        ShowError(Loc::getMessage('BASIS_COMPONENT_CATCH_EXCEPTION'));
+        ShowError(Loc::getMessage('BBC_COMPONENT_CATCH_EXCEPTION'));
     }
 
     /**

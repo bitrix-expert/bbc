@@ -9,7 +9,7 @@
  * @license MIT
  */
 
-namespace Components\Basis;
+namespace Expert\Bbc\Components;
 
 include_once __DIR__.'/componenthelpers.php';
 include_once __DIR__.'/common.php';
