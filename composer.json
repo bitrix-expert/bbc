@@ -3,7 +3,7 @@
   "description": "Bitrix basis components",
   "keywords": ["bitrix", "components"],
   "homepage": "http://bbc.bitrix.expert",
-  "type": "bitrix-module",
+  "type": "bitrix-component",
   "license": "MIT",
   "support": {
     "email": "nik@samokhvalov.info",
