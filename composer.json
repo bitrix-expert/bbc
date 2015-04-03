@@ -1,0 +1,25 @@
+{
+  "name": "bitrix-expert/bbc",
+  "description": "Bitrix basis components",
+  "keywords": ["bitrix", "components"],
+  "homepage": "http://bbc.bitrix.expert",
+  "type": "bitrix-module",
+  "license": "MIT",
+  "support": {
+    "email": "nik@samokhvalov.info",
+    "skype": "nik.samokhvalov",
+    "issues": "https://github.com/bitrix-expert/bbc/issues",
+    "source": "http://github.com/bitrix-expert/bbc/"
+  },
+  "authors": [
+    {
+      "name": "Nik Samokhvalov",
+      "homepage": "http://samokhvalov.info",
+      "email": "nik@samokhvalov.info"
+    }
+  ],
+  "require": {
+    "php":">=5.4.0",
+    "composer/installers": "*"
+  }
+}

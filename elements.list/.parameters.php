@@ -9,7 +9,7 @@
  * @license MIT
  */
 
-namespace Expert\Bbc\Components;
+namespace Bex\Bbc\Components;
 
 use Bitrix\Iblock;
 use Bitrix\Main\Localization\Loc;
