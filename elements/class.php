@@ -11,10 +11,12 @@
 
 namespace Bex\Bbc\Components;
 
+use Bex\Bbc\BasisRouter;
+
 
 if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 
-\CBitrixComponent::includeComponentClass(basename(dirname(__DIR__)).':basis.router');
+if (!\Bitrix\Main\Loader::includeModule('bex.bbc')) return false;
 
 
 class ElementsRouter extends BasisRouter
@@ -23,17 +25,17 @@ class ElementsRouter extends BasisRouter
 
     protected function setSefDefaultParams()
     {
-        $this->defaultUrlTemplates404 = array(
+        $this->defaultUrlTemplates404 = [
             'index' => '',
             'section' => '#SECTION_ID#/',
             'detail' => '#SECTION_ID#/#ELEMENT_ID#/'
-        );
+        ];
 
-        $this->componentVariables = array(
+        $this->componentVariables = [
             'SECTION_ID',
             'SECTION_CODE',
             'ELEMENT_ID',
             'ELEMENT_CODE'
-        );
+        ];
     }
 }

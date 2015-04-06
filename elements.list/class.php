@@ -11,18 +11,20 @@
 
 namespace Bex\Bbc\Components;
 
+use Bex\Bbc;
+
 
 if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 
-\CBitrixComponent::includeComponentClass(basename(dirname(__DIR__)).':basis');
+if (!\Bitrix\Main\Loader::includeModule('bex.bbc')) return false;
 
 
 /**
  * Component for show elements list
  */
-class ElementsList extends Basis
+class ElementsList extends Bbc\Basis
 {
-    use Elements;
+    use Bbc\Traits\Elements;
 
     protected $needModules = array('iblock');
 
