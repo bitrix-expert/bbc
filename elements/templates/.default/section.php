@@ -1,6 +1,6 @@
 <?if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();?>
 
-<?$APPLICATION->IncludeComponent('basis:elements.list', '.default', array(
+<?$APPLICATION->IncludeComponent('bbc:elements.list', '.default', array(
         'IBLOCK_TYPE' => $arParams['IBLOCK_TYPE'],
         'IBLOCK_ID' => $arParams['IBLOCK_ID'],
         'SECTION_ID' => $arResult['VARIABLES']['SECTION_ID'],

@@ -1,10 +1,6 @@
 <?php
 /**
- * Basis components
- *
- * @package components
- * @subpackage basis
- * @author Nik Samokhvalov <nik@samokhvalov.info>
+ * @link http://bbc.bitrix.expert
  * @copyright Copyright © 2014-2015 Nik Samokhvalov
  * @license MIT
  */
@@ -13,14 +9,14 @@ namespace Bex\Bbc\Components;
 
 use Bex\Bbc;
 
-
 if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 
 if (!\Bitrix\Main\Loader::includeModule('bex.bbc')) return false;
 
-
 /**
  * Show page with element of the info-block
+ *
+ * @author Nik Samokhvalov <nik@samokhvalov.info>
  */
 class ElementsDetail extends Bbc\Basis
 {

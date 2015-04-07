@@ -1,20 +1,8 @@
 <?php
-/**
- * Basis components
- *
- * @package components
- * @subpackage basis
- * @author Nik Samokhvalov <nik@samokhvalov.info>
- * @copyright Copyright © 2014-2015 Nik Samokhvalov
- * @license MIT
- */
-
-namespace Bex\Bbc\Components;
 
 use Bex\Bbc\Helpers\ComponentParameters;
 use Bitrix\Iblock;
 use Bitrix\Main\Localization\Loc;
-
 
 if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 
@@ -22,12 +10,11 @@ if (!\Bitrix\Main\Loader::includeModule('bex.bbc')) return false;
 
 Loc::loadMessages(__FILE__);
 
-
 try
 {
     ComponentParameters::includeModules(['iblock']);
 
-    $iblockTypes = \CIBlockParameters::GetIBlockTypes([0 => '']);
+    $iblockTypes = CIBlockParameters::GetIBlockTypes([0 => '']);
     $iblocks = [];
     $elementProperties = [];
 
@@ -71,15 +58,15 @@ try
             ]
         ]);
 
-        while ($arIBlock = $rsIblocks->fetch())
+        while ($iblock = $rsIblocks->fetch())
         {
-            $iblocks[$arIBlock['ID']] = $arIBlock['NAME'];
+            $iblocks[$iblock['ID']] = $iblock['NAME'];
         }
     }
 
     if (isset($arCurrentValues['IBLOCK_ID']) && strlen($arCurrentValues['IBLOCK_ID']))
     {
-        $rsProperties = \CIBlockProperty::GetList(
+        $rsProperties = CIBlockProperty::GetList(
             [
                 'sort' => 'asc',
                 'name' => 'asc'
@@ -107,7 +94,7 @@ try
         }
     }
 
-    $paramElementsFields = \CIBlockParameters::GetFieldCode(Loc::getMessage('ELEMENTS_DETAIL_FIELDS'), 'BASE');
+    $paramElementsFields = CIBlockParameters::GetFieldCode(Loc::getMessage('ELEMENTS_DETAIL_FIELDS'), 'BASE');
 
     $arComponentParameters = [
         'GROUPS' => [
@@ -209,7 +196,7 @@ try
                 'TYPE' => 'CHECKBOX',
                 'DEFAULT' => 'N'
             ],
-            'DATE_FORMAT' => \CIBlockParameters::GetDateFormat(
+            'DATE_FORMAT' => CIBlockParameters::GetDateFormat(
                 Loc::getMessage('ELEMENTS_DETAIL_DATE_FORMAT'),
                 'OTHERS'
             ),
@@ -225,7 +212,7 @@ try
         ]
     ];
 }
-catch (\Exception $e)
+catch (Exception $e)
 {
     ShowError($e->getMessage());
 }

@@ -6,7 +6,7 @@
 
 <?foreach ($arResult['ELEMENTS'] as $element) {?>
 
-    <h1><?=$element['NAME']?></h1>
+    <h1><a href="<?=$element['DETAIL_PAGE_URL']?>"><?=$element['NAME']?></a></h1>
 
 <?}?>
 

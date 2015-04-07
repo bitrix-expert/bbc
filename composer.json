@@ -20,13 +20,6 @@
   ],
   "require": {
     "php":">=5.4.0",
-    "composer/installers": "*",
-    "bitrix-expert/bbc-module": "*"
-  },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/bitrix-expert/bbc-module"
-    }
-  ]
+    "composer/installers": "*"
+  }
 }

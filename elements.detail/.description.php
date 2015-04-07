@@ -1,23 +1,10 @@
 <?php
-/**
- * Basis components
- *
- * @package components
- * @subpackage basis
- * @author Nik Samokhvalov <nik@samokhvalov.info>
- * @copyright Copyright © 2014-2015 Nik Samokhvalov
- * @license MIT
- */
-
-namespace Bex\Bbc\Components;
 
 use Bitrix\Main\Localization\Loc;
-
 
 if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 
 Loc::loadMessages(__FILE__);
-
 
 $arComponentDescription = array(
     'NAME' => Loc::getMessage('ELEMENTS_DETAIL_NAME'),

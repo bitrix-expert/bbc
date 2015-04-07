@@ -1,10 +1,6 @@
 <?php
 /**
- * Basis components
- *
- * @package components
- * @subpackage basis
- * @author Nik Samokhvalov <nik@samokhvalov.info>
+ * @link http://bbc.bitrix.expert
  * @copyright Copyright © 2014-2015 Nik Samokhvalov
  * @license MIT
  */
@@ -13,25 +9,25 @@ namespace Bex\Bbc\Components;
 
 use Bex\Bbc;
 
-
 if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 
 if (!\Bitrix\Main\Loader::includeModule('bex.bbc')) return false;
 
-
 /**
  * Component for show elements list
+ *
+ * @author Nik Samokhvalov <nik@samokhvalov.info>
  */
 class ElementsList extends Bbc\Basis
 {
     use Bbc\Traits\Elements;
 
-    protected $needModules = array('iblock');
+    protected $needModules = ['iblock'];
 
-    protected $checkParams = array(
-        'IBLOCK_TYPE' => array('type' => 'string'),
-        'IBLOCK_ID' => array('type' => 'int')
-    );
+    protected $checkParams = [
+        'IBLOCK_TYPE' => ['type' => 'string'],
+        'IBLOCK_ID' => ['type' => 'int']
+    ];
 
     protected function executeMain()
     {
@@ -40,15 +36,15 @@ class ElementsList extends Bbc\Basis
             $this->getParamsFilters(),
             $this->getParamsGrouping(),
             $this->getParamsNavStart(),
-            $this->getParamsSelected(array(
+            $this->getParamsSelected([
                 'DETAIL_PAGE_URL',
                 'LIST_PAGE_URL'
-            ))
+            ])
         );
 
         if (!isset($this->arResult['ELEMENTS']))
         {
-        	$this->arResult['ELEMENTS'] = array();
+            $this->arResult['ELEMENTS'] = [];
         }
 
         $processingMethod = $this->getProcessingMethod();
@@ -67,6 +63,6 @@ class ElementsList extends Bbc\Basis
         }
 
         $this->generateNav($rsElements);
-        $this->setResultCacheKeys(array('NAV_CACHED_DATA'));
+        $this->setResultCacheKeys(['NAV_CACHED_DATA']);
     }
 }

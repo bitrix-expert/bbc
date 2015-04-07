@@ -1,27 +1,14 @@
 <?php
-/**
- * Basis components
- *
- * @package components
- * @subpackage basis
- * @author Nik Samokhvalov <nik@samokhvalov.info>
- * @copyright Copyright © 2014-2015 Nik Samokhvalov
- * @license MIT
- */
-
-namespace Bex\Bbc\Components;
 
 use Bex\Bbc\Helpers\ComponentParameters;
 use Bitrix\Iblock;
 use Bitrix\Main\Localization\Loc;
-
 
 if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 
 if (!\Bitrix\Main\Loader::includeModule('bex.bbc')) return false;
 
 Loc::loadMessages(__FILE__);
-
 
 $currentZone = basename(dirname(__DIR__));
 

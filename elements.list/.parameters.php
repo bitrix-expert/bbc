@@ -1,20 +1,8 @@
 <?php
-/**
- * Basis components
- *
- * @package components
- * @subpackage basis
- * @author Nik Samokhvalov <nik@samokhvalov.info>
- * @copyright Copyright © 2014-2015 Nik Samokhvalov
- * @license MIT
- */
-
-namespace Bex\Bbc\Components;
 
 use Bex\Bbc\Helpers\ComponentParameters;
 use Bitrix\Iblock;
 use Bitrix\Main\Localization\Loc;
-
 
 if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 
@@ -22,12 +10,11 @@ if (!\Bitrix\Main\Loader::includeModule('bex.bbc')) return false;
 
 Loc::loadMessages(__FILE__);
 
-
 try
 {
     ComponentParameters::includeModules(['iblock']);
 
-    $iblockTypes = \CIBlockParameters::GetIBlockTypes([0 => '']);
+    $iblockTypes = CIBlockParameters::GetIBlockTypes([0 => '']);
     $iblocks = [0 => ''];
     $sections = [0 => ''];
     $elementProperties = [];
@@ -49,9 +36,9 @@ try
             ]
         ]);
 
-        while ($arIBlock = $rsIblocks->fetch())
+        while ($iblock = $rsIblocks->fetch())
         {
-            $iblocks[$arIBlock['ID']] = $arIBlock['NAME'];
+            $iblocks[$iblock['ID']] = $iblock['NAME'];
         }
     }
 
@@ -77,7 +64,7 @@ try
             $sections[$arSection['ID']] = $arSection['NAME'];
         }
 
-        $rsProperties = \CIBlockProperty::GetList(
+        $rsProperties = CIBlockProperty::GetList(
             [
                 'sort' => 'asc',
                 'name' => 'asc'
@@ -88,13 +75,13 @@ try
             ]
         );
 
-        while ($arProperty = $rsProperties->Fetch())
+        while ($property = $rsProperties->Fetch())
         {
-            $elementProperties[$arProperty['CODE']] = '['.$arProperty['CODE'].'] '.$arProperty['NAME'];
+            $elementProperties[$property['CODE']] = '['.$property['CODE'].'] '.$property['NAME'];
         }
     }
 
-    $paramElementsFields = \CIBlockParameters::GetFieldCode(Loc::getMessage('ELEMENTS_LIST_FIELDS'), 'BASE');
+    $paramElementsFields = CIBlockParameters::GetFieldCode(Loc::getMessage('ELEMENTS_LIST_FIELDS'), 'BASE');
 
     $sortOrders = [
         'ASC' => Loc::getMessage('ELEMENTS_LIST_SORT_ORDER_ASC'),
@@ -150,7 +137,7 @@ try
                 'PARENT' => 'BASE',
                 'NAME' => Loc::getMessage('ELEMENTS_LIST_SORT_BY_1'),
                 'TYPE' => 'LIST',
-                'VALUES' => \CIBlockParameters::GetElementSortFields()
+                'VALUES' => CIBlockParameters::GetElementSortFields()
             ],
             'SORT_ORDER_1' => [
                 'PARENT' => 'BASE',
@@ -162,7 +149,7 @@ try
                 'PARENT' => 'BASE',
                 'NAME' => Loc::getMessage('ELEMENTS_LIST_SORT_BY_2'),
                 'TYPE' => 'LIST',
-                'VALUES' => \CIBlockParameters::GetElementSortFields()
+                'VALUES' => CIBlockParameters::GetElementSortFields()
             ],
             'SORT_ORDER_2' => [
                 'PARENT' => 'BASE',
@@ -263,7 +250,7 @@ try
                 'TYPE' => 'CHECKBOX',
                 'DEFAULT' => 'Y'
             ],
-            'DATE_FORMAT' => \CIBlockParameters::GetDateFormat(
+            'DATE_FORMAT' => CIBlockParameters::GetDateFormat(
                 Loc::getMessage('ELEMENTS_LIST_DATE_FORMAT'),
                 'OTHERS'
             ),
@@ -279,9 +266,9 @@ try
         ]
     ];
 
-    \CIBlockParameters::AddPagerSettings($arComponentParameters, Loc::getMessage('ELEMENTS_LIST_NAV_TITLE'), true, true);
+    CIBlockParameters::AddPagerSettings($arComponentParameters, Loc::getMessage('ELEMENTS_LIST_NAV_TITLE'), true, true);
 }
-catch (\Exception $e)
+catch (Exception $e)
 {
     ShowError($e->getMessage());
 }
