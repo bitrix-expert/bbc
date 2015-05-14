@@ -32,11 +32,11 @@ class ElementsList extends Bbc\Basis
     protected function executeMain()
     {
         $rsElements = \CIBlockElement::GetList(
-            $this->getParamsSort(),
-            $this->getParamsFilters(),
-            $this->getParamsGrouping(),
-            $this->getParamsNavStart(),
-            $this->getParamsSelected([
+            $this->paramsElements->getSort(),
+            $this->paramsElements->getFilters(),
+            $this->paramsElements->getGrouping(),
+            $this->paramsElements->getNavStart(),
+            $this->paramsElements->getSelected([
                 'DETAIL_PAGE_URL',
                 'LIST_PAGE_URL'
             ])
@@ -47,7 +47,7 @@ class ElementsList extends Bbc\Basis
             $this->arResult['ELEMENTS'] = [];
         }
 
-        $processingMethod = $this->getProcessingMethod();
+        $processingMethod = $this->paramsElements->getProcessingMethod();
 
         while ($element = $rsElements->$processingMethod())
         {

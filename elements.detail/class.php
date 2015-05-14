@@ -22,14 +22,14 @@ class ElementsDetail extends Bbc\Basis
 {
     use Bbc\Traits\Elements;
 
-    protected $needModules = array('iblock');
+    protected $needModules = ['iblock'];
 
-    protected $checkParams = array(
-        'IBLOCK_TYPE' => array('type' => 'string'),
-        'IBLOCK_ID' => array('type' => 'int'),
-        'ELEMENT_ID' => array('type' => 'int', 'error' => false),
-        'ELEMENT_CODE' => array('type' => 'string', 'error' => false)
-    );
+    protected $checkParams = [
+        'IBLOCK_TYPE' => ['type' => 'string'],
+        'IBLOCK_ID' => ['type' => 'int'],
+        'ELEMENT_ID' => ['type' => 'int', 'error' => false],
+        'ELEMENT_CODE' => ['type' => 'string', 'error' => false]
+    ];
 
     protected function executeProlog()
     {
@@ -42,14 +42,14 @@ class ElementsDetail extends Bbc\Basis
     protected function executeMain()
     {
         $rsElement = \CIBlockElement::GetList(
-            array(),
-            $this->getParamsFilters(),
+            [],
+            $this->paramsElements->getFilters(),
             false,
             false,
-            $this->getParamsSelected()
+            $this->paramsElements->getSelected()
         );
 
-        $processingMethod = $this->getProcessingMethod();
+        $processingMethod = $this->paramsElements->getProcessingMethod();
 
         if ($element = $rsElement->$processingMethod())
         {
@@ -58,7 +58,7 @@ class ElementsDetail extends Bbc\Basis
                 $this->arResult = array_merge($this->arResult, $arElement);
             }
 
-            $this->setResultCacheKeys(array(
+            $this->setResultCacheKeys([
                 'ID',
                 'IBLOCK_ID',
                 'CODE',
@@ -68,7 +68,7 @@ class ElementsDetail extends Bbc\Basis
                 'LIST_PAGE_URL',
                 'SECTION_URL',
                 'SECTION'
-            ));
+            ]);
         }
         elseif ($this->arParams['SET_404'] === 'Y')
         {
