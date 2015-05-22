@@ -8,6 +8,9 @@
 namespace Bex\Bbc\Components;
 
 use Bex\Bbc;
+use Bex\Plugins\Elements\HermitagePlugin;
+use Bex\Plugins\Elements\ParamsPlugin;
+use Bex\Plugins\Elements\SeoPlugin;
 
 if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 
@@ -29,14 +32,36 @@ class ElementsList extends Bbc\Basis
         'IBLOCK_ID' => ['type' => 'int']
     ];
 
+    public function plugins()
+    {
+        return array_merge(
+            parent::plugins(),
+            [
+                'elementsParams' => ParamsPlugin::getClass(),
+                'elementsSeo' => SeoPlugin::getClass(),
+                'elementsHermitage' => HermitagePlugin::getClass(),
+                'includer' => [
+                    'class' => Includer::getClass(),
+                    'checkParams' => [
+                        'IBLOCK_TYPE' => ['type' => 'string'],
+                        'IBLOCK_ID' => ['type' => 'int']
+                    ],
+                    'needModules' => ['iblock']
+                ]
+            ]
+        );
+    }
+
     protected function executeMain()
     {
+        $elementsParams = ParamsPlugin::getInstance();
+
         $rsElements = \CIBlockElement::GetList(
-            $this->paramsElements->getSort(),
-            $this->paramsElements->getFilters(),
-            $this->paramsElements->getGrouping(),
-            $this->paramsElements->getNavStart(),
-            $this->paramsElements->getSelected([
+            $elementsParams->getSort(),
+            $elementsParams->getFilters(),
+            $elementsParams->getGrouping(),
+            $elementsParams->getNavStart(),
+            $elementsParams->getSelected([
                 'DETAIL_PAGE_URL',
                 'LIST_PAGE_URL'
             ])
@@ -47,7 +72,7 @@ class ElementsList extends Bbc\Basis
             $this->arResult['ELEMENTS'] = [];
         }
 
-        $processingMethod = $this->paramsElements->getProcessingMethod();
+        $processingMethod = $elementsParams->getProcessingMethod();
 
         while ($element = $rsElements->$processingMethod())
         {
