@@ -40,19 +40,19 @@ class ElementsList extends Bbc\Basis
                 'elementsParams' => ParamsPlugin::getClass(),
                 'elementsSeo' => SeoPlugin::getClass(),
                 'elementsHermitage' => HermitagePlugin::getClass(),
-                'includer' => [
+                /*'includer' => [
                     'class' => Includer::getClass(),
                     'checkParams' => [
                         'IBLOCK_TYPE' => ['type' => 'string'],
                         'IBLOCK_ID' => ['type' => 'int']
                     ],
                     'needModules' => ['iblock']
-                ]
+                ]*/
             ]
         );
     }
 
-    protected function executeMain()
+    public function executeMain()
     {
         $elementsParams = ParamsPlugin::getInstance();
 
