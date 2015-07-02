@@ -20,7 +20,7 @@ if (!\Bitrix\Main\Loader::includeModule('bex.bbc')) return false;
  */
 class ElementsDetail extends Bbc\Basis
 {
-    use Bbc\Traits\Elements;
+    use Bbc\ElementsTrait;
 
     protected $needModules = ['iblock'];
 
