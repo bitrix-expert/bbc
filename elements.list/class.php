@@ -8,9 +8,9 @@
 namespace Bex\Bbc\Components;
 
 use Bex\Bbc;
-use Bex\Plugins\Elements\HermitagePlugin;
-use Bex\Plugins\Elements\ParamsPlugin;
-use Bex\Plugins\Elements\SeoPlugin;
+use Bex\Plugins\HermitagePlugin;
+use Bex\Plugins\ElementsParamsPlugin;
+use Bex\Plugins\SeoPlugin;
 
 if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 
@@ -37,7 +37,7 @@ class ElementsList extends Bbc\Basis
         return array_merge(
             parent::plugins(),
             [
-                'elementsParams' => ParamsPlugin::getClass(),
+                'elementsParams' => ElementsParamsPlugin::getClass(),
                 'elementsSeo' => SeoPlugin::getClass(),
                 'elementsHermitage' => HermitagePlugin::getClass(),
                 /*'includer' => [
@@ -54,7 +54,7 @@ class ElementsList extends Bbc\Basis
 
     public function executeMain()
     {
-        $elementsParams = ParamsPlugin::getInstance();
+        $elementsParams = ElementsParamsPlugin::getInstance();
 
         $rsElements = \CIBlockElement::GetList(
             $elementsParams->getSort(),
