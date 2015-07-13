@@ -8,9 +8,9 @@
 namespace Bex\Bbc\Components;
 
 use Bex\Bbc;
-use Bex\Plugins\HermitagePlugin;
-use Bex\Plugins\ElementsParamsPlugin;
-use Bex\Plugins\SeoPlugin;
+use Bex\Bbc\Plugins\HermitagePlugin;
+use Bex\Bbc\Plugins\ElementsParamsPlugin;
+use Bex\Bbc\Plugins\SeoPlugin;
 
 if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 
@@ -21,7 +21,7 @@ if (!\Bitrix\Main\Loader::includeModule('bex.bbc')) return false;
  *
  * @author Nik Samokhvalov <nik@samokhvalov.info>
  */
-class ElementsList extends Bbc\Basis
+class ElementsList extends Bbc\BasisComponent
 {
     use Bbc\ElementsTrait;
 

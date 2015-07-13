@@ -18,7 +18,7 @@ if (!\Bitrix\Main\Loader::includeModule('bex.bbc')) return false;
  *
  * @author Nik Samokhvalov <nik@samokhvalov.info>
  */
-class ElementsDetail extends Bbc\Basis
+class ElementsDetail extends Bbc\BasisComponent
 {
     use Bbc\ElementsTrait;
 
