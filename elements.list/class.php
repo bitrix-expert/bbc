@@ -32,24 +32,9 @@ class ElementsList extends Bbc\BasisComponent
         'IBLOCK_ID' => ['type' => 'int']
     ];
 
-    public function plugins()
+    public function configurate()
     {
-        return array_merge(
-            parent::plugins(),
-            [
-                'elementsParams' => ElementsParamsPlugin::getClass(),
-                'elementsSeo' => SeoPlugin::getClass(),
-                'elementsHermitage' => HermitagePlugin::getClass(),
-                /*'includer' => [
-                    'class' => Includer::getClass(),
-                    'checkParams' => [
-                        'IBLOCK_TYPE' => ['type' => 'string'],
-                        'IBLOCK_ID' => ['type' => 'int']
-                    ],
-                    'needModules' => ['iblock']
-                ]*/
-            ]
-        );
+        parent::configurate();
     }
 
     public function executeMain()
