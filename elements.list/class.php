@@ -31,22 +31,35 @@ class ElementsList extends Bbc\BasisComponent
         'IBLOCK_TYPE' => ['type' => 'string'],
         'IBLOCK_ID' => ['type' => 'int']
     ];
+    /**
+     * @var ElementsParamsPlugin
+     */
+    protected $elementsParams;
+    /**
+     * @var SeoPlugin
+     */
+    protected $seo;
 
     public function configurate()
     {
         parent::configurate();
+
+        $this->elementsParams = new ElementsParamsPlugin();
+        $this->seo = new SeoPlugin();
+
+        $this->pluginManager
+            ->add($this->elementsParams)
+            ->add($this->seo);
     }
 
     public function executeMain()
     {
-        $elementsParams = ElementsParamsPlugin::getInstance();
-
         $rsElements = \CIBlockElement::GetList(
-            $elementsParams->getSort(),
-            $elementsParams->getFilters(),
-            $elementsParams->getGrouping(),
-            $elementsParams->getNavStart(),
-            $elementsParams->getSelected([
+            $this->elementsParams->getSort(),
+            $this->elementsParams->getFilters(),
+            $this->elementsParams->getGrouping(),
+            $this->elementsParams->getNavStart(),
+            $this->elementsParams->getSelected([
                 'DETAIL_PAGE_URL',
                 'LIST_PAGE_URL'
             ])
@@ -57,7 +70,7 @@ class ElementsList extends Bbc\BasisComponent
             $this->arResult['ELEMENTS'] = [];
         }
 
-        $processingMethod = $elementsParams->getProcessingMethod();
+        $processingMethod = $this->elementsParams->getProcessingMethod();
 
         while ($element = $rsElements->$processingMethod())
         {
