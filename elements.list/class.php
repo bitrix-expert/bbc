@@ -25,12 +25,6 @@ class ElementsList extends Bbc\BasisComponent
 {
     use Bbc\ElementsTrait;
 
-    protected $needModules = ['iblock'];
-
-    protected $checkParams = [
-        'IBLOCK_TYPE' => ['type' => 'string'],
-        'IBLOCK_ID' => ['type' => 'int']
-    ];
     /**
      * @var ElementsParamsPlugin
      */
@@ -50,6 +44,13 @@ class ElementsList extends Bbc\BasisComponent
         $this->pluginManager
             ->add($this->elementsParams)
             ->add($this->seo);
+
+        $this->includer->addModule('iblock');
+
+        $this->paramsValidator->add([
+            'IBLOCK_TYPE' => ['type' => 'string'],
+            'IBLOCK_ID' => ['type' => 'int']
+        ]);
     }
 
     public function executeMain()
