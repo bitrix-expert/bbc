@@ -21,18 +21,22 @@ if (!\Bitrix\Main\Loader::includeModule('bex.bbc')) return false;
  *
  * @author Nik Samokhvalov <nik@samokhvalov.info>
  */
-class ElementsList extends Bbc\BasisComponent
+class ElementsListComponent extends Bbc\BasisComponent
 {
     use Bbc\ElementsTrait;
 
     /**
      * @var ElementsParamsPlugin
      */
-    protected $elementsParams;
+    public $elementsParams;
     /**
      * @var SeoPlugin
      */
-    protected $seo;
+    public $seo;
+    /**
+     * @var HermitagePlugin
+     */
+    public $hermitage;
 
     public function configurate()
     {
@@ -40,10 +44,12 @@ class ElementsList extends Bbc\BasisComponent
 
         $this->elementsParams = new ElementsParamsPlugin();
         $this->seo = new SeoPlugin();
+        $this->hermitage = new HermitagePlugin();
 
         $this->pluginManager
             ->register($this->elementsParams)
-            ->register($this->seo);
+            ->register($this->seo)
+            ->register($this->hermitage);
 
         $this->includer->addModule('iblock');
 
@@ -53,7 +59,7 @@ class ElementsList extends Bbc\BasisComponent
         ]);
     }
 
-    public function executeMain()
+    protected function executeMain()
     {
         $rsElements = \CIBlockElement::GetList(
             $this->elementsParams->getSort(),
