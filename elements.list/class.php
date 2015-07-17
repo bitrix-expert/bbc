@@ -42,8 +42,8 @@ class ElementsList extends Bbc\BasisComponent
         $this->seo = new SeoPlugin();
 
         $this->pluginManager
-            ->add($this->elementsParams)
-            ->add($this->seo);
+            ->register($this->elementsParams)
+            ->register($this->seo);
 
         $this->includer->addModule('iblock');
 
