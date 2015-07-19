@@ -10,7 +10,7 @@ namespace Bex\Bbc\Components;
 use Bex\Bbc;
 use Bex\Bbc\Plugins\HermitagePlugin;
 use Bex\Bbc\Plugins\ElementsParamsPlugin;
-use Bex\Bbc\Plugins\SeoPlugin;
+use Bex\Bbc\Plugins\ElementsSeoPlugin;
 
 if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 
@@ -30,7 +30,7 @@ class ElementsListComponent extends Bbc\BasisComponent
      */
     public $elementsParams;
     /**
-     * @var SeoPlugin
+     * @var ElementsSeoPlugin
      */
     public $seo;
     /**
@@ -43,7 +43,7 @@ class ElementsListComponent extends Bbc\BasisComponent
         parent::configurate();
 
         $this->elementsParams = new ElementsParamsPlugin();
-        $this->seo = new SeoPlugin();
+        $this->seo = new ElementsSeoPlugin();
         $this->hermitage = new HermitagePlugin();
 
         $this->pluginManager
