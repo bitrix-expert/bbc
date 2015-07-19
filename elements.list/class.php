@@ -23,8 +23,6 @@ if (!\Bitrix\Main\Loader::includeModule('bex.bbc')) return false;
  */
 class ElementsListComponent extends Bbc\BasisComponent
 {
-    use Bbc\ElementsTrait;
-
     /**
      * @var ElementsParamsPlugin
      */
@@ -81,7 +79,7 @@ class ElementsListComponent extends Bbc\BasisComponent
 
         while ($element = $rsElements->$processingMethod())
         {
-            if ($arElement = $this->processingElementsResult($element))
+            if ($arElement = $this->elementsParams->processingFetch($element))
             {
                 $this->arResult['ELEMENTS'][] = $arElement;
             }
@@ -92,7 +90,7 @@ class ElementsListComponent extends Bbc\BasisComponent
             $this->return404();
         }
 
-        $this->generateNav($rsElements);
+        $this->elementsParams->generateNav($rsElements);
         $this->setResultCacheKeys(['NAV_CACHED_DATA']);
     }
 }
