@@ -21,6 +21,6 @@
   "require": {
     "php":">=5.4.0",
     "composer/installers": "~1",
-    "bitrix-expert/bbc-module": ">=0.0.1"
+    "bitrix-expert/bbc-module": "1.*"
   }
 }
