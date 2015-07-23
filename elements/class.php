@@ -7,7 +7,7 @@
 
 namespace Bex\Bbc\Components;
 
-use Bex\Bbc\BasisRouter;
+use Bex\Bbc\BasisComponent;
 
 if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 
@@ -16,23 +16,43 @@ if (!\Bitrix\Main\Loader::includeModule('bex.bbc')) return false;
 /**
  * @author Nik Samokhvalov <nik@samokhvalov.info>
  */
-class ElementsRouter extends BasisRouter
+class ElementsComponent extends BasisComponent
 {
-    protected $defaultSefPage = 'index';
-
-    protected function setSefDefaultParams()
+    public function routers()
     {
-        $this->defaultUrlTemplates404 = [
-            'index' => '',
-            'section' => '#SECTION_ID#/',
-            'detail' => '#SECTION_ID#/#ELEMENT_ID#/'
-        ];
+        /*return [
+            'list' => '',
+            'detail' => '#ELEMENT_ID#/'
+        ];*/
 
-        $this->componentVariables = [
-            'SECTION_ID',
-            'SECTION_CODE',
-            'ELEMENT_ID',
-            'ELEMENT_CODE'
+        return [
+            'users' => [
+                'action' => 'actionUser'
+            ],
+            'user' => [
+                'template' => '#ELEMENT_ID#',
+                'action' => [
+                    'GET' => 'getUser',
+                    'POST|PUT' => 'updateUser',
+                    'DELETE' => 'deleteUser',
+                ]
+            ],
+            'userGroup' => [
+                'template' => '#ELEMENT_ID#/group',
+                'action' => [
+                    'GET' => 'getUserGroups',
+                    'POST|PUT' => 'updateUserGroups',
+                    'DELETE' => 'deleteUserGroups',
+                ]
+            ],
+            'groups' => [
+                'template' => 'group',
+                'action' => 'getGroups'
+            ],
+            'group' => [
+                'template' => 'group/#GROUP_ID#',
+                'action' => 'getGroup'
+            ],
         ];
     }
 }

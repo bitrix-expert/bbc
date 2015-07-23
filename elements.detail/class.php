@@ -31,7 +31,7 @@ class ElementsDetail extends Bbc\BasisComponent
         'ELEMENT_CODE' => ['type' => 'string', 'error' => false]
     ];
 
-    protected function executeProlog()
+    protected function beforeAction()
     {
         if (!$this->arParams['ELEMENT_ID'] && !$this->arParams['ELEMENT_CODE'])
         {
