@@ -18,41 +18,63 @@ if (!\Bitrix\Main\Loader::includeModule('bex.bbc')) return false;
  */
 class ElementsComponent extends BasisComponent
 {
-    public function routers()
+    public function routes()
     {
-        /*return [
-            'list' => '',
-            'detail' => '#ELEMENT_ID#/'
-        ];*/
+        /**
+         * @todo А как варьировать SECTION_ID и SECTION_CODE, ELEMENT_ID и ELEMENT_CODE?
+         */
 
         return [
+            'index' => '',
+            'section' => '#SECTION_ID#/',
+            'element' => '#SECTION_ID#/#ELEMENT_ID#/'
+        ];
+    }
+
+    public function routesUsers()
+    {
+        return [
             'users' => [
-                'action' => 'actionUser'
+                'template' => '',
+                'method' => [
+                    'GET' => 'getUser',
+                    'POST' => 'addUser',
+                    'OPTION' => 'option',
+                ]
             ],
             'user' => [
                 'template' => '#ELEMENT_ID#',
-                'action' => [
+                'method' => [
                     'GET' => 'getUser',
                     'POST|PUT' => 'updateUser',
                     'DELETE' => 'deleteUser',
                 ]
             ],
-            'userGroup' => [
-                'template' => '#ELEMENT_ID#/group',
-                'action' => [
-                    'GET' => 'getUserGroups',
-                    'POST|PUT' => 'updateUserGroups',
-                    'DELETE' => 'deleteUserGroups',
-                ]
+        ];
+    }
+
+    public function routesNews()
+    {
+        return [
+            'list' => '',
+            'section' => '#SECTION_CODE#/',
+            'detail' => '#SECTION_CODE#/#ELEMENT_ID#/',
+        ];
+    }
+
+    public function routesPages()
+    {
+        return [
+            'pages' => [
+                'GET' => 'getPages',
+                'POST' => 'addPage'
             ],
-            'groups' => [
-                'template' => 'group',
-                'action' => 'getGroups'
-            ],
-            'group' => [
-                'template' => 'group/#GROUP_ID#',
-                'action' => 'getGroup'
-            ],
+            'page' => [
+                'template' => '#PAGE_ID#/',
+                'GET' => 'getPage',
+                'POST|PUT' => 'updatePage',
+                'DELETE' => 'deletePage',
+            ]
         ];
     }
 }
