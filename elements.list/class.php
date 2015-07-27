@@ -12,7 +12,7 @@ use Bex\Bbc\Plugins\HermitagePlugin;
 use Bex\Bbc\Plugins\ElementsParamsPlugin;
 use Bex\Bbc\Plugins\ElementsSeoPlugin;
 
-if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
+if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
 
 if (!\Bitrix\Main\Loader::includeModule('bex.bbc')) return false;
 
