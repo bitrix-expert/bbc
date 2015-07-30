@@ -8,6 +8,8 @@
 namespace Bex\Bbc\Components;
 
 use Bex\Bbc\BasisComponent;
+use Bex\Bbc\Plugins\ElementsParamsPlugin;
+use Bex\Bbc\Plugins\ElementsSeoPlugin;
 
 if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
 
@@ -18,6 +20,27 @@ if (!\Bitrix\Main\Loader::includeModule('bex.bbc')) return false;
  */
 class ElementsComponent extends BasisComponent
 {
+    /**
+     * @var ElementsSeoPlugin
+     */
+    public $seo;
+    /**
+     * @var ElementsParamsPlugin
+     */
+    public $elementsParams;
+
+    public function configurate()
+    {
+        parent::configurate();
+
+        $this->seo = new ElementsSeoPlugin();
+        $this->elementsParams = new ElementsParamsPlugin();
+
+        $this->pluginManager
+            ->register($this->seo)
+            ->register($this->elementsParams);
+    }
+
     public function routes()
     {
         /**
