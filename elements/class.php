@@ -54,6 +54,15 @@ class ElementsComponent extends BasisComponent
         ];
     }
 
+    protected function indexAction()
+    {
+
+    }
+
+
+
+    // TEMP
+
     public function routesUsers()
     {
         return [
