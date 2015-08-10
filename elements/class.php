@@ -7,13 +7,12 @@
 
 namespace Bex\Bbc\Components;
 
+use Bitrix\Main\Loader;
 use Bex\Bbc\BasisComponent;
 use Bex\Bbc\Plugins\ElementsParamsPlugin;
 use Bex\Bbc\Plugins\ElementsSeoPlugin;
 
-if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
-
-if (!\Bitrix\Main\Loader::includeModule('bex.bbc')) return false;
+if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true || !Loader::includeModule('bex.bbc')) die();
 
 /**
  * @author Nik Samokhvalov <nik@samokhvalov.info>
