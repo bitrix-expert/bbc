@@ -47,7 +47,7 @@ class ElementsComponent extends BasisComponent
          */
 
         return [
-            'index' => '', // @todo Вместо index определяется list
+            'index' => '',
             'section' => '#SECTION_ID#/',
             'detail' => '#SECTION_ID#/#ELEMENT_ID#/'
         ];
