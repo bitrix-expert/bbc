@@ -11,7 +11,7 @@ use Bitrix\Main\Loader;
 use Bex\Bbc\BasisComponent;
 use Bex\Bbc\Plugins\ElementsParamsPlugin;
 use Bex\Bbc\Plugins\ElementsSeoPlugin;
-
+// todo die() for Loader?
 if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true || !Loader::includeModule('bex.bbc')) die();
 
 /**
