@@ -55,12 +55,63 @@ class ElementsComponent extends BasisComponent
 
     protected function indexAction()
     {
+        // May be?
+        /*$elementModel = $this->elementsReader->getModel();
 
+        $sort = ['ID' => 'ASC'];
+        $addSelectFields = ['DETAIL_PAGE_URL', 'LIST_PAGE_URL'];
+
+        $elements = $elementModel
+            ->setSort($sort)
+            ->addSelectFields($addSelectFields)
+            ->fetchAll();
+
+        $this->arResult['ELEMENTS'] = $elements;*/
+
+        $rsElements = \CIBlockElement::GetList(
+            $this->elementsParams->getSort(),
+            $this->elementsParams->getFilters(),
+            $this->elementsParams->getGrouping(),
+            $this->elementsParams->getNavStart(),
+            $this->elementsParams->getSelected([
+                'DETAIL_PAGE_URL',
+                'LIST_PAGE_URL'
+            ])
+        );
+
+        if (!isset($this->arResult['ELEMENTS']))
+        {
+            $this->arResult['ELEMENTS'] = [];
+        }
+
+        $processingMethod = $this->elementsParams->getProcessingMethod();
+
+        while ($element = $rsElements->$processingMethod())
+        {
+            if ($arElement = $this->elementsParams->processingFetch($element))
+            {
+                $this->arResult['ELEMENTS'][] = $arElement;
+            }
+        }
+
+        if ($this->arParams['SET_404'] === 'Y' && empty($this->arResult['ELEMENTS']))
+        {
+            $this->return404();
+        }
+
+        $this->elementsParams->generateNav($rsElements);
+        $this->setResultCacheKeys(['NAV_CACHED_DATA']);
+
+        $this->includeComponentTemplate('index');
     }
 
 
 
-    // TEMP
+
+
+    /////////////////////////////////////////
+    // Examples
+    /////////////////////////////////////////
 
     public function routesUsers()
     {
