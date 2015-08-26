@@ -38,6 +38,8 @@ class ElementsComponent extends BasisComponent
         $this->pluginManager
             ->register($this->seo)
             ->register($this->elementsParams);
+
+        $this->includer->addModule('iblock');
     }
 
     public function routes()
@@ -105,6 +107,15 @@ class ElementsComponent extends BasisComponent
         $this->includeComponentTemplate('index');
     }
 
+    protected function sectionAction()
+    {
+        $this->includeComponentTemplate('section');
+    }
+
+    protected function detailAction()
+    {
+        $this->includeComponentTemplate('detail');
+    }
 
 
 
@@ -113,7 +124,7 @@ class ElementsComponent extends BasisComponent
     // Examples
     /////////////////////////////////////////
 
-    public function routesUsers()
+    public function routesUsersComponent()
     {
         return [
             'users' => [
@@ -135,7 +146,7 @@ class ElementsComponent extends BasisComponent
         ];
     }
 
-    public function routesNews()
+    public function routesNewsComponent()
     {
         return [
             'list' => '',
@@ -144,7 +155,7 @@ class ElementsComponent extends BasisComponent
         ];
     }
 
-    public function routesPages()
+    public function routesPagesComponent()
     {
         return [
             'pages' => [
