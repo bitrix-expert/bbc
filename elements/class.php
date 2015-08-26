@@ -15,6 +15,8 @@ use Bex\Bbc\Plugins\ElementsSeoPlugin;
 if (!defined('B_PROLOG_INCLUDED') || !Loader::includeModule('bex.bbc')) return;
 
 /**
+ * Component for displaying elements from info block
+ *
  * @author Nik Samokhvalov <nik@samokhvalov.info>
  */
 class ElementsComponent extends BasisComponent
