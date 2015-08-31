@@ -21,25 +21,13 @@ if (!defined('B_PROLOG_INCLUDED') || !Loader::includeModule('bex.bbc')) return;
  */
 class ElementsComponent extends BasisComponent
 {
-    /**
-     * @var ElementsSeoPlugin
-     */
-    public $seo;
-    /**
-     * @var ElementsParamsPlugin
-     */
-    public $elementsParams;
-
     public function configurate()
     {
         parent::configurate();
 
-        $this->seo = new ElementsSeoPlugin();
-        $this->elementsParams = new ElementsParamsPlugin();
-
-        $this->pluginManager
-            ->register($this->seo)
-            ->register($this->elementsParams);
+        $this->getPluginManager()
+            ->register(ElementsSeoPlugin::className())
+            ->register(ElementsParamsPlugin::className());
 
         $this->includer->addModule('iblock');
     }
