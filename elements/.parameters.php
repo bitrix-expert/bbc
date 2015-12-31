@@ -38,12 +38,17 @@ try
                 'section' => [
                     'NAME' => Loc::getMessage('ELEMENTS_SEF_SECTION'),
                     'DEFAULT' => '#SECTION_CODE#/',
-                    'VARIABLES' => ['SECTION_CODE']
+                    'VARIABLES' => ['SECTION_ID', 'SECTION_CODE', 'SECTION_CODE_PATH']
                 ],
                 'detail' => [
                     'NAME' => Loc::getMessage('ELEMENTS_SEF_DETAIL'),
                     'DEFAULT' => '#SECTION_CODE#/#ELEMENT_CODE#/',
-                    'VARIABLES' => ['ELEMENT_CODE', 'SECTION_CODE']
+                    'VARIABLES' => ['ELEMENT_ID', 'ELEMENT_CODE', 'SECTION_ID', 'SECTION_CODE', 'SECTION_CODE_PATH']
+                ],
+		'smart_filter' => [
+                    'NAME' => Loc::getMessage('ELEMENTS_SEF_SMART_FILTER'),
+                    'DEFAULT' => '#SECTION_CODE#/filter/#SMART_FILTER_PATH#/apply/',
+                    'VARIABLES' => ['SECTION_ID', 'SECTION_CODE', 'SECTION_CODE_PATH', 'SMART_FILTER_PATH']
                 ]
             ],
             'USE_SEARCH' => [
