@@ -44,7 +44,7 @@ class ElementsListComponent extends Bbc\BasisComponent
         $this->seo = new ElementsSeoPlugin();
         $this->hermitage = new HermitagePlugin();
 
-        $this->pluginManager
+        $this->pluginDispatcher
             ->register($this->elementsParams)
             ->register($this->seo)
             ->register($this->hermitage);

@@ -9,8 +9,6 @@ namespace Bex\Bbc\Components;
 
 use Bitrix\Main\Loader;
 use Bex\Bbc\BasisComponent;
-use Bex\Bbc\Plugins\ElementsParamsPlugin;
-use Bex\Bbc\Plugins\ElementsSeoPlugin;
 
 if (!defined('B_PROLOG_INCLUDED') || !Loader::includeModule('bex.bbc')) return;
 
@@ -21,15 +19,14 @@ if (!defined('B_PROLOG_INCLUDED') || !Loader::includeModule('bex.bbc')) return;
  */
 class ElementsComponent extends BasisComponent
 {
-    public function configurate()
+    public function plugins()
     {
-        parent::configurate();
-
-        $this->getPluginManager()
-            ->register(ElementsSeoPlugin::className())
-            ->register(ElementsParamsPlugin::className());
-
-        $this->includer->addModule('iblock');
+        $plugins = parent::plugins();
+        
+        $plugins['elementsSeo'] = '\Bex\Bbc\Plugins\ElementsSeoPlugin';
+        $plugins['elementsParams'] = '\Bex\Bbc\Plugins\ElementsParamsPlugin';
+        
+        return $plugins;
     }
 
     public function routes()
@@ -59,13 +56,15 @@ class ElementsComponent extends BasisComponent
             ->fetchAll();
 
         $this->arResult['ELEMENTS'] = $elements;*/
+        
+        $elementsParams = $this->getPlugin('elementsParams');
 
         $rsElements = \CIBlockElement::GetList(
-            $this->elementsParams->getSort(),
-            $this->elementsParams->getFilters(),
-            $this->elementsParams->getGrouping(),
-            $this->elementsParams->getNavStart(),
-            $this->elementsParams->getSelected([
+            $elementsParams->getSort(),
+            $elementsParams->getFilters(),
+            $elementsParams->getGrouping(),
+            $elementsParams->getNavStart(),
+            $elementsParams->getSelected([
                 'DETAIL_PAGE_URL',
                 'LIST_PAGE_URL'
             ])
@@ -76,11 +75,11 @@ class ElementsComponent extends BasisComponent
             $this->arResult['ELEMENTS'] = [];
         }
 
-        $processingMethod = $this->elementsParams->getProcessingMethod();
+        $processingMethod = $elementsParams->getProcessingMethod();
 
         while ($element = $rsElements->$processingMethod())
         {
-            if ($arElement = $this->elementsParams->processingFetch($element))
+            if ($arElement = $elementsParams->processingFetch($element))
             {
                 $this->arResult['ELEMENTS'][] = $arElement;
             }
@@ -91,7 +90,7 @@ class ElementsComponent extends BasisComponent
             $this->return404();
         }
 
-        $this->elementsParams->generateNav($rsElements);
+        $elementsParams->generateNav($rsElements);
         $this->setResultCacheKeys(['NAV_CACHED_DATA']);
 
         $this->includeComponentTemplate('index');
