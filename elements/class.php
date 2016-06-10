@@ -7,10 +7,13 @@
 
 namespace Bex\Bbc\Components;
 
-use Bitrix\Main\Loader;
+use Bex\Bbc\Plugins\ElementsSelectorPlugin;
 use Bex\Bbc\BasisComponent;
+use Bitrix\Main\Loader;
 
-if (!defined('B_PROLOG_INCLUDED') || !Loader::includeModule('bex.bbc')) return;
+if (!defined('B_PROLOG_INCLUDED') || !Loader::includeModule('bex.bbc')) {
+    return;
+}
 
 /**
  * Component for displaying elements from info block
@@ -22,10 +25,10 @@ class ElementsComponent extends BasisComponent
     public function plugins()
     {
         $plugins = parent::plugins();
-        
+
         $plugins['elementsSeo'] = '\Bex\Bbc\Plugins\ElementsSeoPlugin';
-        $plugins['elementsParams'] = '\Bex\Bbc\Plugins\ElementsParamsPlugin';
-        
+        $plugins['elementsSelector'] = '\Bex\Bbc\Plugins\ElementsSelectorPlugin';
+
         return $plugins;
     }
 
@@ -44,53 +47,39 @@ class ElementsComponent extends BasisComponent
 
     protected function indexAction()
     {
-        // May be?
-        /*$elementModel = $this->elementsReader->getModel();
-
-        $sort = ['ID' => 'ASC'];
-        $addSelectFields = ['DETAIL_PAGE_URL', 'LIST_PAGE_URL'];
-
-        $elements = $elementModel
-            ->setSort($sort)
-            ->addSelectFields($addSelectFields)
-            ->fetchAll();
-
-        $this->arResult['ELEMENTS'] = $elements;*/
-        
-        $elementsParams = $this->getPlugin('elementsParams');
+        /**
+         * @var ElementsSelectorPlugin $selector
+         */
+        $selector = $this->getPlugin('elementsSelector');
 
         $rsElements = \CIBlockElement::GetList(
-            $elementsParams->getSort(),
-            $elementsParams->getFilters(),
-            $elementsParams->getGrouping(),
-            $elementsParams->getNavStart(),
-            $elementsParams->getSelected([
+            $selector->getSort(),
+            $selector->getFilters(),
+            $selector->getGrouping(),
+            $selector->getNavStart(),
+            $selector->getSelected([
                 'DETAIL_PAGE_URL',
                 'LIST_PAGE_URL'
             ])
         );
 
-        if (!isset($this->arResult['ELEMENTS']))
-        {
+        if (!isset($this->arResult['ELEMENTS'])) {
             $this->arResult['ELEMENTS'] = [];
         }
 
-        $processingMethod = $elementsParams->getProcessingMethod();
+        $processingMethod = $selector->getProcessingMethod();
 
-        while ($element = $rsElements->$processingMethod())
-        {
-            if ($arElement = $elementsParams->processingFetch($element))
-            {
+        while ($element = $rsElements->$processingMethod()) {
+            if ($arElement = $selector->processingFetch($element)) {
                 $this->arResult['ELEMENTS'][] = $arElement;
             }
         }
 
-        if ($this->arParams['SET_404'] === 'Y' && empty($this->arResult['ELEMENTS']))
-        {
+        if ($this->arParams['SET_404'] === 'Y' && empty($this->arResult['ELEMENTS'])) {
             $this->return404();
         }
 
-        $elementsParams->generateNav($rsElements);
+        $selector->generateNav($rsElements);
         $this->setResultCacheKeys(['NAV_CACHED_DATA']);
 
         $this->includeComponentTemplate('index');

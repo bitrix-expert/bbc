@@ -9,7 +9,7 @@ namespace Bex\Bbc\Components;
 
 use Bex\Bbc;
 use Bex\Bbc\Plugins\HermitagePlugin;
-use Bex\Bbc\Plugins\ElementsParamsPlugin;
+use Bex\Bbc\Plugins\ElementsSelectorPlugin;
 use Bex\Bbc\Plugins\ElementsSeoPlugin;
 
 if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
@@ -24,7 +24,7 @@ if (!\Bitrix\Main\Loader::includeModule('bex.bbc')) return false;
 class ElementsListComponent extends Bbc\BasisComponent
 {
     /**
-     * @var ElementsParamsPlugin
+     * @var ElementsSelectorPlugin
      */
     public $elementsParams;
     /**
@@ -40,7 +40,7 @@ class ElementsListComponent extends Bbc\BasisComponent
     {
         parent::configurate();
 
-        $this->elementsParams = new ElementsParamsPlugin();
+        $this->elementsParams = new ElementsSelectorPlugin();
         $this->seo = new ElementsSeoPlugin();
         $this->hermitage = new HermitagePlugin();
 
