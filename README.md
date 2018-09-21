@@ -18,4 +18,4 @@
 [bex.bbc](https://github.com/bitrix-expert/bbc-module), который автоматически установится в качестве зависимости 
 «Композера». 
 
-## [Документация](http://bbc.bitrix.expert)
+## [Документация](http://bbc.samokhvalov.info)
