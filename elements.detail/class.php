@@ -10,7 +10,7 @@ namespace Bex\Bbc\Components;
 use Bex\Bbc;
 
 if(!defined('B_PROLOG_INCLUDED')||B_PROLOG_INCLUDED!==true)die();
-
+# вынесите пожалуйста код модуля в реппозиторий
 if (!\Bitrix\Main\Loader::includeModule('bex.bbc')) return false;
 
 /**
